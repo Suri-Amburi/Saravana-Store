@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCPRODUCT_LIST</OBJ_NAME>
+     <OBJECT_M>TABL</OBJECT_M>
+     <OBJ_NAME_M>ZNCPRODUCT_LIST</OBJ_NAME_M>
+     <HASH_ID>699D7ACCCB12C10473DBBCBF1FA533C7AA1FC00B</HASH_ID>
+     <ID>&lt;type&gt; ProductList http://saravanastore.com/SaveProductList/S4H/iVend http://saravanastore.com/SaveProductList/S4H/iVend</ID>
+     <IFR_GLOBAL>X</IFR_GLOBAL>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>ProductList</IFR_NAME>
+     <IFR_NSPCE>http://saravanastore.com/SaveProductList/S4H/iVend</IFR_NSPCE>
+     <IFR_GNSPCE>http://saravanastore.com/SaveProductList/S4H/iVend</IFR_GNSPCE>
+     <GEN_VERS>0005</GEN_VERS>
+     <PREFIX>ZNC</PREFIX>
+     <CATEGORY>ifmtypedef</CATEGORY>
+     <X-ML_NSPCE>http://saravanastore.com/SaveProductList/S4H/iVend</X-ML_NSPCE>
+     <X-ML_NAME>ProductList</X-ML_NAME>
+     <VERSION_ID>8f6e3e3291b911e998160000002b9152</VERSION_ID>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCPRODUCT_LIST</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>PRODUCT</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>PRODUCT</OBJ_NAME2>
+     <OBJECT_R>TTYP</OBJECT_R>
+     <OBJ_NAME_R>ZNCPRODUCT_LIST_PRODUCT_TAB</OBJ_NAME_R>
+     <ID>&lt;element&gt; Product &lt;type&gt; ProductList http://saravanastore.com/SaveProductList/S4H/iVend http://saravanastore.com/SaveProductList/S4H/iVend</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>Product</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_TAGTYP>L</IFR_TAGTYP>
+     <IFR_MAXOCC>65535</IFR_MAXOCC>
+     <IFR_OPTNL>X</IFR_OPTNL>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>PRODUCT</R3_NAME>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCPRODUCT_LIST</OBJ_NAME>
+     <OBJECT1>TABL</OBJECT1>
+     <OBJ_NAME1>ZNCPRODUCT_LIST</OBJ_NAME1>
+     <OBJECT2>TABL</OBJECT2>
+     <OBJ_NAME2>ZNCPRODUCT_LIST</OBJ_NAME2>
+     <ID>&lt;type&gt; ProductList http://saravanastore.com/SaveProductList/S4H/iVend http://saravanastore.com/SaveProductList/S4H/iVend</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>ProductList</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>TABL</R3_TYPE>
+     <R3_NAME>ZNCPRODUCT_LIST</R3_NAME>
+     <R3_TEXT>Proxy Structure (generated)</R3_TEXT>
+     <CATEGORY>ifmtypedef</CATEGORY>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

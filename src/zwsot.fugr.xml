@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Assortment functions</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZWSOTF01</SOBJ_NAME>
+    <SOBJ_NAME>LZWSOTF02</SOBJ_NAME>
+    <SOBJ_NAME>LZWSOTF03</SOBJ_NAME>
+    <SOBJ_NAME>LZWSOTF04</SOBJ_NAME>
+    <SOBJ_NAME>LZWSOTF05</SOBJ_NAME>
+    <SOBJ_NAME>LZWSOTF06</SOBJ_NAME>
+    <SOBJ_NAME>LZWSOTTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZWSOT</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZZLISTING_CHECK</FUNCNAME>
+     <SHORT_TEXT>DE-EN-LANG-SWITCH-NO-TRANSLATION</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>PI_ARTICLE</PARAMETER>
+       <DBFIELD>MARA-MATNR</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DATAB</PARAMETER>
+       <DBFIELD>WLK1-DATAB</DBFIELD>
+       <DEFAULT>&apos;00000000&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DATBI</PARAMETER>
+       <DBFIELD>WLK1-DATBI</DBFIELD>
+       <DEFAULT>&apos;00000000&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_FILIA</PARAMETER>
+       <DBFIELD>T001W-WERKS</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_IGNORE_EXCL</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VRKME</PARAMETER>
+       <DBFIELD>WPWLK1-VRKME</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_NO_EAN_CHECK</PARAMETER>
+       <DBFIELD>WTDY-TYP01</DBFIELD>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_WLK1_READ</PARAMETER>
+       <DBFIELD>WTDY-TYP01</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VKORG</PARAMETER>
+       <DBFIELD>T001W-VKORG</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VTWEG</PARAMETER>
+       <DBFIELD>T001W-VTWEG</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_LOCNR</PARAMETER>
+       <DBFIELD>WRF1-LOCNR</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>BUFFER_WLK2_FILIA_ENTRIES</PARAMETER>
+       <DBFIELD>MTCOM-KZRFB</DBFIELD>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_ONLY_LIST_CHECK</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_MODE</PARAMETER>
+       <DEFAULT>SPACE</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+     </IMPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>PET_LIST_KOND</PARAMETER>
+       <DBSTRUCT>WPWLK1</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PET_BEW_KOND</PARAMETER>
+       <DBSTRUCT>WPWLK1</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_VRKME</PARAMETER>
+       <DBSTRUCT>MARM</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+     </TABLES>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>KOND_NOT_FOUND</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>VRKME_NOT_FOUND</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>VKDAT_NOT_FOUND</EXCEPTION>
+      </RSEXC>
+      <RSEXC>
+       <EXCEPTION>ASS_OWNER_NOT_FOUND</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>PI_ARTICLE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DATAB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Entries valid from</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DATBI</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Entries valid to</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_FILIA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Store</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_IGNORE_EXCL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Blank -&gt; valid entries only;&apos;X&apos; -&gt; all entries</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VRKME</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Blank -&gt; all sales units (MARM); otherwise -&gt; for the sales unit</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_NO_EAN_CHECK</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>If &apos;X&apos; -&gt; no EAN check</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_WLK1_READ</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>If &apos;X&apos; -&gt; read valid listing conditions</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VKORG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Sales organization for intercompany billing</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VTWEG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Distribution channel for intercompany billing</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_LOCNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Alternative to plant (either/or)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>BUFFER_WLK2_FILIA_ENTRIES</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Indicator: reset buffer for Material_Pre_Fetch</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_ONLY_LIST_CHECK</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Indicator</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Call Source</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PET_LIST_KOND</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Valid listing conditions found</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PET_BEW_KOND</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Valid selling periods found (+ sales unit)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_VRKME</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Units of Measure for Material</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>KOND_NOT_FOUND</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>No valid listing condition found</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>VRKME_NOT_FOUND</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Sales unit is not allowed (T006U)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>VKDAT_NOT_FOUND</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>No sales data determined</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ASS_OWNER_NOT_FOUND</PARAMETER>
+       <KIND>X</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+   <I18N_TPOOL>
+    <item>
+     <LANGUAGE>D</LANGUAGE>
+     <TEXTPOOL>
+      <item>
+       <ID>R</ID>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>001</KEY>
+       <ENTRY>Alte und neue Listungsprüfung werden</ENTRY>
+       <LENGTH>72</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>002</KEY>
+       <ENTRY>parallel genutzt. Ist das beabsichtigt?</ENTRY>
+       <LENGTH>78</LENGTH>
+      </item>
+     </TEXTPOOL>
+    </item>
+   </I18N_TPOOL>
+  </asx:values>
+ </asx:abap>
+</abapGit>

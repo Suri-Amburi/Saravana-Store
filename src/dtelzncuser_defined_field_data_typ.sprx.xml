@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>DTEL</OBJECT>
+     <OBJ_NAME>ZNCUSER_DEFINED_FIELD_DATA_TYP</OBJ_NAME>
+     <OBJECT_M>INTF</OBJECT_M>
+     <OBJ_NAME_M>ZNCII_SAVE_PRODUCT_LIST_INBOUN</OBJ_NAME_M>
+     <HASH_ID>1CBD76EA83AE7DF047A29414B59D6DCDC982129D</HASH_ID>
+     <ID>&lt;type&gt; UserDefinedFieldDataType http://schemas.datacontract.org/2004/07/CXS.Framework.Core SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>UserDefinedFieldDataType</IFR_NAME>
+     <IFR_NSPCE>http://schemas.datacontract.org/2004/07/CXS.Framework.Core</IFR_NSPCE>
+     <IFR_GNSPCE>SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</IFR_GNSPCE>
+     <GEN_VERS>0005</GEN_VERS>
+     <PREFIX>ZNC</PREFIX>
+     <CATEGORY>ifmtypedef</CATEGORY>
+     <X-ML_NSPCE>http://schemas.datacontract.org/2004/07/CXS.Framework.Core</X-ML_NSPCE>
+     <X-ML_NAME>UserDefinedFieldDataType</X-ML_NAME>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>DTEL</OBJECT>
+     <OBJ_NAME>ZNCUSER_DEFINED_FIELD_DATA_TYP</OBJ_NAME>
+     <OBJECT1>DTEL</OBJECT1>
+     <OBJ_NAME1>ZNCUSER_DEFINED_FIELD_DATA_TYP</OBJ_NAME1>
+     <OBJECT2>DTEL</OBJECT2>
+     <OBJ_NAME2>ZNCUSER_DEFINED_FIELD_DATA_TYP</OBJ_NAME2>
+     <ID>&lt;type&gt; UserDefinedFieldDataType http://schemas.datacontract.org/2004/07/CXS.Framework.Core SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>UserDefinedFieldDataType</IFR_NAME>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>DTEL</R3_TYPE>
+     <R3_NAME>ZNCUSER_DEFINED_FIELD_DATA_TYP</R3_NAME>
+     <R3_TEXT>Proxy Data Element (generated)</R3_TEXT>
+     <R3_DATATYP>STRG</R3_DATATYP>
+     <CATEGORY>ifmtypedef</CATEGORY>
+     <FURTHERDATA>&lt;asx:abap xmlns:asx=&quot;http://www.sap.com/abapxml&quot; version=&quot;1.0&quot;&gt;&lt;asx:values&gt;&lt;DATA&gt;&lt;IFR_T_ENUM&gt;&lt;item&gt;String&lt;/item&gt;&lt;item&gt;Int32&lt;/item&gt;&lt;item&gt;Currency&lt;/item&gt;&lt;item&gt;Decimal&lt;/item&gt;&lt;item&gt;DateTime&lt;/item&gt;&lt;item&gt;ValidValues&lt;/item&gt;&lt;item&gt;Int16&lt;/item&gt;&lt;item&gt;Int64&lt;/item&gt;&lt;item&gt;Boolean&lt;/item&gt;&lt;item&gt;Image&lt;/item&gt;&lt;/IFR_T_ENUM&gt;&lt;/DATA&gt;&lt;/asx:values&gt;&lt;/asx:abap&gt;</FURTHERDATA>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

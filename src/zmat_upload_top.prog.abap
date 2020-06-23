@@ -1,0 +1,36 @@
+*&---------------------------------------------------------------------*
+*& Include          ZMAT_UPLOAD_TOP
+*&---------------------------------------------------------------------*
+
+
+TYPES : BEGIN OF TY_FILE ,
+          SLNO(10) ,
+          LOCNR(10) ,
+          MATKL(10) ,
+        END OF TY_FILE ,
+
+        TY_FILE1 TYPE STANDARD TABLE OF TY_FILE.
+
+DATA: IT_FILE TYPE TABLE OF TY_FILE,
+      WA_FILE TYPE TY_FILE.
+TYPES:BEGIN OF TY_DISPLAY,
+        SLNO(10),
+        LOCNR(10) ,
+        MATKL(10) ,
+        TYPE      TYPE BAPI_MTYPE,
+        MESSAGE	  TYPE BAPI_MSG,
+      END OF TY_DISPLAY.
+
+DATA: IT_DISPLAY TYPE TABLE OF TY_DISPLAY,
+      WA_DISPLAY TYPE TY_DISPLAY.
+DATA:FNAME TYPE LOCALFILE,
+     ENAME TYPE CHAR4.
+
+DATA:IT_MESSTAB TYPE TABLE OF BDCMSGCOLL,
+     WA_MESSTAB TYPE BDCMSGCOLL.
+
+DATA: CTUMODE LIKE CTU_PARAMS-DISMODE VALUE 'N',
+      CUPDATE LIKE CTU_PARAMS-UPDMODE VALUE 'A' .
+
+DATA: IT_BDCDATA TYPE TABLE OF BDCDATA,
+      WA_BDCDATA TYPE BDCDATA .

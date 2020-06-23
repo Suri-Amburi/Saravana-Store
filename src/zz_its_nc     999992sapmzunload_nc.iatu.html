@@ -1,0 +1,59 @@
+`include(~service="system", ~language="", ~theme="dm", ~name="TemplateLibraryDHTML.html")`
+`SAP_TopInclude()`
+<html>
+  <head>
+    `SAP_PageTitle()`
+    `SAP_Stylesheet()`
+    `SAP_JavaScript()`
+  </head>
+  <body `SAP_BodyAttributes()` onload="`SAP_OnloadJavaScript()`">
+    `SAP_TemplateHeader()`
+    `SAP_BodyContentBegin()`
+    `SAP_FormBegin()`
+      `SAP_DynproLayerBegin(001,001,005,001)`
+      `SAP_Button("BACK")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,002,006,001)`
+      `SAP_Label("ATKNUM")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(017,002,010,001)`
+      `SAP_InputField("ATKNUM")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLabelLine(001,002,017)`
+
+      `SAP_DynproLayerBegin(004,004,020,001)`
+      `SAP_Label("PALLET")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(004,005,020,001)`
+      `SAP_InputField("AEXIDV")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,007,005,001)`
+      `SAP_Label("TOTALL_HUS")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(008,007,011,001)`
+      `SAP_InputField("TOTALL_HUS")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLabelLine(001,007,008)`
+
+      `SAP_DynproLayerBegin(001,008,006,001)`
+      `SAP_Label("LOADED_HUS")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(008,008,011,001)`
+      `SAP_InputField("LOADED_HUS")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLabelLine(001,008,008)`
+
+    `SAP_FormEnd()`
+    `SAP_BodyContentEnd()`
+  </body>
+</html>
+                                                                                                                                                                                                                         

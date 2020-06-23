@@ -1,0 +1,85 @@
+*&---------------------------------------------------------------------*
+*& Include          ZHR_EMLPY_MASTER_SUB
+*&---------------------------------------------------------------------*
+FORM GET_TABLEDATA.
+  SELECT PERNR
+         SUBTY
+         ENAME
+         BUKRS
+         WERKS
+         BTRTL
+         PERSG
+         PERSK FROM PA0001 INTO TABLE IT_PA0001 WHERE PERNR = PERNR-PERNR.
+
+  IF IT_PA0001 IS NOT INITIAL.
+    SELECT PERNR
+           SUBTY
+           STAT1
+           STAT2
+           BEGDA
+           ENDDA FROM PA0000 INTO TABLE IT_PA0000
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERNR = IT_PA0001-PERNR.
+
+    SELECT PERNR
+       SUBTY
+       GBDAT
+       GESCH
+       FAMST FROM PA0002 INTO TABLE IT_PA0002
+       FOR ALL ENTRIES IN IT_PA0001
+       WHERE PERNR = IT_PA0001-PERNR.
+*  ENDIF.
+
+*IF IT_PA0001 IS NOT INITIAL.
+    SELECT PERNR
+           SUBTY
+           FAVOR FROM PA0021 INTO TABLE IT_PA0021
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERNR = IT_PA0001-PERNR
+           AND SUBTY = '11'.
+*  ENDIF.
+
+    SELECT PERNR
+           SUBTY
+           USRID
+           USRID_LONG FROM PA0105 INTO TABLE IT_PA0105
+           FOR ALL ENTRIES IN IT_PA0001
+          WHERE PERNR = IT_PA0001-PERNR
+            AND SUBTY = IT_PA0001-SUBTY.
+
+    SELECT PERNR
+           SUBTY
+           ICNUM FROM PA0185 INTO TABLE IT_PA0185
+           FOR ALL ENTRIES IN IT_PA0001
+         WHERE PERNR = IT_PA0001-PERNR
+          AND SUBTY = IT_PA0001-SUBTY.
+
+    SELECT PERNR
+         BNKSA
+         BANKN
+         BANKL FROM PA0009 INTO TABLE IT_PA0009
+         FOR ALL ENTRIES IN IT_PA0001
+         WHERE PERNR = IT_PA0001-PERNR.
+
+  SELECT PERSG
+           PTEXT
+           FROM T501T INTO TABLE IT_T501T
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERSG = IT_PA0001-PERSG.
+
+    SELECT PERSK
+           PTEXT
+           FROM T503T INTO TABLE IT_T503T
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERSK  = IT_PA0001-PERSK.
+
+  ENDIF.
+
+
+ENDFORM.
+
+FORM GET_FINAL.
+
+
+
+  ENDFORM.

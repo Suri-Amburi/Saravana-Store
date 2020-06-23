@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Test FG</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZTEST_FGTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZTEST_FG</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZTEST_RFC_FIORI</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Test RFC for ODATA :  Multible items</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>TBL_HEADER</PARAMETER>
+       <TYP>BAPIMEPOHEADER</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>TBL_ITEM</PARAMETER>
+       <TYP>BAPIMEPOITEM</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>TBL_RESULT</PARAMETER>
+       <TYP>BAPIRET2</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>TBL_HEADER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchase Order Header Data</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TBL_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchase Order Item</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TBL_RESULT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return Parameter</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

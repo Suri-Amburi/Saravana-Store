@@ -1,0 +1,667 @@
+*&---------------------------------------------------------------------*
+*& Include          ZMM_CATEGORY_AGE_FORM
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Form GET_DATA
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM GET_DATA .
+*  BREAK BREDDY.
+
+  SELECT
+   T009C~SPRAS ,
+   T009C~PERIV ,
+   T009C~POPER ,
+   T009C~BDATJ ,
+   T009C~KTEXT ,
+   T009C~LTEXT  FROM T009C INTO TABLE @DATA(IT_T009C)
+    WHERE SPRAS = @SY-LANGU
+  AND PERIV = 'V3'.
+
+  SELECT SINGLE  CLINT
+            KLART
+            CLASS
+            VONDT
+            BISDT
+            WWSKZ FROM KLAH INTO WA_KLAH
+            WHERE WWSKZ = '0'
+            AND   KLART = '026'
+            AND CLASS = CATEGORY.
+*  ENDIF.
+  IF WA_KLAH IS NOT INITIAL.
+    SELECT OBJEK
+           MAFID
+           KLART
+           CLINT
+           ADZHL
+           DATUB FROM KSSK INTO TABLE IT_KSSK
+            WHERE CLINT = WA_KLAH-CLINT.
+  ENDIF.
+
+  LOOP AT IT_KSSK INTO WA_KSSK .
+    SHIFT WA_KSSK-OBJEK LEFT DELETING LEADING '0'.
+    WA_KSSK1-OBJEK = WA_KSSK-OBJEK .
+    APPEND WA_KSSK1 TO IT_KSSK1 .
+    CLEAR WA_KSSK1 .
+  ENDLOOP.
+  BREAK BREDDY .
+  IF IT_KSSK1 IS NOT INITIAL .
+    SELECT CLINT
+           KLART
+           CLASS
+           VONDT
+           BISDT
+           WWSKZ FROM KLAH INTO TABLE IT_KLAH
+           FOR ALL ENTRIES IN IT_KSSK1
+           WHERE CLINT = IT_KSSK1-OBJEK
+            AND WWSKZ = '1'.
+  ENDIF.
+  IT_KLAH1[] = IT_KLAH[] .
+  IF IT_KLAH IS NOT INITIAL .
+    SELECT MATNR
+           MATKL FROM MARA INTO TABLE IT_MARA
+           FOR ALL ENTRIES IN IT_KLAH1
+           WHERE MATKL = IT_KLAH1-CLASS .
+*         AND MATKL IN GROUP.
+
+  ELSE .
+
+    SELECT MATNR
+      MATKL FROM MARA INTO TABLE IT_MARA
+*      FOR ALL ENTRIES IN IT_KLAH1
+      WHERE MATKL IN GROUP .
+
+  ENDIF.
+
+  IF IT_MARA IS NOT INITIAL.
+
+    SELECT
+      MCHB~MATNR ,
+      MCHB~WERKS ,
+      MCHB~CHARG ,
+      MCHB~CLABS ,
+      MCHB~LFGJA ,
+      MCHB~LFMON FROM MCHB INTO TABLE @DATA(IT_MCHB)
+            FOR ALL ENTRIES IN @IT_MARA
+            WHERE WERKS IN @PLANT
+*            AND LFMON = '03'
+*            AND LFGJA = '2019'
+            AND   MATNR = @IT_MARA-MATNR .
+
+  ENDIF.
+  BREAK BREDDY.
+
+  IF IT_MCHB IS NOT INITIAL.
+    SELECT
+       MBEW~MATNR ,
+       MBEW~BWKEY ,
+       MBEW~BWTAR ,
+       MBEW~LBKUM ,
+       MBEW~SALK3 ,
+       MBEW~LFMON ,
+       MBEW~LFGJA FROM MBEW INTO TABLE @DATA(IT_MBEW)
+                  FOR ALL ENTRIES IN @IT_MCHB
+                  WHERE BWTAR = @IT_MCHB-CHARG
+*                  AND LFMON = '03'
+*                  AND LFGJA = '2019'
+                  AND BWKEY = @IT_MCHB-WERKS .
+  ENDIF.
+
+  DATA(LV_DATE) = SY-DATUM .
+  DATA : LV_PERIOD TYPE T009B-POPER,
+         LV_YEAR   TYPE T009B-BDATJ.
+  DATA : LV_P TYPE I .
+
+  DATA : SLNO(3) TYPE I .
+*  DATA(IT_MCHB1) = IT_MCHB[] .
+*  SORT IT_MCHB BY LFGJA LFMON CHARG .
+*  DELETE ADJACENT DUPLICATES FROM IT_MCHB  COMPARING LFGJA LFMON CHARG .
+  DO 12 TIMES .
+    SLNO = SLNO + 1 .
+    WA_FINAL-SL_NO = SLNO  .
+
+    CALL FUNCTION 'DATE_TO_PERIOD_CONVERT'
+      EXPORTING
+        I_DATE         = LV_DATE
+*       I_MONMIT       = 00
+        I_PERIV        = 'V3'
+      IMPORTING
+        E_BUPER        = LV_PERIOD
+        E_GJAHR        = LV_YEAR
+      EXCEPTIONS
+        INPUT_FALSE    = 1
+        T009_NOTFOUND  = 2
+        T009B_NOTFOUND = 3
+        OTHERS         = 4.
+    IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+    ENDIF.
+    LV_P = LV_PERIOD .
+
+    READ TABLE IT_T009C ASSIGNING FIELD-SYMBOL(<WA_T009C>) WITH KEY POPER = LV_P .
+
+    IF SY-SUBRC  = 0 .
+      CONCATENATE <WA_T009C>-KTEXT LV_YEAR INTO WA_FINAL-MONTH SEPARATED BY '-' .
+    ENDIF.
+
+    LOOP AT IT_MARA ASSIGNING FIELD-SYMBOL(<WA_MARA>) .
+      LOOP AT IT_MCHB ASSIGNING FIELD-SYMBOL(<LS_MCHB>) WHERE MATNR = <WA_MARA>-MATNR AND LFGJA = LV_YEAR AND LFMON = LV_P .
+        ADD <LS_MCHB>-CLABS TO WA_FINAL-QTY .
+*        LOOP AT IT_MCHB ASSIGNING FIELD-SYMBOL(<LS_MCHB>) WHERE  CHARG = <LS_MCHB1>-CHARG AND MATNR = <LS_MCHB1>-MATNR AND LFGJA = <LS_MCHB1>-LFGJA AND LFMON = <LS_MCHB1>-LFMON . "AND WERKS = <LS_MCHB1>-WERKS.
+        LOOP AT IT_MBEW ASSIGNING FIELD-SYMBOL(<LS_MBEW>) WHERE  BWTAR = <LS_MCHB>-CHARG AND LFMON = <LS_MCHB>-LFMON AND LFGJA = <LS_MCHB>-LFGJA AND BWKEY = <LS_MCHB>-WERKS .    ""MATNR = <WA_MARA>-MATNR AND LFGJA = LV_YEAR AND LFMON = LV_PERIOD
+          ADD <LS_MBEW>-SALK3 TO WA_FINAL-AMOUNT .
+          WA_FINAL-BWTAR = <LS_MBEW>-BWTAR .
+        ENDLOOP.
+*        ENDLOOP.
+      ENDLOOP.
+    ENDLOOP.
+
+    APPEND WA_FINAL TO IT_FINAL .
+    CLEAR WA_FINAL .
+
+    CALL FUNCTION 'RP_CALC_DATE_IN_INTERVAL'
+      EXPORTING
+        DATE      = LV_DATE
+        DAYS      = '30'
+        MONTHS    = '00'
+        SIGNUM    = '-'
+        YEARS     = '00'
+      IMPORTING
+        CALC_DATE = LV_DATE.
+    CLEAR : LV_PERIOD , LV_YEAR , LV_P.
+
+  ENDDO.
+
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form DISPLAY
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM DISPLAY .
+  DATA :
+WA_LAYOUT   TYPE SLIS_LAYOUT_ALV.
+
+
+  DATA: IT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV,
+        WA_FIELDCAT TYPE SLIS_FIELDCAT_ALV,
+        WVARI       TYPE DISVARIANT.
+
+  DATA: IT_SORT TYPE SLIS_T_SORTINFO_ALV,
+        WA_SORT TYPE SLIS_SORTINFO_ALV.
+
+  WA_FIELDCAT-FIELDNAME = 'SL_NO'.
+  WA_FIELDCAT-SELTEXT_L =  'Serial No'.
+  APPEND WA_FIELDCAT TO IT_FIELDCAT.
+  CLEAR   WA_FIELDCAT  .
+
+  WA_FIELDCAT-FIELDNAME = 'MONTH'.
+  WA_FIELDCAT-SELTEXT_L = 'Month'.
+*  WA_FIELDCAT-EMPHASIZE = 'X' .
+*  WA_FIELDCAT-DO_SUM = 'X' .
+  APPEND WA_FIELDCAT TO IT_FIELDCAT.
+  CLEAR   WA_FIELDCAT  .
+
+  WA_FIELDCAT-FIELDNAME = 'QTY'.
+  WA_FIELDCAT-SELTEXT_L = 'Quantity'.
+*  WA_FIELDCAT-EMPHASIZE = 'X' .
+  WA_FIELDCAT-DO_SUM = 'X' .
+  APPEND WA_FIELDCAT TO IT_FIELDCAT.
+  CLEAR   WA_FIELDCAT  .
+
+  WA_FIELDCAT-FIELDNAME = 'AMOUNT'.
+  WA_FIELDCAT-SELTEXT_L = 'Amount'.
+*  WA_FIELDCAT-EMPHASIZE = 'X' .
+  WA_FIELDCAT-DO_SUM = 'X' .
+  APPEND WA_FIELDCAT TO IT_FIELDCAT.
+  CLEAR   WA_FIELDCAT  .
+  WA_LAYOUT-ZEBRA = 'X'.
+  WA_LAYOUT-COLWIDTH_OPTIMIZE = 'X'.
+*  WA_LAYOUT-TOTALS_TEXT = 'Grand Total'.
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      I_BUFFER_ACTIVE             = ' '
+      I_CALLBACK_PROGRAM          = SY-REPID
+      IS_LAYOUT                   = WA_LAYOUT
+      I_CALLBACK_USER_COMMAND     = 'USER_COMMAND'
+      I_CALLBACK_HTML_TOP_OF_PAGE = 'TOP_OF_PAGE'
+      IT_FIELDCAT                 = IT_FIELDCAT
+      IT_SORT                     = IT_SORT
+      I_DEFAULT                   = 'X'
+      I_SAVE                      = 'A'
+      IS_VARIANT                  = WVARI
+    TABLES
+      T_OUTTAB                    = IT_FINAL
+    EXCEPTIONS
+      PROGRAM_ERROR               = 1
+      OTHERS                      = 2.
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+ENDFORM.
+
+FORM TOP_OF_PAGE USING TOP TYPE REF TO CL_DD_DOCUMENT.
+*  TABLES : T001W .
+  DATA: LV_TOP   TYPE SDYDO_TEXT_ELEMENT,
+        LV_DATE  TYPE SDYDO_TEXT_ELEMENT,
+        LV_CAT   TYPE SDYDO_TEXT_ELEMENT,
+        LV_PLANT TYPE SDYDO_TEXT_ELEMENT,
+        SEP      TYPE C VALUE ' ',
+        DOT      TYPE C VALUE '.',
+        YYYY1    TYPE CHAR4,
+        MM1      TYPE CHAR2,
+        DD1      TYPE CHAR2,
+        DATE1    TYPE CHAR10,
+        YYYY2    TYPE CHAR4,
+        MM2      TYPE CHAR2,
+        DD2      TYPE CHAR2,
+        DATE2    TYPE CHAR10.
+
+
+  SELECT SINGLE
+    NAME1 FROM T001W INTO WA_T001W
+    WHERE WERKS IN PLANT .
+
+  LV_TOP = 'CATEGORY AGE REPORT'.
+
+  CONCATENATE LV_DATE SY-DATUM+6(2) SY-DATUM+4(2) SY-DATUM+0(4) INTO LV_DATE  SEPARATED BY '.' .
+  SHIFT LV_DATE LEFT DELETING LEADING '.' .
+  CONCATENATE  'Report Date' LV_DATE  INTO LV_DATE  SEPARATED BY '-' .
+
+  CALL METHOD TOP->ADD_TEXT
+    EXPORTING
+      TEXT      = LV_TOP
+      SAP_STYLE = 'HEADING'.
+*     to move to next line
+  CALL METHOD TOP->NEW_LINE.
+
+*  lv_cat = CATEGORY .
+  CONCATENATE 'Group' CATEGORY INTO LV_CAT SEPARATED BY '-' .
+  CALL METHOD TOP->ADD_TEXT
+    EXPORTING
+      TEXT      = LV_CAT
+      SAP_STYLE = 'SUBHEADING'.
+
+  CALL METHOD TOP->NEW_LINE.
+
+  CALL METHOD TOP->ADD_TEXT
+    EXPORTING
+      TEXT      = LV_DATE
+      SAP_STYLE = 'SUBHEADING'.
+
+  CALL METHOD TOP->NEW_LINE.
+  LV_PLANT = WA_T001W .
+  IF WA_T001W IS NOT INITIAL .
+*    CONCATENATE 'Store/Warehouse' WA_T001W INTO LV_PLANT SEPARATED BY '-' .
+    CALL METHOD TOP->ADD_TEXT
+      EXPORTING
+        TEXT      = LV_PLANT
+        SAP_STYLE = 'SUBHEADING'.
+  ENDIF .
+
+ENDFORM.
+FORM USER_COMMAND USING  R_UCOMM LIKE SY-UCOMM RS_SELFIELD TYPE SLIS_SELFIELD.
+  REFRESH IT_FINAL1.
+  CASE R_UCOMM.
+    WHEN '&IC1'.
+      PERFORM GET_PO_DATA USING RS_SELFIELD .
+  ENDCASE.
+ENDFORM.
+FORM GET_PO_DATA  USING  RS_SELFIELD TYPE SLIS_SELFIELD.
+  BREAK BREDDY .
+  DATA(IT_FINAL2) = IT_FINAL[] .
+  READ TABLE IT_FINAL ASSIGNING FIELD-SYMBOL(<WA_FINAL>) INDEX RS_SELFIELD-TABINDEX.
+  IF SY-SUBRC = 0 .
+    DELETE IT_FINAL2 WHERE MONTH <> <WA_FINAL>-MONTH .
+  ENDIF .
+
+  DATA : A1(6) TYPE C,
+         A2(4) TYPE C.
+  SPLIT <WA_FINAL>-MONTH AT '-' INTO A1  A2 .
+
+
+
+
+  CASE RS_SELFIELD-FIELDNAME.
+    WHEN 'SL_NO' OR 'MONTH' OR 'QTY' OR 'AMOUNT'  .
+      SELECT
+      T009C~SPRAS ,
+      T009C~PERIV ,
+      T009C~POPER ,
+      T009C~BDATJ ,
+      T009C~KTEXT ,
+      T009C~LTEXT  FROM T009C INTO TABLE @DATA(IT_T009C1)
+      WHERE SPRAS = @SY-LANGU
+      AND PERIV =  'V3'
+      AND KTEXT = @A1  .
+
+
+      SELECT SINGLE  CLINT
+            KLART
+            CLASS
+            VONDT
+            BISDT
+            WWSKZ FROM KLAH INTO WA_KLAH
+            WHERE WWSKZ = '0'
+            AND   KLART = '026'
+            AND CLASS = CATEGORY.
+*  ENDIF.
+      IF WA_KLAH IS NOT INITIAL.
+        SELECT OBJEK
+               MAFID
+               KLART
+               CLINT
+               ADZHL
+               DATUB FROM KSSK INTO TABLE IT_KSSK
+                WHERE CLINT = WA_KLAH-CLINT.
+      ENDIF.
+
+      LOOP AT IT_KSSK INTO WA_KSSK .
+        SHIFT WA_KSSK-OBJEK LEFT DELETING LEADING '0'.
+        WA_KSSK1-OBJEK = WA_KSSK-OBJEK .
+        APPEND WA_KSSK1 TO IT_KSSK1 .
+        CLEAR WA_KSSK1 .
+      ENDLOOP.
+
+      IF IT_KSSK1 IS NOT INITIAL .
+        SELECT CLINT
+               KLART
+               CLASS
+               VONDT
+               BISDT
+               WWSKZ FROM KLAH INTO TABLE IT_KLAH
+               FOR ALL ENTRIES IN IT_KSSK1
+               WHERE CLINT = IT_KSSK1-OBJEK
+                AND WWSKZ = '1'.
+      ENDIF.
+      IT_KLAH1[] = IT_KLAH[] .
+      IF IT_KLAH IS NOT INITIAL .
+        SELECT MATNR
+               MATKL FROM MARA INTO TABLE IT_MARA
+               FOR ALL ENTRIES IN IT_KLAH1
+               WHERE MATKL = IT_KLAH1-CLASS.
+
+      ENDIF.
+      READ TABLE IT_T009C1 ASSIGNING FIELD-SYMBOL(<WA_T009C1>) INDEX 1 .
+      IF SY-SUBRC = 0.
+        SELECT
+          MCHB~MATNR ,
+          MCHB~WERKS ,
+          MCHB~CHARG ,
+          MCHB~CLABS ,
+          MCHB~LFGJA ,
+          MCHB~LFMON FROM MCHB INTO TABLE @DATA(IT_MCHB1)
+                    FOR ALL ENTRIES IN @IT_MARA
+                    WHERE MATNR = @IT_MARA-MATNR
+                    AND WERKS  IN @PLANT
+*                   AND MATNR = '1018'
+                   AND LFMON = @<WA_T009C1>-POPER
+                  AND LFGJA = @A2
+                  AND CLABS <> '0'.
+
+*            AND LFMON = '03'
+*            AND LFGJA = '2019'
+*              AND   MATNR = @IT_MARA-MATNR .
+
+      ENDIF .
+
+      IF IT_MCHB1 IS NOT INITIAL .
+
+
+        SELECT
+          CHARG
+          ERSDA FROM MCHA INTO TABLE IT_MCHA
+                FOR ALL ENTRIES IN IT_MCHB1
+                WHERE CHARG = IT_MCHB1-CHARG .
+
+        SELECT
+          A502~MATNR ,
+          A502~LIFNR  FROM A502 INTO TABLE @DATA(IT_A502)
+                      FOR ALL ENTRIES IN @IT_MCHB1
+                      WHERE MATNR = @IT_MCHB1-MATNR .
+        SELECT
+        MAKT~MATNR ,
+        MAKT~MAKTX  FROM MAKT INTO TABLE @DATA(IT_MAKT)
+               FOR ALL ENTRIES IN @IT_MCHB1
+               WHERE MATNR = @IT_MCHB1-MATNR
+               AND SPRAS = @SY-LANGU .
+        SELECT
+          LIFNR
+          NAME1 FROM LFA1 INTO TABLE IT_LFA1
+          FOR ALL ENTRIES IN IT_A502
+          WHERE LIFNR = IT_A502-LIFNR .
+*        SELECT
+*          MARA~MATNR ,
+*          MARA~MATKL FROM MARA INTO TABLE @DATA(IT_MARA)
+*                     FOR ALL ENTRIES IN @IT_MCHB1
+*                     WHERE MATNR = @IT_MCHB1-MATNR .
+
+        SELECT
+        MBEW~MATNR ,
+        MBEW~BWKEY ,
+        MBEW~BWTAR ,
+        MBEW~LBKUM ,
+        MBEW~SALK3 ,
+        MBEW~LFMON ,
+        MBEW~LFGJA FROM MBEW INTO TABLE @DATA(IT_MBEW1)
+                   FOR ALL ENTRIES IN @IT_MCHB1
+                   WHERE BWTAR = @IT_MCHB1-CHARG
+*                  AND LFMON = '03'
+*                  AND LFGJA = '2019'
+                   AND BWKEY = @IT_MCHB1-WERKS .
+
+      ENDIF .
+*      IF IT_MARA IS NOT INITIAL.
+*
+*        SELECT
+*          T023~MATKL  FROM T023 INTO TABLE @DATA(IT_T023)
+*                     FOR ALL ENTRIES IN @IT_MARA
+*                     WHERE MATKL = @IT_MARA-MATKL .
+*      ENDIF.
+
+      IF IT_MARA IS NOT INITIAL.
+
+        SELECT
+          T023T~MATKL ,
+          T023T~WGBEZ FROM T023T INTO TABLE @DATA(IT_T023T)
+                      FOR ALL ENTRIES IN @IT_MARA
+                      WHERE MATKL = @IT_MARA-MATKL .
+      ENDIF.
+      DATA : SLNO(3) TYPE I .
+      DATA(IT_MCHB_M) =  IT_MCHB1[] .
+*      SORT IT_MCHB1 BY MATNR .
+*      DELETE ADJACENT DUPLICATES FROM IT_MCHB1 COMPARING MATNR .
+
+*      LOOP AT IT_MCHB1 ASSIGNING FIELD-SYMBOL(<WA_MCHB1>).
+      LOOP AT IT_MCHB1 ASSIGNING FIELD-SYMBOL(<WA_MCHB1>).
+
+        SLNO = SLNO + 1 .
+        WA_FINAL1-SL_NO = SLNO  .
+
+        WA_FINAL1-MATNR = <WA_MCHB1>-MATNR .
+*        LOOP AT IT_MCHB_M ASSIGNING FIELD-SYMBOL(<WA_MCHB_M>) WHERE MATNR = <WA_MCHB1>-MATNR.
+
+*          WA_FINAL1-QTY = <WA_MCHB_M>-CLABS + WA_FINAL1-QTY.
+        WA_FINAL1-QTY = <WA_MCHB1>-CLABS .                ""+ WA_FINAL1-QTY.
+        WA_FINAL1-CHARG = <WA_MCHB1>-CHARG .                ""+ WA_FINAL1-QTY.
+
+*          READ TABLE IT_MBEW1 ASSIGNING FIELD-SYMBOL(<WA_MBEW1>) WITH KEY BWTAR = <WA_MCHB_M>-CHARG BWKEY = <WA_MCHB_M>-WERKS.
+        READ TABLE IT_MBEW1 ASSIGNING FIELD-SYMBOL(<WA_MBEW1>) WITH KEY BWTAR = <WA_MCHB1>-CHARG BWKEY = <WA_MCHB1>-WERKS.
+
+        IF SY-SUBRC = 0.
+*            WA_FINAL1-AMOUNT = <WA_MBEW1>-SALK3 + WA_FINAL1-AMOUNT .
+          WA_FINAL1-AMOUNT = <WA_MBEW1>-SALK3 .
+
+        ENDIF.
+
+        READ TABLE IT_A502 ASSIGNING FIELD-SYMBOL(<WA_A502>) WITH KEY MATNR = <WA_MCHB1>-MATNR .
+        IF SY-SUBRC = 0.
+          WA_FINAL1-LIFNR = <WA_A502>-LIFNR .
+        ENDIF.
+
+        READ TABLE IT_LFA1 ASSIGNING FIELD-SYMBOL(<LS_LFA1>) WITH KEY LIFNR = <WA_A502>-LIFNR .
+        IF SY-SUBRC = 0.
+          WA_FINAL1-NAME1 = <LS_LFA1>-NAME1 .
+        ENDIF.
+
+        READ TABLE IT_MCHA ASSIGNING FIELD-SYMBOL(<LS_MCHA>) WITH KEY CHARG = <WA_MCHB1>-CHARG .
+        IF SY-SUBRC = 0.
+
+          WA_FINAL1-ERSDA = <LS_MCHA>-ERSDA .
+
+        ENDIF.
+
+        READ TABLE IT_MAKT ASSIGNING FIELD-SYMBOL(<WA_MAKT>) WITH KEY MATNR = <WA_MCHB1>-MATNR .
+        IF SY-SUBRC = 0.
+          WA_FINAL1-MAKTX = <WA_MAKT>-MAKTX .
+        ENDIF.
+
+        READ TABLE IT_MARA ASSIGNING FIELD-SYMBOL(<WA_MARA>) WITH KEY MATNR = <WA_MCHB1>-MATNR .
+        IF SY-SUBRC = 0.
+          WA_FINAL1-MATKL = <WA_MARA>-MATKL .
+        ENDIF.
+
+        READ TABLE IT_T023T ASSIGNING FIELD-SYMBOL(<WA_T023T>) WITH KEY MATKL = <WA_MARA>-MATKL .
+        IF SY-SUBRC = 0.
+          WA_FINAL1-WGBEZ = <WA_T023T>-WGBEZ .
+        ENDIF.
+
+        APPEND WA_FINAL1 TO IT_FINAL1 .
+        CLEAR : WA_FINAL1 .
+
+
+      ENDLOOP.
+
+*        READ TABLE IT_A502 ASSIGNING FIELD-SYMBOL(<WA_A502>) WITH KEY MATNR = <WA_MCHB1>-MATNR .
+*        IF SY-SUBRC = 0.
+*          WA_FINAL1-LIFNR = <WA_A502>-LIFNR .
+*        ENDIF.
+*
+*        READ TABLE IT_MAKT ASSIGNING FIELD-SYMBOL(<WA_MAKT>) WITH KEY MATNR = <WA_MCHB1>-MATNR .
+*        IF SY-SUBRC = 0.
+*          WA_FINAL1-MAKTX = <WA_MAKT>-MAKTX .
+*        ENDIF.
+*
+*        READ TABLE IT_MARA ASSIGNING FIELD-SYMBOL(<WA_MARA>) WITH KEY MATNR = <WA_MCHB1>-MATNR .
+*        IF SY-SUBRC = 0.
+*          WA_FINAL1-MATKL = <WA_MARA>-MATKL .
+*        ENDIF.
+*
+*        READ TABLE IT_T023T ASSIGNING FIELD-SYMBOL(<WA_T023T>) WITH KEY MATKL = <WA_MARA>-MATKL .
+*        IF SY-SUBRC = 0.
+*          WA_FINAL1-WGBEZ = <WA_T023T>-WGBEZ .
+*        ENDIF.
+*
+*        APPEND WA_FINAL1 TO IT_FINAL1 .
+*        CLEAR : WA_FINAL1 .
+*      ENDLOOP.
+
+
+  ENDCASE.
+*  BREAK BREDDY .
+  DATA: IT_FCAT1  TYPE SLIS_T_FIELDCAT_ALV,
+        WA_FCAT1  TYPE SLIS_FIELDCAT_ALV,
+        IT_EVENT1 TYPE SLIS_T_EVENT,
+        WA_EVENT1 TYPE SLIS_ALV_EVENT.
+
+  DATA WA_LAYOUT1 TYPE SLIS_LAYOUT_ALV.
+  WA_LAYOUT1-COLWIDTH_OPTIMIZE = 'X'.
+  WA_LAYOUT1-ZEBRA = 'X'.
+
+
+  WA_FCAT1-FIELDNAME = 'SL_NO'.
+  WA_FCAT1-SELTEXT_M = 'Serial_No'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'LIFNR'.
+  WA_FCAT1-SELTEXT_M = 'Vendor'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'Name1'.
+  WA_FCAT1-SELTEXT_M = 'Vendor Name'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'MATNR'.
+  WA_FCAT1-SELTEXT_M = 'Child SST Code'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'MAKTX'.
+  WA_FCAT1-SELTEXT_M = 'Description'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'MATKL'.
+  WA_FCAT1-SELTEXT_M = 'Cat Code'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'CHARG'.
+  WA_FCAT1-SELTEXT_M = 'Batch'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'ERSDA'.
+  WA_FCAT1-SELTEXT_M = 'Gr Date'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+
+
+
+
+  WA_FCAT1-FIELDNAME = 'WGBEZ'.
+  WA_FCAT1-SELTEXT_M = 'Cat Code Description'.
+*  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'QTY'.
+  WA_FCAT1-SELTEXT_M = 'Quantity'.
+  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+  WA_FCAT1-FIELDNAME = 'AMOUNT'.
+  WA_FCAT1-SELTEXT_M = 'Value'.
+  WA_FCAT1-DO_SUM    = 'X' .
+  APPEND  WA_FCAT1 TO IT_FCAT1.
+  CLEAR :WA_FCAT1 .
+
+
+
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      I_CALLBACK_PROGRAM = SY-REPID
+      IS_LAYOUT          = WA_LAYOUT1
+      IT_FIELDCAT        = IT_FCAT1
+    TABLES
+      T_OUTTAB           = IT_FINAL1
+    EXCEPTIONS
+      PROGRAM_ERROR      = 1
+      OTHERS             = 2.
+*          IF SY-SUBRC <> 0.
+** Implement suitable error handling here
+*          ENDIF.
+
+ENDFORM.

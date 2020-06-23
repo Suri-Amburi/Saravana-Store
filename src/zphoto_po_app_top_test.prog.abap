@@ -1,0 +1,255 @@
+*&---------------------------------------------------------------------*
+*& Include          ZPHOTO_PO_APP_TOP
+*&---------------------------------------------------------------------*
+TYPES : BEGIN OF TY_HDR,
+          VENDOR          TYPE LIFNR,
+*          VENDOR          TYPE CHAR20,    "  ADDED (6-2-20)
+          PGROUP          TYPE ZGROUP,
+          PUR_GROUP       TYPE EKGRP,
+          INDENT_NO       TYPE ZINDENT,
+          PDATE           TYPE ZP_DATE,
+          SUP_SAL_NO      TYPE ZSAL,
+          SUP_NAME        TYPE ZSUP_NAME,
+          VENDOR_NAME     TYPE NAME1,
+          TRANSPORTER     TYPE NAME1,
+          VENDOR_LOCATION TYPE AD_CITY1,
+          DELIVERY_AT     TYPE WERKS_D,
+          LEAD_TIME       TYPE ZLEAD,
+          E_MSG           TYPE ZEMSG,
+          S_MSG           TYPE ZSMSG,
+        END OF TY_HDR .
+
+TYPES : BEGIN OF TY_ITEM ,
+          INDENT_NO     TYPE ZINDENT,
+*          VENDOR        TYPE ZPH_T_ITEM-VENDOR,       " ADDED (6-2-20)
+          VENDOR        TYPE LIFNR,
+          PGROUP        TYPE ZCAT,
+          ITEM          TYPE EBELP,
+          CATEGORY_CODE TYPE MATKL,
+          STYLE         TYPE ZP_STYLE,
+          FROM_SIZE     TYPE ZSIZE_F,
+          TO_SIZE       TYPE ZSIZE_T,
+          COLOR         TYPE ZP_COLOR,
+          QUANTITY      TYPE BSTMG,
+          PRICE         TYPE BPREI,
+          REMARKS       TYPE ZP_REMARKS,
+          E_MSG         TYPE ZEMSG,
+          S_MSG         TYPE ZSMSG,
+          ZTEXT100      TYPE ZTEXT,
+        END OF TY_ITEM .
+
+TYPES : BEGIN OF TY_FINAL ,
+          INDENT_NO       TYPE ZINDENT,
+*          VENDOR      TYPE CHAR20,             " ADDED (6-2-20)
+          VENDOR          TYPE LIFNR,
+          PGROUP          TYPE ZCAT,
+          PUR_GROUP       TYPE EKGRP,
+          PDATE           TYPE ZP_DATE,
+          SUP_SAL_NO      TYPE ZSAL,
+          SUP_NAME        TYPE ZSUP_NAME,
+          VENDOR_NAME     TYPE NAME1,
+          TRANSPORTER     TYPE NAME1,
+          VENDOR_LOCATION TYPE AD_CITY1,
+          DELIVERY_AT     TYPE WERKS_D,
+          LEAD_TIME       TYPE ZLEAD,
+          E_MSG           TYPE ZEMSG,
+          S_MSG           TYPE ZSMSG,
+          CELLCOLORS      TYPE LVC_T_SCOL,
+        END OF TY_FINAL .
+
+TYPES : BEGIN OF TY_FINAL1,
+          INDENT_NO     TYPE ZINDENT,
+          VENDOR        TYPE LIFNR,
+*          VENDOR(20)        TYPE C,
+          PGROUP        TYPE ZCAT,
+          ITEM          TYPE EBELP,
+          CATEGORY_CODE TYPE MATKL,
+          STYLE         TYPE ZP_STYLE,
+          FROM_SIZE     TYPE ZSIZE_F,
+          TO_SIZE       TYPE ZSIZE_T,
+          COLOR         TYPE ZP_COLOR,
+          QUANTITY      TYPE BSTMG,
+          PRICE         TYPE ZPR_FRM,
+          REMARKS       TYPE ZP_REMARKS,
+          E_MSG         TYPE ZEMSG,
+          S_MSG         TYPE ZSMSG,
+          ZTEXT100      TYPE ZTEXT,
+          SUP_NAME      TYPE ZSUP_NAME,
+          USER_NAME     TYPE ZUNAM,
+        END OF TY_FINAL1 .
+
+TYPES : BEGIN OF TY_MARP ,
+          MATNR      TYPE   MARA-MATNR,
+          MATKL      TYPE   MARA-MATKL,
+          SIZE1      TYPE    MARA-SIZE1,
+          ZZPRICE_FR TYPE    MARA-ZZPRICE_FRM,
+          ZZPRICE_TO TYPE    MARA-ZZPRICE_TO,
+          MEINS      TYPE    MARA-MEINS,
+        END OF TY_MARP .
+TYPES : BEGIN OF TY_EKKO ,
+          ZINDENT TYPE ZINDENT,
+        END OF TY_EKKO,
+************ ADDED (6-2-20)    ***********************
+        BEGIN OF TY_LFA1,
+          LIFNR         TYPE CHAR20,
+
+          ZZTEMP_VENDOR TYPE CHAR20,
+          REGIO         TYPE REGIO,
+        END OF TY_LFA1.
+
+
+TYPES : BEGIN OF TY_2LFA1,
+          LIFNR     TYPE LIFNR  , "ACCOUNT NUMBER OF VENDOR OR CREDITOR
+          LAND1     TYPE LAND1_GP, "Country Key
+          NAME1     TYPE NAME1_GP  , "  Name 1
+          ADRNR     TYPE ADRNR  , "Address
+          STCD3     TYPE STCD3,
+          REGIO     TYPE LFA1-REGIO,
+          VEN_CLASS TYPE LFA1-VEN_CLASS,
+        END OF TY_2LFA1.
+*************        END      *************
+TYPES : BEGIN OF TY_A044,
+          KAPPL TYPE KAPPL,
+          KSCHL TYPE KSCHA,
+          EKORG TYPE A044-EKORG,
+          LIFNR TYPE A044-LIFNR,
+          KNUMH TYPE A044-KNUMH,
+        END OF TY_A044,
+
+        BEGIN OF TY_A502,
+          KAPPL TYPE A502-KAPPL,
+          KSCHL TYPE A502-KSCHL,
+          LIFNR TYPE A502-LIFNR,
+          MATNR TYPE A502-MATNR,
+          KFRST TYPE A502-KFRST,
+          KNUMH TYPE A502-KNUMH,
+        END OF TY_A502,
+
+        BEGIN OF TY_A503,
+          KAPPL TYPE A503-KAPPL,
+          KSCHL TYPE A503-KSCHL,
+          LIFNR TYPE A503-LIFNR,
+          MATKL TYPE A503-MATKL,
+          KFRST TYPE A503-KFRST,
+          KNUMH TYPE A503-KNUMH,
+        END OF TY_A503.
+
+TYPES : BEGIN OF TY_KONP_LI,
+          KNUMH TYPE KNUMH,
+          KOPOS TYPE KOPOS,
+          KBETR TYPE KBETR_KOND,
+        END OF TY_KONP_LI.
+
+
+
+
+DATA : IT_HDR    TYPE TABLE OF TY_HDR,
+       IT_ITEM   TYPE TABLE OF TY_ITEM,
+       LS_ITEM   TYPE TY_ITEM,
+       WA_EKKO   TYPE  TY_EKKO,
+       IT_FINAL  TYPE TABLE OF TY_FINAL,
+       IT_FIN    TYPE TABLE OF TY_FINAL,
+       WA_FINAL  TYPE  TY_FINAL,
+       IT_FINAL1 TYPE TABLE OF TY_FINAL,
+       IT_FINAL2 TYPE TABLE OF TY_FINAL1,
+       LV_TEST   TYPE TY_HDR,                             " ADDED BY LIKHITHA
+       IT_FINAL3 TYPE TABLE OF TY_FINAL1,
+       WA_FINAL1 TYPE  TY_FINAL,
+       WA_FINAL2 TYPE  TY_FINAL1,
+       IT_MARP   TYPE TABLE OF TY_MARP,
+       IT_COUNT  TYPE TABLE OF TY_MARP,
+       IT_A044   TYPE TABLE OF TY_A044,
+       WA_A044   TYPE TY_A044,
+       IT_A502   TYPE TABLE OF TY_A502,
+       WA_A502   TYPE TY_A502,
+       IT_A503   TYPE TABLE OF TY_A503,
+       WA_A503   TYPE TY_A503,
+**************       ADDED (6-2-20)      ***************
+       IT_LFA1   TYPE TABLE OF TY_LFA1,
+       WA_LFA1   TYPE TY_LFA1,
+
+        IT_KONP_1 TYPE TABLE OF TY_KONP_LI,
+        WA_KONP_1 TYPE TY_KONP_LI,
+
+        IT_KONP_2 TYPE TABLE OF TY_KONP_LI,
+        WA_KONP_2 TYPE TY_KONP_LI,
+
+        IT_KONP_3 TYPE TABLE OF TY_KONP_LI,
+        WA_KONP_3 TYPE TY_KONP_LI.
+
+        DATA : LV_DIS TYPE KBETR_KOND.
+
+*       it_lfa1
+*********************     END (6-2-20)      ***************
+DATA : LV_COUNT(03) TYPE  I .
+
+DATA :  GV_SUBRC    TYPE SY-SUBRC. .
+DATA: C_X(1)      VALUE 'X',
+      C_M(1)      VALUE 'M',
+      LS_LAYOUT   TYPE SLIS_LAYOUT_ALV,
+      LT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV,
+      GS_FIELDCAT TYPE SLIS_FIELDCAT_ALV,
+      WVARI       TYPE DISVARIANT,
+      LT_SORT     TYPE SLIS_T_SORTINFO_ALV.
+DATA : LV_VENDOR TYPE LIFNR .
+WVARI-REPORT    = SY-REPID.
+WVARI-USERNAME  = SY-UNAME.
+
+LS_LAYOUT-ZEBRA       = ABAP_TRUE.
+LS_LAYOUT-COLWIDTH_OPTIMIZE  = ABAP_TRUE.
+
+
+DATA:
+  CONTAINER    TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+  CONTAINER1   TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+  GRID         TYPE REF TO CL_GUI_ALV_GRID,
+  GRID1        TYPE REF TO CL_GUI_ALV_GRID,
+  GT_EXCLUDE   TYPE UI_FUNCTIONS,
+  GS_LAYO      TYPE LVC_S_LAYO,
+  GS_LAYO1     TYPE LVC_S_LAYO,
+  GT_FIELDCAT  TYPE LVC_T_FCAT,
+  GT_ERRORCAT  TYPE LVC_T_FCAT,
+  GS_FIELDCATS TYPE LVC_S_FCAT,
+  GS_ERRORCAT  TYPE LVC_S_FCAT,
+  OK_9003      TYPE SY-UCOMM,
+  GV_QR        TYPE ZQR_CODE.
+*  GV_SUBRC     TYPE SY-SUBRC.
+DATA: C_BACK   TYPE SYUCOMM    VALUE 'BACK1',
+      C_EXIT   TYPE SYUCOMM    VALUE 'EXIT',
+      C_CANCEL TYPE SYUCOMM  VALUE 'CANCEL'.
+
+
+*  DATA(OK_CODE) = OK_9003.
+*  CLEAR :OK_9003.
+DATA : OK_CODE TYPE SY-UCOMM .
+
+DATA : EXTENSIONIN    TYPE TABLE OF BAPIPAREX,
+       WA_EXTENSIONIN TYPE  BAPIPAREX.
+
+DATA: BAPI_TE_PO   TYPE BAPI_TE_MEPOHEADER,
+      IBAPI_TE_PO  TYPE BAPI_TE_MEPOHEADER,
+      BAPI_TE_POX  TYPE BAPI_TE_MEPOHEADERX,
+      IBAPI_TE_POX TYPE BAPI_TE_MEPOHEADERX.
+DATA : LV_EBELN TYPE EBELN .
+DATA: IT_CELLCOLOURS TYPE LVC_T_SCOL,
+      WA_CELLCOLOR   TYPE LVC_S_SCOL.
+
+DATA : WA_LAYOUT TYPE SLIS_LAYOUT_ALV .
+WA_LAYOUT-ZEBRA = 'X' .
+WA_LAYOUT-COLWIDTH_OPTIMIZE = 'X' .
+WA_LAYOUT-COLTAB_FIELDNAME  = 'CELLCOLORS'.
+
+DATA : REF_GRID TYPE REF TO CL_GUI_ALV_GRID. "new
+
+
+DATA : IT_ERROR      TYPE TABLE OF BAPIRET2,
+       WA_ERROR      TYPE  BAPIRET2,
+       C_SET(3)      VALUE 'SET' , " SET UOM
+       C_VESSELS(10) VALUE 'VESSELS',
+       C_KG(2)       VALUE 'KG'.
+DATA : SL_ITEM(10) TYPE C VALUE '10',
+       FLAG        TYPE C.
+
+DATA : IT_DIS TYPE ZTAX_TT,
+       WA_DIS TYPE ZTAX_L.
+DATA : LV_CON TYPE KNUMH.

@@ -1,0 +1,176 @@
+*&---------------------------------------------------------------------*
+*& Report ZMM_STOCK_REPORT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+TYPES : BEGIN OF TY_KLAH ,
+          CLINT TYPE CLINT,
+          KLART TYPE KLASSENART,
+          CLASS TYPE KLASSE_D,
+          VONDT TYPE VONDAT,
+          BISDT TYPE BISDAT,
+          WWSKZ TYPE KLAH-WWSKZ,
+        END OF TY_KLAH .
+
+TYPES : BEGIN OF TY_KLAH1 ,
+          CLINT TYPE CLINT,
+          KLART TYPE KLASSENART,
+          CLASS TYPE MATKL,
+          VONDT TYPE VONDAT,
+          BISDT TYPE BISDAT,
+          WWSKZ TYPE KLAH-WWSKZ,
+        END OF TY_KLAH1 .
+
+TYPES : BEGIN OF TY_KSSK ,
+          OBJEK TYPE CUOBN,
+          MAFID TYPE KLMAF,
+          KLART TYPE KLASSENART,
+          CLINT TYPE CLINT,
+          ADZHL TYPE ADZHL,
+          DATUB TYPE DATUB,
+        END OF TY_KSSK .
+
+TYPES : BEGIN OF TY_KSSK1 ,
+          OBJEK TYPE CLINT,
+*          MAFID type KLMAF,
+*          KLART type KLASSENART,
+*          CLINT type CLINT,
+*          ADZHL type ADZHL,
+*          DATUB type DATUB,
+        END OF TY_KSSK1 .
+
+TYPES : BEGIN OF TY_MBEW ,
+          MATNR TYPE MATNR,
+          BWKEY TYPE BWKEY,
+          LBKUM TYPE LBKUM,
+          SALK3 TYPE SALK3,
+        END OF TY_MBEW .
+
+TYPES : BEGIN OF TY_MARA ,
+          MATNR TYPE MATNR,
+          MATKL TYPE MATKL,
+        END OF TY_MARA .
+
+TYPES : BEGIN OF TY_A502 ,
+          MATNR TYPE MATNR,
+          LIFNR TYPE LIFNR,
+        END OF TY_A502 .
+
+TYPES : BEGIN OF TY_FINAL ,
+          LIFNR TYPE LIFNR,
+          BWKEY TYPE BWKEY,
+          LBKUM TYPE LBKUM,
+          SALK3 TYPE SALK3,
+        END OF TY_FINAL .
+
+TYPES : BEGIN OF TY_GTDATA ,
+          MATNR TYPE MBEW-MATNR,
+          BWKEY TYPE MBEW-BWKEY,
+          LBKUM TYPE MBEW-LBKUM,
+          SALK3 TYPE MBEW-SALK3,
+          LIFNR TYPE A502-LIFNR,
+          KSCHL TYPE A502-KSCHL,
+          KNUMH TYPE KONP-KNUMH,
+        END OF TY_GTDATA.
+
+DATA : IT_MBEW   TYPE TABLE OF TY_MBEW,
+       WA_MBEW   TYPE TY_MBEW,
+       IT_KLAH   TYPE TABLE OF TY_KLAH,
+       IT_FINAL  TYPE TABLE OF TY_FINAL,
+       IT_FINAL1 TYPE TABLE OF TY_FINAL,
+       WA_KLAH   TYPE TY_KLAH,
+       WA_FINAL  TYPE TY_FINAL,
+       WA_FINAL1 TYPE TY_FINAL,
+       IT_KLAH1  TYPE TABLE OF TY_KLAH1,
+       WA_KLAH1  TYPE TY_KLAH1,
+       IT_KSSK1  TYPE TABLE OF TY_KSSK1,
+       WA_KSSK1  TYPE TY_KSSK1,
+       IT_KSSK   TYPE TABLE OF TY_KSSK,
+       WA_KSSK   TYPE TY_KSSK,
+       IT_A502   TYPE TABLE OF TY_A502,
+       IT_MARA   TYPE TABLE OF TY_MARA,
+       GT_DATA   TYPE TABLE OF TY_GTDATA,
+       WA_A502   TYPE TY_A502,
+       WA_MARA   TYPE TY_MARA,
+       LV_MATKL  TYPE MATKL.
+
+
+
+
+TYPES : BEGIN OF TY_TABLE ,
+          LIFNR TYPE LIFNR,
+          W01Q  TYPE LBKUM,
+          W02Q  TYPE LBKUM,
+          W03Q  TYPE LBKUM,
+          W04Q  TYPE LBKUM,
+          W05Q  TYPE LBKUM,
+          W06Q  TYPE LBKUM,
+          W07Q  TYPE LBKUM,
+          W08Q  TYPE LBKUM,
+          W09Q  TYPE LBKUM,
+          W010Q TYPE LBKUM,
+          W01V  TYPE SALK3,
+          W02V  TYPE SALK3,
+          W03V  TYPE SALK3,
+          W04V  TYPE SALK3,
+          W05V  TYPE SALK3,
+          W06V  TYPE SALK3,
+          W07V  TYPE SALK3,
+          W08V  TYPE SALK3,
+          W09V  TYPE SALK3,
+          W010V TYPE SALK3,
+          CUM   TYPE LBKUM,
+          CUM1  TYPE SALK3,
+        END OF TY_TABLE .
+
+
+
+TYPES : BEGIN OF TY_TAB ,
+          SL_NO(03) TYPE I,
+          PLANT     TYPE WERKS,
+        END OF TY_TAB .
+
+
+
+
+
+
+
+
+
+
+
+DATA : GT_TABLE TYPE TABLE OF TY_TABLE,
+       GS_TABLE TYPE TY_TABLE,
+       GT_TAB   TYPE TABLE OF TY_TAB,
+       GS_TAB   TYPE  TY_TAB.
+
+DATA: FIELDCAT  TYPE TABLE OF LVC_S_FCAT WITH HEADER LINE, "for field catalog
+      LT_FCAT   TYPE LVC_T_FCAT,
+      LS_FCAT   TYPE LVC_S_FCAT,
+      LT_FCAT01 TYPE LVC_T_FCAT,
+      LS_FCAT01 TYPE LVC_S_FCAT.
+
+DATA : IT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV,
+       WA_FIELDCAT TYPE SLIS_FIELDCAT_ALV.
+
+DATA: IT_SORT TYPE SLIS_T_SORTINFO_ALV,
+      WA_SORT TYPE SLIS_SORTINFO_ALV.
+TYPE-POOLS : SLIS.
+DATA : WA_LAYOUT TYPE SLIS_LAYOUT_ALV .
+WA_LAYOUT-ZEBRA = 'X' .
+WA_LAYOUT-COLWIDTH_OPTIMIZE = 'X' .
+
+
+DATA: IT_EVENTS TYPE  SLIS_T_EVENT,
+      WA_EVENTS TYPE SLIS_ALV_EVENT.
+
+DATA : IT_FCAT TYPE SLIS_T_FIELDCAT_ALV .
+DATA: GT_EVENTS     TYPE SLIS_T_EVENT.
+
+
+DATA:
+      WA_FCAT      TYPE SLIS_FIELDCAT_ALV,
+      GD_TAB_GROUP TYPE SLIS_T_SP_GROUP_ALV,
+      GD_LAYOUT    TYPE SLIS_LAYOUT_ALV,
+      GD_REPID     LIKE SY-REPID.

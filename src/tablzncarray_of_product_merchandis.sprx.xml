@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCARRAY_OF_PRODUCT_MERCHANDIS</OBJ_NAME>
+     <OBJECT_M>INTF</OBJECT_M>
+     <OBJ_NAME_M>ZNCII_SAVE_PRODUCT_LIST_INBOUN</OBJ_NAME_M>
+     <HASH_ID>15747EEE3681EC3ADA995ADA01CF7512ACE62572</HASH_ID>
+     <ID>&lt;type&gt; ArrayOfProductMerchandiseHierarchyDetail http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>ArrayOfProductMerchandiseHierarchyDetail</IFR_NAME>
+     <IFR_NSPCE>http://www.iVend.com/IIntegrationService/2010/12</IFR_NSPCE>
+     <IFR_GNSPCE>SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</IFR_GNSPCE>
+     <GEN_VERS>0005</GEN_VERS>
+     <PREFIX>ZNC</PREFIX>
+     <CATEGORY>ifmtypedef</CATEGORY>
+     <X-ML_NSPCE>http://www.iVend.com/IIntegrationService/2010/12</X-ML_NSPCE>
+     <X-ML_NAME>ArrayOfProductMerchandiseHierarchyDetail</X-ML_NAME>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCARRAY_OF_PRODUCT_MERCHANDIS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>PRODUCT_MERCHANDISE_HIERARCHY</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>PRODUCT_MERCHANDISE_HIERARCHY</OBJ_NAME2>
+     <OBJECT_R>TTYP</OBJECT_R>
+     <OBJ_NAME_R>ZNCPRODUCT_MERCHANDISE_HIE_TAB</OBJ_NAME_R>
+     <ID>&lt;element&gt; {http://www.iVend.com/IIntegrationService/2010/12}ProductMerchandiseHierarchyDetail &lt;type&gt; ArrayOfProductMerchandiseHierarchyDetail http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>ProductMerchandiseHierarchyDetail</IFR_NAME>
+     <IFR_TAGTYP>L</IFR_TAGTYP>
+     <IFR_MAXOCC>65535</IFR_MAXOCC>
+     <IFR_OPTNL>X</IFR_OPTNL>
+     <IFR_QUALIF>X</IFR_QUALIF>
+     <IFR_NILLABLE>X</IFR_NILLABLE>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>PRODUCT_MERCHANDISE_HIERARCHY</R3_NAME>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCARRAY_OF_PRODUCT_MERCHANDIS</OBJ_NAME>
+     <OBJECT1>TABL</OBJECT1>
+     <OBJ_NAME1>ZNCARRAY_OF_PRODUCT_MERCHANDIS</OBJ_NAME1>
+     <OBJECT2>TABL</OBJECT2>
+     <OBJ_NAME2>ZNCARRAY_OF_PRODUCT_MERCHANDIS</OBJ_NAME2>
+     <ID>&lt;type&gt; ArrayOfProductMerchandiseHierarchyDetail http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>ArrayOfProductMerchandiseHierarchyDetail</IFR_NAME>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>TABL</R3_TYPE>
+     <R3_NAME>ZNCARRAY_OF_PRODUCT_MERCHANDIS</R3_NAME>
+     <R3_TEXT>Proxy Structure (generated)</R3_TEXT>
+     <CATEGORY>ifmtypedef</CATEGORY>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

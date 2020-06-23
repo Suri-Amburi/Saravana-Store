@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Gate Way Function Group</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZGW_FGTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZGW_FG</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZGW_PO_ITEM_DETAILS</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>PO Item details to Fiori</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>EBELN</PARAMETER>
+       <TYP>EBELN</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>DAYS</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>/ACCGO/E_DELIV_DAYS</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>ERROR_FLAG</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+     </IMPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>ET_ITEMS</PARAMETER>
+       <DBSTRUCT>ZGW_PO_ITEMS</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>EBELN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchasing Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>DAYS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>No. of Days</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ERROR_FLAG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Error Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_ITEMS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>PO Item details to Fiori</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZGW_VENDOR_PO_CREATE</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Odata : Vendor PO Create</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_HEADER</PARAMETER>
+       <DBFIELD>ZGW_PO_H_V</DBFIELD>
+      </RSIMP>
+     </IMPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>I_ITEM</PARAMETER>
+       <DBSTRUCT>ZGW_PO_I_V</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>E_RETURN</PARAMETER>
+       <TYP>BAPIRET2_T</TYP>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_HEADER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Odata : Vendor PO App Header</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Odata : PO Create Vendor App Item</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return table</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

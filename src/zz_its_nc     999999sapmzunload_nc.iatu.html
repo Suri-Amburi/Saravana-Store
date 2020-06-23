@@ -1,0 +1,57 @@
+`include(~service="system", ~language="", ~theme="dm", ~name="TemplateLibraryDHTML.html")`
+`SAP_TopInclude()`
+<html>
+  <head>
+    `SAP_PageTitle()`
+    `SAP_Stylesheet()`
+    `SAP_JavaScript()`
+  </head>
+  <body `SAP_BodyAttributes()` onload="`SAP_OnloadJavaScript()`">
+    `SAP_TemplateHeader()`
+    `SAP_BodyContentBegin()`
+    `SAP_FormBegin()`
+      `SAP_DynproLayerBegin(001,001,004,001)`
+      `SAP_InputField("AICON")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(006,001,001,001)`
+      `SAP_InputField("NOTIFY_BELL_SIGNAL")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(021,001,006,001)`
+      `SAP_Button("BACK")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,002,026,001)`
+      `SAP_InputField("MESAG1")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,003,026,001)`
+      `SAP_InputField("MESAG2")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,004,026,001)`
+      `SAP_InputField("MESAG3")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,005,026,001)`
+      `SAP_InputField("MESAG4")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,006,026,001)`
+      `SAP_InputField("MESAG5")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,007,026,001)`
+      `SAP_InputField("MESAG6")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(001,008,026,001)`
+      `SAP_InputField("MESAG7")`
+      `SAP_DynproLayerEnd()`
+
+    `SAP_FormEnd()`
+    `SAP_BodyContentEnd()`
+  </body>
+</html>
+                                                                                                                                                                                                                             

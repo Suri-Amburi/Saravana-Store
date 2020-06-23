@@ -1,0 +1,608 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZMSG_CLS</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>Message Class</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>Invalid PO</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Enter PO or QR Code</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Data Saved Successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Invalid QR Code</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Entered PO Quantity greater than Open PO Quantity</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>GRPO done Edit not possible</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Fill the mandatory fields</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>Enter Selected Line</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>Invalid Line Number</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Material is not in Selected Delivery</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>Invalid Batch</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>No data found for given input</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>Document is already Processed</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>HU Assigned to Delivery</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>&amp; Batch Scanned Successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>Margin not Maintained</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>Bill Date should not be in future</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>LR number is already exist with &amp; vendor</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>Fright Number is already exist with &amp; vendor</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>Bill Number is already exist with &amp; vendor</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>Scanned Quantity is greater the delivery qunatity</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>&amp; Transporter does not exist</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>&amp; PO Successfully Created</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>023</MSGNR>
+     <TEXT>Batch &amp; is not from the same QR Code &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>024</MSGNR>
+     <TEXT>Invalid QR Code</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>025</MSGNR>
+     <TEXT>Changes not possible in QR Code</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>026</MSGNR>
+     <TEXT>Already printed by user : &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>027</MSGNR>
+     <TEXT>Bill Date &amp; should not be in future</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>028</MSGNR>
+     <TEXT>Invalid data</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>029</MSGNR>
+     <TEXT>Batch quantity exceeded</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>030</MSGNR>
+     <TEXT>No shortage quantity</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>031</MSGNR>
+     <TEXT>Total Number of bundles are not matching with Actual number of bundles</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>032</MSGNR>
+     <TEXT>Billing date &amp; should not be in before PO date &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>033</MSGNR>
+     <TEXT>Gate in not required for Tatkal PO and Local PO</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>034</MSGNR>
+     <TEXT>For Tatkal PO received Inward quantity should be same PO quantity</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>035</MSGNR>
+     <TEXT>Maintain GL Account details for Plant &amp; and Material Group &amp; in ZGL_ACC_T</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>036</MSGNR>
+     <TEXT>Material hierarchy not maintained for material group &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>037</MSGNR>
+     <TEXT>Price not maintained for Transporter &amp; line &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>038</MSGNR>
+     <TEXT>Tatakal PO not possible for returned goods</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>039</MSGNR>
+     <TEXT>Tatkal PO &amp; already created</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>040</MSGNR>
+     <TEXT>Return PO &amp; already created</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>041</MSGNR>
+     <TEXT>Return PO not possible for Tatkled goods</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>042</MSGNR>
+     <TEXT>Discounts not maintained</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>043</MSGNR>
+     <TEXT>Invalid HU</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>044</MSGNR>
+     <TEXT>Price not maintained for Transporter &amp; line &amp; Service &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>045</MSGNR>
+     <TEXT>Changes not possible in completed document</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>046</MSGNR>
+     <TEXT>QR Code not Completed</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>047</MSGNR>
+     <TEXT>Invoice &amp; Created Successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>048</MSGNR>
+     <TEXT>Payment Posted Successfully with Clearing Doc &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>049</MSGNR>
+     <TEXT>Invoice already created</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>050</MSGNR>
+     <TEXT>Payment already posted</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>051</MSGNR>
+     <TEXT>Invoice not yet created</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>052</MSGNR>
+     <TEXT>Tatkal PO &amp; need approvals</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>053</MSGNR>
+     <TEXT>Inward not possible after 10 days for Tatkal PO &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>054</MSGNR>
+     <TEXT>Debit note &amp; created Successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>055</MSGNR>
+     <TEXT>&amp; Approved Successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>056</MSGNR>
+     <TEXT>Not Authorized for &amp; Approval</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>057</MSGNR>
+     <TEXT>&amp; is not Tatkal Purchase Order</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>058</MSGNR>
+     <TEXT>&amp; not a Local purchase</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>059</MSGNR>
+     <TEXT>Gate Entry is already done</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>060</MSGNR>
+     <TEXT>GRPO is alreday done , gate in not possible</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>061</MSGNR>
+     <TEXT>Given PO qunatity &amp; can&apos;t divided by set Qunatity &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>062</MSGNR>
+     <TEXT>Packing Charges Or Discount are already supplied for PO &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>063</MSGNR>
+     <TEXT>QR Code is alreday generated ,Packing Charges Or Discount not possible</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>064</MSGNR>
+     <TEXT>Invalid Number of bundles</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>065</MSGNR>
+     <TEXT>Special characters not allowed in &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>066</MSGNR>
+     <TEXT>Margin or Selling price not Maintained</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>067</MSGNR>
+     <TEXT>Selling Price is not Maintained</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>068</MSGNR>
+     <TEXT>QR Added Successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>069</MSGNR>
+     <TEXT>Invalid File type</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>070</MSGNR>
+     <TEXT>No Records Found</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>071</MSGNR>
+     <TEXT>Document is currently being processed by user - &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>072</MSGNR>
+     <TEXT>GRPO is Already Posted</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>073</MSGNR>
+     <TEXT>Received Quantity should not be empty</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>074</MSGNR>
+     <TEXT>Invalid PO for Vessels</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>075</MSGNR>
+     <TEXT>&amp; Service Entry Sheet Created Successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>076</MSGNR>
+     <TEXT>&amp; Goods Receipt Posted Successfully</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>077</MSGNR>
+     <TEXT>For Vessels Group use the Transaction : ZTP3_V</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>078</MSGNR>
+     <TEXT>Inward is not possible for Return PO</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>079</MSGNR>
+     <TEXT>Inward is not possible after delivery date</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>080</MSGNR>
+     <TEXT>GRPO is Already Posted for Local PO</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>081</MSGNR>
+     <TEXT>Gate In not yet done</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>082</MSGNR>
+     <TEXT>LR date &amp; should not be in before PO Creation date &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>083</MSGNR>
+     <TEXT>LR Date &amp; should not be in future</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>084</MSGNR>
+     <TEXT>CFO Diary not approved</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>085</MSGNR>
+     <TEXT>Invalid Material</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>086</MSGNR>
+     <TEXT>Stock is not available</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>087</MSGNR>
+     <TEXT>Purchase order is already created</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>088</MSGNR>
+     <TEXT>Enter Selling Price for Material &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>089</MSGNR>
+     <TEXT>Invalid GR Number</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>090</MSGNR>
+     <TEXT>Received Quantity is greater then Order quantity</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>091</MSGNR>
+     <TEXT>No Data to Process</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>092</MSGNR>
+     <TEXT>IDoc not Created for Material: &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>093</MSGNR>
+     <TEXT>Idoc &amp; Successfully Created for Material : &amp;</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>094</MSGNR>
+     <TEXT>No Batch Key received</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>095</MSGNR>
+     <TEXT>Enter Bay Details</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>096</MSGNR>
+     <TEXT>Please Select Payment Mode</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>097</MSGNR>
+     <TEXT>Invalid File type : only possible types XLS and XLSX</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZMSG_CLS</ARBGB>
+     <MSGNR>098</MSGNR>
+     <TEXT>&amp;  Background Job Started</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,665 @@
+*&---------------------------------------------------------------------*
+*& Include          ZMM_GRPO_SUMMARY_FORM
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Form SUBDATA
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM SUBDATA .
+  BREAK BREDDY.
+  IF QR_CODE IS NOT INITIAL.
+    SELECT SINGLE
+           EBELN
+           LIFNR
+           QR_CODE
+           TRNS
+           LR_NO
+           DUE_DATE
+           MBLNR
+           MBLNR_103
+           BILL_NUM
+           BILL_DATE
+           ACT_NO_BUD
+           STATUS
+           INWD_DOC
+           LR_DATE
+           TOTAL
+           PUR_TOTAL FROM ZINW_T_HDR INTO WA_ZINW_T_HDR
+               WHERE QR_CODE = QR_CODE
+               AND STATUS GE '04' .
+
+  ENDIF.
+
+
+
+  IF WA_ZINW_T_HDR IS NOT INITIAL .
+
+    SELECT QR_CODE
+           EBELN
+           EBELP
+           MATNR
+           LGORT
+           WERKS
+           MENGE_P
+           MEINS
+           MAKTX
+           NETPR_P
+           NETWR_P
+           NETPR_GP
+           NETPR_S
+           FROM ZINW_T_ITEM INTO TABLE IT_ZINW_T_ITEM
+           WHERE QR_CODE = WA_ZINW_T_HDR-QR_CODE.
+
+    SELECT SINGLE
+          MBLNR
+          BUDAT FROM MATDOC INTO WA_MATDOC
+                 WHERE MBLNR = WA_ZINW_T_HDR-MBLNR .
+
+    SELECT SINGLE
+           INWD_DOC
+           QR_CODE
+           STATUS_FIELD
+           STATUS_VALUE
+           DESCRIPTION
+           CREATED_DATE
+           CREATED_TIME
+           CREATED_BY FROM ZINW_T_STATUS INTO WA_ZINW_T_STATUS
+                      WHERE QR_CODE = WA_ZINW_T_HDR-QR_CODE.
+
+  ENDIF.
+
+  READ TABLE IT_ZINW_T_ITEM INTO WA_ZINW_T_ITEM INDEX 1 .
+
+  IF WA_ZINW_T_HDR IS NOT INITIAL.
+    SELECT SINGLE LIFNR
+                  LAND1
+                  NAME1
+                  STRAS
+                  ORT01
+                  STCD3
+                  REGIO FROM LFA1 INTO WA_LFA1
+                  WHERE LIFNR = WA_ZINW_T_HDR-LIFNR.
+  ENDIF.
+
+  IF WA_ZINW_T_ITEM  IS NOT INITIAL .
+    SELECT SINGLE  WERKS
+                   NAME1
+                   STRAS
+                   ORT01
+                   LAND1  FROM T001W INTO WA_T001W
+                   WHERE WERKS = WA_ZINW_T_ITEM-WERKS.
+
+    SELECT MATNR
+           SPRAS
+           MAKTX FROM MAKT INTO TABLE IT_MAKT
+           FOR ALL ENTRIES IN IT_ZINW_T_ITEM
+           WHERE MATNR = IT_ZINW_T_ITEM-MATNR.     "#EC CI_NO_TRANSFORM
+    SELECT
+      MATNR
+      EAN11 FROM MARA INTO TABLE IT_MARA
+      FOR ALL ENTRIES IN IT_ZINW_T_ITEM
+      WHERE MATNR = IT_ZINW_T_ITEM-MATNR.
+
+  ENDIF.
+  READ TABLE IT_ZINW_T_ITEM INTO WA_ZINW_T_ITEM INDEX 1.
+  IF WA_ZINW_T_ITEM IS NOT INITIAL.
+    SELECT SINGLE
+      LFA1~STCD3 FROM LFA1 INTO WA_HEADER-GSTINP
+      WHERE WERKS = WA_ZINW_T_ITEM-WERKS.
+  ENDIF.
+
+
+  IF WA_LFA1 IS NOT INITIAL .
+    SELECT SINGLE SPRAS
+                  LAND1
+                  BLAND
+                  BEZEI FROM T005U INTO WA_T005U
+                  WHERE SPRAS = 'EN'
+                  AND  LAND1 = WA_LFA1-LAND1
+                  AND BLAND = WA_LFA1-REGIO.
+
+
+  ENDIF.
+  BREAK BREDDY.
+  IF IT_ZINW_T_ITEM IS NOT INITIAL.
+    SELECT  EBELN
+            BSART
+            KNUMV
+            AEDAT
+            ZBD1T
+            ERNAM
+            EKGRP
+            USER_NAME
+            FROM EKKO INTO TABLE IT_EKKO
+            FOR ALL ENTRIES IN  IT_ZINW_T_ITEM
+            WHERE EBELN = IT_ZINW_T_ITEM-EBELN .
+
+    SELECT
+       EBELN
+       EBELP
+       WERKS
+       MATNR
+       MWSKZ
+       MENGE
+       NETPR
+       PEINH
+       NETWR
+       BUKRS
+       RETPO
+       FROM EKPO INTO TABLE IT_EKPO
+       FOR ALL ENTRIES IN IT_ZINW_T_ITEM
+       WHERE EBELN = IT_ZINW_T_ITEM-EBELN
+       AND MATNR = IT_ZINW_T_ITEM-MATNR
+       AND EBELP = IT_ZINW_T_ITEM-EBELP.
+
+  ENDIF.
+
+  IF IT_EKPO IS NOT INITIAL.
+    SELECT * FROM A003 INTO TABLE IT_A003
+                       FOR ALL ENTRIES IN IT_EKPO
+                       WHERE MWSKZ = IT_EKPO-MWSKZ.
+  ENDIF.
+
+  IF IT_EKKO IS NOT INITIAL.
+    SELECT
+      EKGRP
+      EKNAM FROM T024 INTO TABLE IT_T024
+      FOR ALL ENTRIES IN   IT_EKKO
+      WHERE EKGRP = IT_EKKO-EKGRP.
+  ENDIF.
+
+  IF IT_A003 IS NOT INITIAL.
+    SELECT * FROM KONP INTO TABLE IT_KONP
+                       FOR ALL ENTRIES IN IT_A003
+                       WHERE KNUMH = IT_A003-KNUMH.
+  ENDIF.
+
+  IF IT_EKKO IS NOT INITIAL.
+    SELECT KNUMV
+           KPOSN
+           STUNR
+           ZAEHK
+           KSCHL
+           KBETR FROM KONV INTO TABLE IT_KONV
+           FOR ALL ENTRIES IN IT_EKKO
+           WHERE KNUMV = IT_EKKO-KNUMV.            "#EC CI_NO_TRANSFORM
+
+  ENDIF.
+  READ TABLE IT_EKKO INTO WA_EKKO INDEX 1.
+
+**************for local po******************
+  SELECT
+  MBLNR
+  MJAHR
+  ZEILE
+  LIFNR
+  WERKS
+  MATNR
+  BWART
+  MENGE
+  EBELN
+  EBELP
+  BUDAT_MKPF FROM MSEG INTO TABLE IT_MSEG
+        WHERE MBLNR = WA_ZINW_T_HDR-MBLNR AND  BWART = '109'.
+
+  IF IT_MSEG IS NOT INITIAL.
+    SELECT
+       EBELN
+       EBELP
+       WERKS
+       MATNR
+       MWSKZ
+       MENGE
+       NETPR
+       PEINH
+       NETWR
+       BUKRS
+       RETPO
+       FROM EKPO INTO TABLE IT_EKPO1
+       FOR ALL ENTRIES IN IT_MSEG
+       WHERE EBELN = IT_MSEG-EBELN
+       AND EBELP = IT_MSEG-EBELP.
+    SELECT
+    QR_CODE
+    EBELN
+    EBELP
+    MATNR
+    LGORT
+    WERKS
+    MENGE_P
+    MEINS
+    MAKTX
+    NETPR_P
+    NETWR_P
+    NETPR_GP
+    NETPR_S
+      FROM ZINW_T_ITEM INTO TABLE IT_ZINW_T_ITEM1
+         FOR ALL ENTRIES IN IT_MSEG
+         WHERE EBELN = IT_MSEG-EBELN
+         AND    EBELP = IT_MSEG-EBELP AND QR_CODE = QR_CODE.
+
+  ENDIF .
+
+  IF IT_EKPO1 IS NOT INITIAL.
+
+
+    SELECT  EBELN
+            BSART
+            KNUMV
+            AEDAT
+            ZBD1T
+            ERNAM
+            EKGRP
+            USER_NAME
+            FROM EKKO INTO TABLE IT_EKKO1
+            FOR ALL ENTRIES IN  IT_EKPO1
+            WHERE EBELN = IT_EKPO1-EBELN .
+
+
+    SELECT * FROM A003 INTO TABLE IT_A0031
+                       FOR ALL ENTRIES IN IT_EKPO1
+                       WHERE MWSKZ = IT_EKPO1-MWSKZ.
+  ENDIF.
+
+
+
+  IF IT_EKKO1 IS NOT INITIAL.
+    SELECT
+      EKGRP
+      EKNAM FROM T024 INTO TABLE IT_T0241
+      FOR ALL ENTRIES IN   IT_EKKO1
+      WHERE EKGRP = IT_EKKO1-EKGRP.
+
+    SELECT KNUMV
+     KPOSN
+     STUNR
+     ZAEHK
+     KSCHL
+     KBETR FROM KONV INTO TABLE IT_KONV1
+     FOR ALL ENTRIES IN IT_EKKO1
+     WHERE KNUMV = IT_EKKO1-KNUMV.                 "#EC CI_NO_TRANSFORM
+
+  ENDIF.
+
+  IF IT_EKPO1 IS NOT INITIAL.
+    SELECT MATNR
+         SPRAS
+         MAKTX FROM MAKT INTO TABLE IT_MAKT1
+         FOR ALL ENTRIES IN IT_EKPO1
+         WHERE MATNR = IT_EKPO1-MATNR.             "#EC CI_NO_TRANSFORM
+    SELECT
+      MATNR
+      EAN11 FROM MARA INTO TABLE IT_MARA1
+      FOR ALL ENTRIES IN IT_EKPO1
+      WHERE MATNR = IT_EKPO1-MATNR.
+
+  ENDIF.
+  IF IT_A0031 IS NOT INITIAL.
+    SELECT * FROM KONP INTO TABLE IT_KONP1
+                       FOR ALL ENTRIES IN IT_A0031
+                       WHERE KNUMH = IT_A0031-KNUMH.
+  ENDIF.
+
+***************************
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form GETDATA
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM GETDATA .
+  REFRESH : IT_FINAL .
+  WA_HEADER-V_NAME1 = WA_LFA1-NAME1 .
+  WA_HEADER-V_STRAS = WA_LFA1-STRAS .
+  WA_HEADER-V_ORT01 = WA_LFA1-ORT01 .
+  WA_HEADER-V_STCD3 = WA_LFA1-STCD3 .
+  WA_HEADER-V_REGIO = WA_T005U-BEZEI.
+  WA_HEADER-NAME1 = WA_T001W-NAME1 .
+  WA_HEADER-STRAS = WA_T001W-STRAS .
+  WA_HEADER-ORT01 = WA_T001W-ORT01 .
+  WA_HEADER-LAND1 = WA_T001W-LAND1 .
+*  WA_HEADER-EBELN = WA_MSEG-EBELN .
+  WA_HEADER-LIFNR = WA_ZINW_T_HDR-LIFNR .
+  WA_HEADER-LR_DATE = WA_ZINW_T_HDR-LR_DATE .
+  WA_HEADER-BILL_NUM = WA_ZINW_T_HDR-BILL_NUM .
+  WA_HEADER-BILL_DATE = WA_ZINW_T_HDR-BILL_DATE .
+  WA_HEADER-DUE_DATE = WA_ZINW_T_HDR-DUE_DATE .
+  WA_HEADER-LR_NO = WA_ZINW_T_HDR-LR_NO .
+  WA_HEADER-INWD_DOC = WA_ZINW_T_HDR-INWD_DOC .
+  BREAK BREDDY.
+  DATA : LV_SELLING TYPE ZINW_T_ITEM-NETWR_S .
+  IF WA_EKKO-BSART = 'ZLOP' .
+
+    LOOP AT IT_MSEG INTO WA_MSEG WHERE MBLNR = WA_ZINW_T_HDR-MBLNR AND BWART = '109'.
+      LV_SLNO = LV_SLNO + 1.
+      WA_FINAL-SLNO = LV_SLNO .
+      SORT   IT_EKPO1 BY EBELN EBELP .
+      READ TABLE IT_EKPO1 INTO WA_EKPO1 WITH KEY EBELN = WA_MSEG-EBELN  EBELP = WA_MSEG-EBELP ."MATNR = WA_MSEG-MATNR.
+*    LOOP AT IT_EKPO1 INTO WA_EKPO1 WHERE EBELN = WA_MSEG-EBELN AND EBELP = WA_MSEG-EBELP ."AND MATNR = WA_EKPO1-MATNR.
+      IF SY-SUBRC = 0.
+        LV1 = WA_MSEG-MENGE .
+        SPLIT LV1 AT '.' INTO LV3 LV2.
+        WA_FINAL-MENGE = LV3.
+        WA_HEADER-MENGE_T = WA_HEADER-MENGE_T + WA_FINAL-MENGE.
+        LV4 = WA_HEADER-MENGE_T.
+        SPLIT LV4 AT '.' INTO LV5 LV6.
+        WA_FINAL-NETWR = WA_EKPO1-NETPR * WA_MSEG-MENGE .
+        WA_HEADER-NETWR1 = WA_HEADER-NETWR1 + WA_FINAL-NETWR .
+        WA_FINAL-NETPR =  WA_EKPO1-NETPR.
+      ENDIF.
+      READ TABLE IT_ZINW_T_ITEM1 INTO WA_ZINW_T_ITEM1 WITH KEY EBELN = WA_MSEG-EBELN EBELP = WA_MSEG-EBELP QR_CODE = QR_CODE.
+      IF SY-SUBRC = 0.
+        LV_SELLING = WA_ZINW_T_ITEM1-NETPR_S * WA_MSEG-MENGE + LV_SELLING .
+      ENDIF.
+      READ TABLE IT_MARA1 ASSIGNING FIELD-SYMBOL(<LS_MARA2>) WITH KEY MATNR = WA_EKPO1-MATNR .
+      IF SY-SUBRC = 0.
+        WA_FINAL-EAN11 = <LS_MARA2>-EAN11.
+      ENDIF.
+      READ TABLE IT_MAKT1 INTO WA_MAKT1 WITH KEY MATNR = WA_EKPO1-MATNR .
+      IF SY-SUBRC = 0.
+        WA_FINAL-MAKTX = WA_MAKT1-MAKTX .
+      ENDIF.
+
+      BREAK BREDDY.
+      CLEAR : WA_EKKO.
+      READ TABLE IT_EKKO1 INTO WA_EKKO1 WITH KEY EBELN = WA_EKPO1-EBELN.
+      WA_HEADER-MBLNR = WA_ZINW_T_HDR-MBLNR.
+      IF SY-SUBRC  = 0.
+        LV_DATE = WA_MSEG-BUDAT_MKPF + WA_EKKO1-ZBD1T.
+        LV_DUE = LV_DATE+6(2) && '.' && LV_DATE+4(2) && '.' &&
+        LV_DATE+0(4).
+        WA_HEADER-PO_NUM     = WA_EKKO1-EBELN.
+        WA_HEADER-CREATE_DT  = WA_EKKO1-AEDAT.
+
+        IF WA_EKKO1-USER_NAME IS NOT INITIAL.
+          WA_HEADER-CREATED_BY = WA_EKKO1-USER_NAME.
+        ELSE.
+          CLEAR:  WA_HEADER-CREATED_BY.
+          WA_HEADER-CREATED_BY = WA_EKKO1-ERNAM.
+        ENDIF.
+      ENDIF.
+
+      IF WA_EKKO1-BSART = 'ZTAT'.
+        LV_HEADING = 'Tatkal GRPO Summary'.
+      ELSE.
+        LV_HEADING = 'GRPO Summary'.
+      ENDIF.
+
+      WA_HEADER-GPRO_DATE = WA_ZINW_T_STATUS-CREATED_DATE.
+      WA_HEADER-GRPO_USER = WA_ZINW_T_STATUS-CREATED_BY.
+      WA_HEADER-NO_BUN    = WA_ZINW_T_HDR-ACT_NO_BUD.
+      BREAK BREDDY.
+      CLEAR : WA_T024.
+      READ TABLE IT_T0241 INTO WA_T0241 WITH KEY EKGRP = WA_EKKO1-EKGRP.
+      IF SY-SUBRC = 0.
+        WA_HEADER-EKNAM = WA_T0241-EKNAM.
+      ENDIF.
+      LOOP AT IT_A0031 ASSIGNING FIELD-SYMBOL(<WA_A003>) WHERE MWSKZ = WA_EKPO1-MWSKZ.
+        IF <WA_A003>-KSCHL = 'JIIG'.
+          LV_HED = 'IGST'.
+          READ TABLE IT_KONP1 ASSIGNING FIELD-SYMBOL(<WA_KONP>) WITH KEY KNUMH = <WA_A003>-KNUMH.
+          IF SY-SUBRC = 0.
+            LV_PER =  <WA_KONP>-KBETR / 10   .
+            LV_TAX = ( <WA_KONP>-KBETR * WA_FINAL-NETWR ) / 1000.
+            ADD LV_TAX  TO LV_TAX1.
+            WA_HEADER-NETPR_GP1 = WA_HEADER-NETPR_GP1 + LV_TAX1 .
+          ENDIF.
+        ELSEIF <WA_A003>-KSCHL = 'JICG' OR <WA_A003>-KSCHL = 'JISG'.
+          CLEAR : LV_HED , WA_HEADER-NETPR_GP1.
+          READ TABLE IT_KONP1 ASSIGNING FIELD-SYMBOL(<WA_KONP1>) WITH KEY KNUMH = <WA_A003>-KNUMH.
+          LV_HED = 'CGST'.
+          IF SY-SUBRC = 0.
+            CLEAR: LV_TAX,LV_PER ,LV_TAX1.
+            LV_PER =  <WA_KONP1>-KBETR / 10 .
+            LV_TAX = ( <WA_KONP1>-KBETR * WA_FINAL-NETWR ) / 1000.
+            ADD LV_TAX TO LV_TAX1.
+            WA_HEADER-NETPR_GP1 = WA_HEADER-NETPR_GP1 + LV_TAX1 .
+          ENDIF.
+        ENDIF.
+      ENDLOOP.
+      APPEND WA_FINAL TO IT_FINAL.
+      CLEAR WA_FINAL.
+
+      WA_HEADER-PROFIT = ( ( LV_SELLING - WA_HEADER-NETWR1 ) / WA_HEADER-NETWR1 ) * 100.
+      WA_HEADER-TOTAL = WA_HEADER-NETPR_GP1 + WA_HEADER-NETWR1  .
+      CLEAR : LV_TAX,LV_PER , LV_TAX1.
+    ENDLOOP.
+
+  ELSE .
+
+    LOOP AT IT_ZINW_T_ITEM INTO WA_ZINW_T_ITEM.
+      LV_SLNO = LV_SLNO + 1.
+      WA_FINAL-SLNO = LV_SLNO .
+      LV1 = WA_ZINW_T_ITEM-MENGE_P .
+      SPLIT LV1 AT '.' INTO LV3 LV2.
+      WA_FINAL-MENGE = LV3.
+      WA_HEADER-MENGE_T = WA_HEADER-MENGE_T + WA_FINAL-MENGE.
+      LV4 = WA_HEADER-MENGE_T.
+      SPLIT LV4 AT '.' INTO LV5 LV6.
+      WA_FINAL-NETWR = WA_ZINW_T_ITEM-NETWR_P .
+      WA_HEADER-NETWR1 = WA_HEADER-NETWR1 + WA_FINAL-NETWR .
+      WA_FINAL-NETPR =  WA_ZINW_T_ITEM-NETPR_P.
+
+      READ TABLE IT_MARA ASSIGNING FIELD-SYMBOL(<LS_MARA1>) WITH KEY MATNR = WA_ZINW_T_ITEM-MATNR .
+      IF SY-SUBRC = 0.
+        WA_FINAL-EAN11 = <LS_MARA1>-EAN11.
+      ENDIF.
+
+      READ TABLE IT_MAKT INTO WA_MAKT WITH KEY MATNR = WA_ZINW_T_ITEM-MATNR .
+      IF SY-SUBRC = 0.
+        WA_FINAL-MAKTX = WA_MAKT-MAKTX .
+      ENDIF.
+
+      BREAK BREDDY.
+      CLEAR : WA_EKKO.
+      READ TABLE IT_EKKO INTO WA_EKKO WITH KEY EBELN = WA_ZINW_T_ITEM-EBELN.
+      WA_HEADER-MBLNR = WA_ZINW_T_HDR-MBLNR.
+      IF SY-SUBRC  = 0.
+        LV_DATE = WA_MATDOC-BUDAT + WA_EKKO-ZBD1T.
+        LV_DUE = LV_DATE+6(2) && '.' && LV_DATE+4(2) && '.' &&
+        LV_DATE+0(4).
+        WA_HEADER-PO_NUM     = WA_EKKO-EBELN.
+        WA_HEADER-CREATE_DT  = WA_EKKO-AEDAT.
+
+        IF WA_EKKO-USER_NAME IS NOT INITIAL.
+          WA_HEADER-CREATED_BY = WA_EKKO-USER_NAME.
+        ELSE.
+          CLEAR:  WA_HEADER-CREATED_BY.
+          WA_HEADER-CREATED_BY = WA_EKKO-ERNAM.
+        ENDIF.
+      ENDIF.
+
+      IF WA_EKKO-BSART = 'ZTAT'.
+        LV_HEADING = 'Tatkal GRPO Summary'.
+      ELSE.
+        LV_HEADING = 'GRPO Summary'.
+      ENDIF.
+
+      WA_HEADER-GPRO_DATE = WA_ZINW_T_STATUS-CREATED_DATE.
+      WA_HEADER-GRPO_USER = WA_ZINW_T_STATUS-CREATED_BY.
+      WA_HEADER-NO_BUN    = WA_ZINW_T_HDR-ACT_NO_BUD.
+      BREAK BREDDY.
+      CLEAR : WA_T024.
+      READ TABLE IT_T024 INTO WA_T024 WITH KEY EKGRP = WA_EKKO-EKGRP.
+      IF SY-SUBRC = 0.
+        WA_HEADER-EKNAM = WA_T024-EKNAM.
+      ENDIF.
+      READ TABLE IT_EKPO INTO WA_EKPO WITH KEY EBELN = WA_ZINW_T_ITEM-EBELN EBELP = WA_ZINW_T_ITEM-EBELP MATNR = WA_ZINW_T_ITEM-MATNR .
+      LOOP AT IT_A003 ASSIGNING FIELD-SYMBOL(<WA_A0031>) WHERE MWSKZ = WA_EKPO-MWSKZ.
+        IF <WA_A0031>-KSCHL = 'JIIG'.
+          LV_HED = 'IGST'.
+          READ TABLE IT_KONP ASSIGNING FIELD-SYMBOL(<WA_KONP3>) WITH KEY KNUMH = <WA_A0031>-KNUMH.
+          IF SY-SUBRC = 0.
+            LV_PER =  <WA_KONP3>-KBETR / 10   .
+            LV_TAX = ( <WA_KONP3>-KBETR * WA_ZINW_T_ITEM-NETWR_P ) / 1000.
+            ADD LV_TAX  TO LV_TAX1.
+            WA_HEADER-NETPR_GP1 = WA_HEADER-NETPR_GP1 + LV_TAX1 .
+          ENDIF.
+        ELSEIF <WA_A0031>-KSCHL = 'JICG' OR <WA_A0031>-KSCHL = 'JISG'.
+          CLEAR : LV_HED , WA_HEADER-NETPR_GP1.
+          READ TABLE IT_KONP ASSIGNING FIELD-SYMBOL(<WA_KONP2>) WITH KEY KNUMH = <WA_A0031>-KNUMH.
+          LV_HED = 'CGST'.
+          IF SY-SUBRC = 0.
+            CLEAR: LV_TAX,LV_PER ,LV_TAX1.
+            LV_PER =  <WA_KONP2>-KBETR / 10 .
+            LV_TAX = ( <WA_KONP2>-KBETR * WA_ZINW_T_ITEM-NETWR_P ) / 1000.
+            ADD LV_TAX TO LV_TAX1.
+            WA_HEADER-NETPR_GP1 = WA_HEADER-NETPR_GP1 + LV_TAX1 .
+          ENDIF.
+        ENDIF.
+      ENDLOOP.
+      APPEND WA_FINAL TO IT_FINAL.
+      CLEAR WA_FINAL.
+      WA_HEADER-PROFIT = ( ( WA_ZINW_T_HDR-TOTAL - WA_ZINW_T_HDR-PUR_TOTAL ) / WA_ZINW_T_HDR-PUR_TOTAL ) * 100.
+      WA_HEADER-TOTAL = WA_HEADER-NETPR_GP1 + WA_HEADER-NETWR1  .
+      CLEAR : LV_TAX,LV_PER , LV_TAX1.
+
+    ENDLOOP.
+  ENDIF.
+*LOOP AT IT_ZINW_T_ITEM INTO WA_ZINW_T_ITEM.
+*
+**    WA_HEADER-BLDAT = WA_MKPF-BLDAT.  "" dt
+*    LV_SLNO = LV_SLNO + 1.
+*    WA_FINAL-SLNO = LV_SLNO .
+*
+*    LV1 = WA_ZINW_T_ITEM-MENGE_P .
+*    SPLIT LV1 AT '.' INTO LV3 LV2.
+*    WA_FINAL-MENGE = LV3.
+*
+*    WA_header-MENGE_t = WA_header-MENGE_t + WA_FINAL-MENGE.
+*    LV4 = WA_header-MENGE_t.
+*    SPLIT LV4 AT '.' INTO LV5 LV6.
+*
+*    WA_FINAL-NETWR = WA_ZINW_T_ITEM-NETWR_P .
+*    WA_header-NETWR1 = WA_header-NETWR1 + WA_FINAL-NETWR .
+**    WA_header-NETPR_GP1 = WA_header-NETPR_GP1 +
+**WA_ZINW_T_ITEM-NETPR_GP .
+*
+*    WA_FINAL-NETPR =  WA_ZINW_T_ITEM-NETPR_P.
+*
+*READ TABLE it_mara ASSIGNING FIELD-SYMBOL(<ls_mara>)
+*with key matnr = wa_ZINW_T_ITEM-MATNR .
+*IF sy-subrc = 0.
+*
+*  WA_FINAL-ean11 = <ls_mara>-ean11.
+*
+*ENDIF.
+*
+*    READ TABLE IT_MAKT INTO WA_MAKT WITH KEY MATNR =
+*WA_ZINW_T_ITEM-MATNR .
+*    IF SY-SUBRC = 0.
+*      WA_FINAL-MAKTX = WA_MAKT-MAKTX .
+*    ENDIF.
+*BREAK BREDDY.
+*CLEAR : WA_EKKO.
+*READ TABLE IT_EKKO INTO WA_EKKO WITH KEY EBELN = WA_ZINW_T_ITEM-EBELN.
+*   WA_HEADER-mblnr = WA_ZINW_T_HDR-mblnr.
+*    IF SY-SUBRC  = 0.
+*      lv_date = WA_EKKO-AEDAT + WA_EKKO-ZBD1T.
+*      LV_DUE = lv_date+6(2) && '.' && lv_date+4(2) && '.' &&
+*      lv_date+0(4).
+*
+*      WA_HEADER-PO_NUM     = wa_ekko-ebeln.
+*      WA_HEADER-CREATE_DT  = wa_ekko-AEDAT.
+*
+*      IF wa_ekko-user_name is NOT INITIAL.
+*      WA_HEADER-CREATED_BY = wa_ekko-user_name.
+*      ELSE.
+*        CLEAR:  WA_HEADER-CREATED_BY.
+*       WA_HEADER-CREATED_BY = wa_ekko-ernam.
+*      ENDIF.
+*
+*
+*    ENDIF.
+*IF WA_EKKO-BSART = 'ZTAT'.
+**   WA_HEADER-mblnr = WA_ZINW_T_HDR-mblnr_103.
+**  WA_HEADER-gPRo_date = WA_ZINW_T_HDR-GPRO_DATE.
+**  WA_HEADER-grpo_user = WA_ZINW_T_HDR-GPRO_USER .
+**   WA_HEADER-mblnr = WA_ZINW_T_HDR-mblnr.
+*    LV_HEADING = 'Tatkal GRPO Summary'.
+*ELSE.
+**     WA_HEADER-mblnr = WA_ZINW_T_HDR-mblnr.
+*     LV_HEADING = 'GRPO Summary'.
+**  WA_HEADER-grpo_user = WA_ZINW_T_HDR-GPRO_USER .
+*ENDIF.
+*  WA_HEADER-gPRo_date = WA_ZINW_T_STATUS-CREATED_DATE.
+*  WA_HEADER-grpo_user = WA_ZINW_T_STATUS-CREATED_BY.
+*  WA_HEADER-NO_BUN    = WA_ZINW_T_HDR-ACT_NO_BUD.
+*BREAK BREDDY.
+*CLEAR : wa_t024.
+*READ TABLE it_t024 INTO wa_t024 with key ekgrp = wa_ekko-ekgrp.
+*IF sy-subrc = 0.
+*wa_header-EKNAM = wa_t024-EKNAM.
+*ENDIF.
+*  READ TABLE IT_EKPO INTO WA_EKPO WITH KEY EBELN =
+*WA_ZINW_T_ITEM-EBELN EBELP = WA_ZINW_T_ITEM-EBELP MATNR =
+*WA_ZINW_T_ITEM-MATNR .
+*""WA_ZINW_T_ITEM-EBELP.
+*    LOOP AT IT_A003 ASSIGNING FIELD-SYMBOL(<WA_A003>) WHERE MWSKZ =
+*WA_EKPO-MWSKZ.
+*      IF <WA_A003>-KSCHL = 'JIIG'.
+*        LV_HED = 'IGST'.
+**        LV_VAL = 'IGST Value'.
+*        READ TABLE IT_KONP ASSIGNING FIELD-SYMBOL(<WA_KONP>) WITH KEY
+*KNUMH = <WA_A003>-KNUMH.
+*        IF SY-SUBRC = 0.
+*          LV_PER =  <WA_KONP>-KBETR / 10   .
+*"""""| && | { '%' } |.
+*          LV_TAX = ( <WA_KONP>-KBETR * WA_ZINW_T_ITEM-NETWR_P )
+*/ 1000.
+*
+*          ADD LV_TAX  TO LV_TAX1.
+*          WA_HEADER-NETPR_GP1 = WA_HEADER-NETPR_GP1 +
+*LV_TAX1 .
+**            EXIT.
+*        ENDIF.
+*      ELSEIF <WA_A003>-KSCHL = 'JICG' OR <WA_A003>-KSCHL = 'JISG'.
+*        CLEAR : LV_HED , WA_HEADER-NETPR_gp1.
+*        READ TABLE IT_KONP ASSIGNING FIELD-SYMBOL(<WA_KONP1>) WITH KEY
+*KNUMH = <WA_A003>-KNUMH.
+*        LV_HED = 'CGST'.
+**        LV_VAL = 'CGST/SGST Val'.
+*        IF SY-SUBRC = 0.
+*          CLEAR: LV_TAX,LV_PER ,LV_TAX1.
+*          LV_PER =  <WA_KONP1>-KBETR / 10 .
+**          LV_S = '/'.                           """""| && | { '/' } |.
+*          LV_TAX = ( <WA_KONP1>-KBETR * WA_ZINW_T_ITEM-NETWR_P ) / 1000.
+*          ADD LV_TAX TO LV_TAX1.
+*          WA_HEADER-NETPR_GP1 = WA_HEADER-NETPR_GP1 +
+*LV_TAX1 .
+*        ENDIF.
+*      ENDIF.
+*
+*        ENDLOOP.
+**  WA_HEADER-gPRo_date = WA_ZINW_T_STATUS-CREATED_DATE.
+**      READ TABLE IT_EKKO INTO WA_EKKO WITH KEY
+**      EBELN = WA_ZINW_T_ITEM-EBELN.
+*
+*    APPEND WA_FINAL TO IT_FINAL.
+*    CLEAR WA_FINAL.
+*WA_header-profit = ( ( WA_ZINW_T_HDR-total
+*- WA_ZINW_T_HDR-pur_total ) / WA_ZINW_T_HDR-pur_total ) * 100.
+*       WA_header-total = WA_header-NETPR_GP1 + WA_header-NETWR1  .
+*CLEAR : LV_TAX,LV_PER , LV_TAX1.
+*
+*  ENDLOOP.
+
+
+
+
+
+
+
+
+
+
+
+
+ENDFORM.

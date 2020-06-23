@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCUSER_FIELDS</OBJ_NAME>
+     <OBJECT_M>INTF</OBJECT_M>
+     <OBJ_NAME_M>ZNCII_SAVE_PRODUCT_LIST_INBOUN</OBJ_NAME_M>
+     <HASH_ID>088273F6758B729A24CC8A2AC49F84EF86F223AA</HASH_ID>
+     <ID>&lt;type&gt; UserFields http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>UserFields</IFR_NAME>
+     <IFR_NSPCE>http://www.iVend.com/IIntegrationService/2010/12</IFR_NSPCE>
+     <IFR_GNSPCE>SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</IFR_GNSPCE>
+     <GEN_VERS>0005</GEN_VERS>
+     <PREFIX>ZNC</PREFIX>
+     <CATEGORY>ifmtypedef</CATEGORY>
+     <X-ML_NSPCE>http://www.iVend.com/IIntegrationService/2010/12</X-ML_NSPCE>
+     <X-ML_NAME>UserFields</X-ML_NAME>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCUSER_FIELDS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>FIELD_NAME</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>FIELD_NAME</OBJ_NAME2>
+     <ID>&lt;element&gt; {http://www.iVend.com/IIntegrationService/2010/12}FieldName &lt;type&gt; UserFields http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>FieldName</IFR_NAME>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_QUALIF>X</IFR_QUALIF>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_NILLABLE>X</IFR_NILLABLE>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>FIELD_NAME</R3_NAME>
+     <R3_DATATYP>STRG</R3_DATATYP>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCUSER_FIELDS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>FIELD_TYPE</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>FIELD_TYPE</OBJ_NAME2>
+     <OBJECT_R>DTEL</OBJECT_R>
+     <OBJ_NAME_R>ZNCUSER_DEFINED_FIELD_DATA_TYP</OBJ_NAME_R>
+     <ID>&lt;element&gt; {http://www.iVend.com/IIntegrationService/2010/12}FieldType &lt;type&gt; UserFields http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>FieldType</IFR_NAME>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_OPTNL>X</IFR_OPTNL>
+     <IFR_QUALIF>X</IFR_QUALIF>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>FIELD_TYPE</R3_NAME>
+     <R3_SEQNUM>000003</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCUSER_FIELDS</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>FIELD_VALUE</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>FIELD_VALUE</OBJ_NAME2>
+     <ID>&lt;element&gt; {http://www.iVend.com/IIntegrationService/2010/12}FieldValue &lt;type&gt; UserFields http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>FieldValue</IFR_NAME>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MINOCC>1</IFR_MINOCC>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_QUALIF>X</IFR_QUALIF>
+     <IFR_XSDTYP>string</IFR_XSDTYP>
+     <IFR_NILLABLE>X</IFR_NILLABLE>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>FIELD_VALUE</R3_NAME>
+     <R3_DATATYP>STRG</R3_DATATYP>
+     <R3_SEQNUM>000002</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCUSER_FIELDS</OBJ_NAME>
+     <OBJECT1>TABL</OBJECT1>
+     <OBJ_NAME1>ZNCUSER_FIELDS</OBJ_NAME1>
+     <OBJECT2>TABL</OBJECT2>
+     <OBJ_NAME2>ZNCUSER_FIELDS</OBJ_NAME2>
+     <ID>&lt;type&gt; UserFields http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>type</IFR_TYPE>
+     <IFR_NAME>UserFields</IFR_NAME>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>TABL</R3_TYPE>
+     <R3_NAME>ZNCUSER_FIELDS</R3_NAME>
+     <R3_TEXT>Proxy Structure (generated)</R3_TEXT>
+     <CATEGORY>ifmtypedef</CATEGORY>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

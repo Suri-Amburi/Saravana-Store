@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Tax Code Fetching For ZSALES_RET</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSALERTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSALER</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZSALES_RET_GET_TAX_CODE</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Get Tax Code For Zsales_ret</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_POS_BATCH</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZB1_BTCH</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_PLANT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>WERKS_D</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_TAXP</PARAMETER>
+       <TYP>KBETR</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_S4H_BATCH</PARAMETER>
+       <TYP>CHARG_D</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MATNR</PARAMETER>
+       <TYP>MATNR</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MEINS</PARAMETER>
+       <TYP>MEINS</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_MAKTX</PARAMETER>
+       <TYP>MAKTX</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_POS_BATCH</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_PLANT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Plant</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_TAXP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Condition Amount or Percentage</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_S4H_BATCH</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Batch Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MATNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MEINS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Base Unit of Measure</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_MAKTX</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material description</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Function Group for iVend Interface</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZITERFACE_NCTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZITERFACE_NC</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZNC_IVEND_ARTICLE_DETAILS</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>iVend Article Master Replication</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_DATE_LOW</PARAMETER>
+       <TYP>ERDAT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_DATE_HIGH</PARAMETER>
+       <TYP>ERDAT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>TT_ART_DET</PARAMETER>
+       <TYP>ZNCART_DET_TT</TYP>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_DATE_LOW</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Date on which the record was created</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_DATE_HIGH</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Date on which the record was created</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TT_ART_DET</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>NC : Interface Article Details to iVend</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZNC_IVEND_ARTICLE_RESPONSE</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>RFC for storing Response from iVend</SHORT_TEXT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>I_TAB</PARAMETER>
+       <DBSTRUCT>ZNCTEST</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_TAB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>test</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZODATA_RFC_TEST</FUNCNAME>
+     <SHORT_TEXT>Test Odata</SHORT_TEXT>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

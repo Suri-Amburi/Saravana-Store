@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>CLAS</OBJECT>
+     <OBJ_NAME>ZNCCX_IINTEGRATION_SERVICE_SAV</OBJ_NAME>
+     <OBJECT_M>INTF</OBJECT_M>
+     <OBJ_NAME_M>ZNCII_SAVE_PRODUCT_LIST_INBOUN</OBJ_NAME_M>
+     <HASH_ID>9EE0C6C860D00FB2BB14EEADD6E34F14FDC9D2DB</HASH_ID>
+     <ID>&lt;message&gt; IIntegrationService_SaveProductList_APIExceptionFault_FaultMessage http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>message</IFR_TYPE>
+     <IFR_NAME>IIntegrationService_SaveProductList_APIExceptionFault_FaultMessage</IFR_NAME>
+     <IFR_NSPCE>http://www.iVend.com/IIntegrationService/2010/12</IFR_NSPCE>
+     <IFR_GNSPCE>SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</IFR_GNSPCE>
+     <GEN_VERS>0006</GEN_VERS>
+     <PREFIX>ZNC</PREFIX>
+     <CATEGORY>ifmfaultm</CATEGORY>
+     <X-ML_NSPCE>http://www.iVend.com/IIntegrationService/2010/12</X-ML_NSPCE>
+     <X-ML_NAME>APIException</X-ML_NAME>
+     <VERSION_ID>dfcad0318b7d11e9b2dd0000002b9152</VERSION_ID>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>CLAS</OBJECT>
+     <OBJ_NAME>ZNCCX_IINTEGRATION_SERVICE_SAV</OBJ_NAME>
+     <OBJECT1>ATTR</OBJECT1>
+     <OBJ_NAME1>DETAIL</OBJ_NAME1>
+     <OBJECT2>ATTR</OBJECT2>
+     <OBJ_NAME2>DETAIL</OBJ_NAME2>
+     <OBJECT_R>TABL</OBJECT_R>
+     <OBJ_NAME_R>ZNCAPIEXCEPTION</OBJ_NAME_R>
+     <ID>&lt;part&gt; detail &lt;message&gt; IIntegrationService_SaveProductList_APIExceptionFault_FaultMessage http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>part</IFR_TYPE>
+     <IFR_NAME>detail</IFR_NAME>
+     <IFR_NILLABLE>X</IFR_NILLABLE>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>ATTR</R3_TYPE>
+     <R3_NAME>DETAIL</R3_NAME>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>CLAS</OBJECT>
+     <OBJ_NAME>ZNCCX_IINTEGRATION_SERVICE_SAV</OBJ_NAME>
+     <OBJECT1>CLAS</OBJECT1>
+     <OBJ_NAME1>ZNCCX_IINTEGRATION_SERVICE_SAV</OBJ_NAME1>
+     <OBJECT2>CLAS</OBJECT2>
+     <OBJ_NAME2>ZNCCX_IINTEGRATION_SERVICE_SAV</OBJ_NAME2>
+     <ID>&lt;message&gt; IIntegrationService_SaveProductList_APIExceptionFault_FaultMessage http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>message</IFR_TYPE>
+     <IFR_NAME>IIntegrationService_SaveProductList_APIExceptionFault_FaultMessage</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <IFR_FAULT>X</IFR_FAULT>
+     <R3_TYPE>CLAS</R3_TYPE>
+     <R3_NAME>ZNCCX_IINTEGRATION_SERVICE_SAV</R3_NAME>
+     <R3_TEXT>Proxy Class (generated)</R3_TEXT>
+     <CATEGORY>ifmfaultm</CATEGORY>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

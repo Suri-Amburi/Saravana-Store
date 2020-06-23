@@ -1,0 +1,56 @@
+<!-- ----------------------------------------------------------- -->
+<!-- SYMBOL POCKET BROWSER, sample entries for model 3090 and 9090->
+<!-- ----------------------------------------------------------- -->
+
+<!-- setting best fitting text size for ITSmobile -->
+<META HTTP-Equiv="TextSize" Content="smaller">
+
+<!-- Only for Windows Mobile OS (operating system).  When using Windows CE,
+     these meta tags are not required, because javascript in
+     ITSMOBILE/99/SCRIPTS/ALL/MOBILE.JS can be interpreted by the Microsoft
+     browser (higher JavaScript version). -->
+<!-- key mapping F1 - F10 using ITSmobile javascript functions    -->
+<!-- With this mapping the key buttons 0 to 9 will act as function keys   -->
+<!-- F1 to F10. Use blue FUNC button to input numbers into edit fields    -->
+<META HTTP-Equiv="OnKeydispatch0x3b" content="Javascript:setFKey('1');">
+<META HTTP-Equiv="OnKeydispatch0x3c" content="Javascript:setFKey('2');">
+<META HTTP-Equiv="OnKeydispatch0x3d" content="Javascript:setFKey('3');">
+<META HTTP-Equiv="OnKeydispatch0x3e" content="Javascript:setFKey('4');">
+<META HTTP-Equiv="OnKeydispatch0x3f" content="Javascript:setFKey('5');">
+<META HTTP-Equiv="OnKeydispatch0x40" content="Javascript:setFKey('6');">
+<META HTTP-Equiv="OnKeydispatch0x41" content="Javascript:setFKey('7');">
+<META HTTP-Equiv="OnKeydispatch0x42" content="Javascript:setFKey('8');">
+<META HTTP-Equiv="OnKeydispatch0x43" content="Javascript:setFKey('9');">
+<META HTTP-Equiv="OnKeydispatch0x44" content="Javascript:setFKey('10');">
+
+<!-- battery indicator, color blue  -->
+<META HTTP-Equiv="battery" Content="show">
+<META HTTP-Equiv="battery" Content="bottom_growfromright">
+<META HTTP-Equiv="battery" Content="rgb:00,00,80">
+<META HTTP-Equiv="battery" Content="x=290">
+<META HTTP-Equiv="battery" Content="y=30">
+
+<!-- wireless signal meter, color blue -->
+<META HTTP-Equiv="signal" Content="show">
+<META HTTP-Equiv="signal" Content="bottom_growfromright">
+<META HTTP-Equiv="signal" Content="rgb:00,00,80">
+<META HTTP-Equiv="signal" Content="x=290">
+<META HTTP-Equiv="signal" Content="y=110">
+
+<!-- for testing purposes, text zoom and quit button -->
+<META HTTP-Equiv="Textbutton" Content="show">
+<META HTTP-Equiv="Textbutton" Content="x=40">
+<META HTTP-Equiv="Textbutton" Content="y=3">
+<META HTTP-Equiv="quitbutton" Content="show">
+<META HTTP-Equiv="quitbutton" Content="x=60">
+<META HTTP-Equiv="quitbutton" Content="y=3">
+
+<!-- scrollbars dis-/enabled are set via start settings -->
+
+<!-- Required to get trigger event -->
+<META HTTP-Equiv="rfid" Content="enabled">
+<!-- onTrigger() function is implemented in ITSMOBILE/99/DEVICE_SYMBOL.HTML and is called by
+     the device, when the trigger button is pressed and released.  The function is called two
+     times, with parameter value 2048 when pressed, and 0 when depressed.
+     For more information, please read the Symbol Pocket Browser documentation. -->
+<META HTTP-Equiv="OnTrigger" Content="javascript:parent.frames['ITSFrameDev'].onTrigger('%s')">

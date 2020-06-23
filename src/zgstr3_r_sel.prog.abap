@@ -1,0 +1,29 @@
+*&---------------------------------------------------------------------*
+*& Include          ZGSTR3_R_SEL
+*&---------------------------------------------------------------------*
+SELECTION-SCREEN : BEGIN OF BLOCK B1 WITH FRAME TITLE TEXT-001 .
+PARAMETERS : P_MONTH TYPE CHAR2, P_YEAR TYPE CHAR4 .
+SELECTION-SCREEN : END OF BLOCK B1 .
+DATA : MONTH_LENGTH TYPE I .
+MONTH_LENGTH = STRLEN( P_MONTH ) .
+IF MONTH_LENGTH < 2  .    "condition for avoiding single character entry
+
+  CONCATENATE '0' P_MONTH INTO P_MONTH .
+ENDIF .
+
+
+
+DATA : FIRST_DATE TYPE SY-DATUM,
+       LAST_DATE  TYPE SY-DATUM,
+       INPUT_DATE TYPE SY-DATUM.
+
+DATA : R_DATE TYPE RANGE OF RBKP-BUDAT .
+INPUT_DATE = P_YEAR && P_MONTH && '01'.
+CALL FUNCTION 'HR_JP_MONTH_BEGIN_END_DATE'
+  EXPORTING
+    IV_DATE             = INPUT_DATE
+  IMPORTING
+    EV_MONTH_BEGIN_DATE = FIRST_DATE
+    EV_MONTH_END_DATE   = LAST_DATE.
+
+APPEND VALUE #( SIGN = 'I' LOW = FIRST_DATE HIGH = LAST_DATE OPTION = 'BT') TO R_DATE .

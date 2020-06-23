@@ -1,0 +1,665 @@
+`   if ( ~itsmobileFuncInclude != "" )
+        declare width(i, a), w(i, a), pos(t, l), alignment(elem) in "some.html";
+        include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileFuncInclude & ".html", ~style="x");
+    else
+        include(~service="itsmobile", ~language="", ~theme="99", ~name="functions.html", ~style="x");;
+    end;
+if (~currdynpro.speechenabled != "")
+`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+`end`
+<html`if (~currdynpro.speechenabled != "")
+    ` xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:vxml="http://www.w3.org/2001/vxml"
+      xmlns:ev="http://www.w3.org/2001/xml-events"
+      xmlns:xv="http://www.voicexml.org/2002/xhtml+voice"`
+  end` `
+`class="MobileHtml" `
+` style="" >`
+  if ( ~itsmobileNameSpace != "" )
+    ~current_service = ~itsmobileNameSpace & ~service;
+  elseif ( strsub(~sources, 0, 1) == "/" )
+    ~current_service = strsub(~sources, 0, strchr(~sources, "/", 1)+1) & ~service;
+  else
+    ~current_service = ~service;
+  end;
+  if ( ~AttrMimeUrlService == "" ) ~AttrMimeUrlService = ~current_service; end;
+  if ( ~AttrMimeUrlTheme == "" ) ~AttrMimeUrlTheme = ~theme; end;`
+
+`
+<!-- Generated Template
+      NAME:   SAPMZLOAD
+      SCREEN: 9999
+      DATE:   20200211
+      TIME:   135548
+      STYLE:  MOBILEEDIT
+-->
+    `<head>`
+    if (  ~itsmobileDeviceInclude != "" )
+       include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileDeviceInclude & ".html");
+    end;
+        `<title>`~windowtitle`</title>
+`if (NOTIFY_BELL_SIGNAL > 0)
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsounderr.wav")`" loop="`NOTIFY_BELL_SIGNAL`">
+`end;
+if ( ( ~messageline != "" ) && ( ~itsmobilemsgsound == "1" ) || ( ~currdynpro.messagesound != "" ) )
+   if ( ~messagetype == "S" || ~currdynpro.messagesound == "S" )
+         <!-- sucess message -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsoundmsg.wav")`" loop="1" />
+`  elseif ( ~messagetype == "I" || ~currdynpro.messagesound == "I" )
+         <!-- information message -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsoundmsg.wav")`" loop="1" />
+`  elseif ( ~messagetype == "W" || ~currdynpro.messagesound == "W" )
+         <!-- warning message -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsounderr.wav")`" loop="1" />
+`  elseif ( ~messagetype == "E" || ~currdynpro.messagesound == "E" )
+         <!-- error message -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsounderr.wav")`" loop="3" />
+`  elseif ( ~currdynpro.messagesound != "" )
+         <!-- message type not set -->
+`        <bgsound src="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~currdynpro.messagesound)`" loop="1" />
+`  else
+         <!-- message type not set -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsoundmsg.wav")`" loop="1" />
+`  end;
+end;
+ if ( ~itsmobileCssInclude != "" ) <!-- customer include from gui settings -->`
+        <link rel="stylesheet" href="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~itsmobileCssInclude & ".css")`" type="text/css" />
+` else <!-- default include from itsmobile --> `
+        <link rel="stylesheet" href="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="styles/all/mobile_e.css")`" type="text/css" />
+` end;
+ if ( ~itsmobileJsInclude != "" ) <!-- customer include specified in gui settings -->`
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~itsmobileJsInclude & ".js")`"></script>
+` else <!-- default include from itsmobile -->`
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="scripts/all/mobile_e.js")`"></script>
+` end;`
+        <script type="text/javascript" language="Javascript">
+           var itsmobile_eos = "`wgateurl(~okcode="/nex")`";
+        </script>
+` <!-- rfid values --------------------------- -->
+  if ( ~RfidEnabledFields != "" ) `
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="rfid/rfbutton.js")`"></script>
+        <script type="text/javascript" language="Javascript">
+           var rfid_fields = new Object;
+`   repeat with i from 1 to ~RfidEnabledFields.dim
+      <!-- get field name and index -->
+      rfidField = ~RfidEnabledFields[i];
+      rfidFieldIdx = ~RfidEnabledFields[i].idx;
+      rfidFieldParams = ~RfidEnabledFields[i].params; `
+           rfid_fields["`rfidField`[`rfidFieldIdx`]"] = { `rfidFieldParams` };
+`   end;`
+        </script>
+` end;`
+
+`       <!-- Check if screen supports voice integration -->
+        if ( ~currdynpro.speechenabled != "" )
+          <!-- include the htmlb functions for voice integration -->
+          if ( ~itsmobileVoiceInclude != "" ) <!-- customers voice generation html -->
+            include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileVoiceInclude & ".html");
+          else <!-- default its default voice include -->
+            include(~service="itsmobile", ~language="", ~theme="99", ~name="include/voice.html");
+          end;
+        end;
+    `</head>`
+    `<body `
+      if (~currdynpro.speechenabled != "")` ev:event="load" ev:handler="#sayOnPageLoad"` else
+      ` onload="setFocus('`~focusfield`')"` end;
+      ` onkeydown="return processKeyEvent(event);" onhelp="return false;"`
+      ` style="" `
+`class="MobileBody" `
+`id="MobileBody" `
+` >
+`
+        `<form method="post" action="`WGateURL()`" `
+`class="mobileform" `
+`id="mobileform" `
+`name="mobileform" `
+` onsubmit="return firstSend()" style="`
+`display:inline; `
+`">
+            <!-- hidden okcode field -->
+            <input type="hidden" id="~OkCode" name="~OkCode" value="/0" />
+            <!-- hidden fkey field -->
+            <input type="hidden" id="~FKey" name="~FKey" value="" />
+            <!-- hidden focus field -->
+            <input type="hidden" id="~Focusfield" name="~Focusfield" value="" />
+            <!-- already send flag -->
+            <input type="hidden" id="~ItsMobFirstSend" name="~ItsMobFirstSend" value="" />
+            `if (~SEC_SESSTOKEN != "")`<input type="hidden" name="~SEC_SESSTOKEN" value="`~SEC_SESSTOKEN`" />`end;
+xFactorFromGenerator=1000`
+`yFactorFromGenerator=1000
+`<!-- main screen begin -->`
+`<div width="100%" >`
+    if ( ~itsmobileCuaInclude != "" ) <!-- customers cua area -->
+       include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileCuaInclude & ".html");
+    elseif ( ~itsmobileNoCuaInclude != "1" && ~itsmobileNoCuaInclude != "X" ) <!-- default cua area -->
+       include(~service="itsmobile", ~language="", ~theme="99", ~name="include/cuaarea.html");
+    end
+`</div>`
+`<div `
+`class="MobileUserArea" `
+` style="`
+`background-color:slategrey; `
+`height:`y_length("470")`; `
+`position:relative; `
+`width:`x_length("325")`; `
+` ">`
+if ( ( 'AICON'[1].exists == "X" ) && ( 'AICON'[1].visible == "X" ) )
+    `<span `
+    if ( 'AICON'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted MobileOutputOnly" `
+` `
+       `style=" `if ( 'AICON'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("10")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("60")`; `
+``
+           `display:block; " `
+    else
+        ``
+`class="MobileLabel MobileOutputOnly" `
+` `
+       `style=" `if ( 'AICON'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("10")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("60")`; `
+``
+           `display:block; " `
+    end;
+    `>`strmask('AICON'[1])`</span>`
+end;
+if ( 'NOTIFY_BELL_SIGNAL'[1].exists == "X" )
+    if ( 'NOTIFY_BELL_SIGNAL'[1].disabled == "X" )
+        if ( 'NOTIFY_BELL_SIGNAL'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+        elseif ( 'NOTIFY_BELL_SIGNAL'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'NOTIFY_BELL_SIGNAL'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+            end;
+        elseif ( 'NOTIFY_BELL_SIGNAL'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'NOTIFY_BELL_SIGNAL'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'NOTIFY_BELL_SIGNAL'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+            end;
+        end;
+        `name="`'NOTIFY_BELL_SIGNAL'[1].name`" `
+        if ( 'NOTIFY_BELL_SIGNAL'[1].inputrequired == "X" && 'NOTIFY_BELL_SIGNAL'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('NOTIFY_BELL_SIGNAL'[1], 1)`" `
+        end;
+        `maxlength="`'NOTIFY_BELL_SIGNAL'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'NOTIFY_BELL_SIGNAL'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+        elseif ( 'NOTIFY_BELL_SIGNAL'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'NOTIFY_BELL_SIGNAL'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+`" `
+            end;
+        elseif ( 'NOTIFY_BELL_SIGNAL'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'NOTIFY_BELL_SIGNAL'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'NOTIFY_BELL_SIGNAL'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'NOTIFY_BELL_SIGNAL'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'NOTIFY_BELL_SIGNAL'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'NOTIFY_BELL_SIGNAL'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'NOTIFY_BELL_SIGNAL'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("70")`; `
+`position:absolute; `
+`top:`y_length("30")`; `
+`width:`x_length("24")`; `
+` " `
+            end;
+        end;
+        if ( 'NOTIFY_BELL_SIGNAL'[1].range != "" )
+            `its:range="`'NOTIFY_BELL_SIGNAL'[1].range`" `
+        elseif ( 'NOTIFY_BELL_SIGNAL'[1].list != "" )
+            `its:list="`'NOTIFY_BELL_SIGNAL'[1].list`" `
+        end;
+        if ( 'NOTIFY_BELL_SIGNAL'[1].next != "" )
+            `its:next="`'NOTIFY_BELL_SIGNAL'[1].next`[1]" `
+        end;
+        if ( 'NOTIFY_BELL_SIGNAL'[1].okcode != "" )
+            `onchange="setOkCode('`'NOTIFY_BELL_SIGNAL'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'NOTIFY_BELL_SIGNAL'[1].name`');" `
+        `onblur="leaveFocusField('`'NOTIFY_BELL_SIGNAL'[1].name`');" `
+        `name="`'NOTIFY_BELL_SIGNAL'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'NOTIFY_BELL_SIGNAL'[1].name`" `end;
+        if ( 'NOTIFY_BELL_SIGNAL'[1].inputrequired == "X" && 'NOTIFY_BELL_SIGNAL'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('NOTIFY_BELL_SIGNAL'[1], 1)`" `
+        end;
+        `maxlength="`'NOTIFY_BELL_SIGNAL'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'BACK'[1].exists == "X" && 'BACK'[1].visible == "X" )
+    `<input type="button"
+        `
+    if ( 'BACK'[1].disabled == "X" )
+        ``
+`class="MobileButtonDisabled" `
+` disabled="disabled" style="`
+`height:`y_length("20")`; `
+`left:`x_length("229")`; `
+`position:absolute; `
+`top:`y_length("31")`; `
+`width:`x_length("70")`; `
+`" `
+    else
+        ``
+`class="MobileButton" `
+` style="`
+`background-color:aquamarine; `
+`font:bold 12px arial; `
+`height:`y_length("20")`; `
+`left:`x_length("229")`; `
+`position:absolute; `
+`text-align:center; `
+`top:`y_length("31")`; `
+`width:`x_length("70")`; `
+`" `
+    end;
+    `name="`'BACK'[1].name`" `
+    if ( ~currdynpro.speechenabled != "" )`id="`'BACK'[1].name`" `end;
+    `value="`strmask('BACK'[1].label)`" `
+    if ( 'BACK'[1].onclick != "" )
+         `onclick="`'BACK'[1].onclick`;" `
+    elseif ( 'BACK'[1].rfidenabled == "X" )
+        `onfocus="setFocusField('`'BACK'[1].name`');"
+        onblur="leaveFocusField('`'BACK'[1].name`');"
+        onclick="RfidButtonClick();" `
+    else
+        `onclick="setOkCode('`'BACK'[1].okcode`');" `
+    end;
+    `/>`
+end;
+if ( ( 'MESAG1'[1].exists == "X" ) && ( 'MESAG1'[1].visible == "X" ) )
+    `<span `
+    if ( 'MESAG1'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG1'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("64")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    else
+        ``
+`class="MobileLabel MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG1'[1].alignment == "right" )` text-align: right; `end
+        ``
+`background-color:LightSteelBlue; `
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("64")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    end;
+    `>`strmask('MESAG1'[1])`</span>`
+end;
+if ( ( 'MESAG2'[1].exists == "X" ) && ( 'MESAG2'[1].visible == "X" ) )
+    `<span `
+    if ( 'MESAG2'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG2'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("84")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    else
+        ``
+`class="MobileLabel MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG2'[1].alignment == "right" )` text-align: right; `end
+        ``
+`background-color:LightSteelBlue; `
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("84")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    end;
+    `>`strmask('MESAG2'[1])`</span>`
+end;
+if ( ( 'MESAG3'[1].exists == "X" ) && ( 'MESAG3'[1].visible == "X" ) )
+    `<span `
+    if ( 'MESAG3'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG3'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("104")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    else
+        ``
+`class="MobileLabel MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG3'[1].alignment == "right" )` text-align: right; `end
+        ``
+`background-color:LightSteelBlue; `
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("104")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    end;
+    `>`strmask('MESAG3'[1])`</span>`
+end;
+if ( ( 'MESAG4'[1].exists == "X" ) && ( 'MESAG4'[1].visible == "X" ) )
+    `<span `
+    if ( 'MESAG4'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG4'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("124")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    else
+        ``
+`class="MobileLabel MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG4'[1].alignment == "right" )` text-align: right; `end
+        ``
+`background-color:LightSteelBlue; `
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("124")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    end;
+    `>`strmask('MESAG4'[1])`</span>`
+end;
+if ( ( 'MESAG5'[1].exists == "X" ) && ( 'MESAG5'[1].visible == "X" ) )
+    `<span `
+    if ( 'MESAG5'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG5'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("144")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    else
+        ``
+`class="MobileLabel MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG5'[1].alignment == "right" )` text-align: right; `end
+        ``
+`background-color:LightSteelBlue; `
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("144")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    end;
+    `>`strmask('MESAG5'[1])`</span>`
+end;
+if ( ( 'MESAG6'[1].exists == "X" ) && ( 'MESAG6'[1].visible == "X" ) )
+    `<span `
+    if ( 'MESAG6'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG6'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("164")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    else
+        ``
+`class="MobileLabel MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG6'[1].alignment == "right" )` text-align: right; `end
+        ``
+`background-color:LightSteelBlue; `
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("164")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    end;
+    `>`strmask('MESAG6'[1])`</span>`
+end;
+if ( ( 'MESAG7'[1].exists == "X" ) && ( 'MESAG7'[1].visible == "X" ) )
+    `<span `
+    if ( 'MESAG7'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG7'[1].alignment == "right" )` text-align: right; `end
+        ``
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("184")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    else
+        ``
+`class="MobileLabel MobileOutputOnly" `
+` `
+       `style=" `if ( 'MESAG7'[1].alignment == "right" )` text-align: right; `end
+        ``
+`background-color:LightSteelBlue; `
+`height:`y_length("20")`; `
+`left:`x_length("5")`; `
+`position:absolute; `
+`top:`y_length("184")`; `
+`width:`x_length("310")`; `
+``
+           `display:block; " `
+    end;
+    `>`strmask('MESAG7'[1])`</span>`
+end;
+`</div>
+<!-- main screen end -->`
+        `</form>`
+    `</body>`
+`</html>
+                                                

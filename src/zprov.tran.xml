@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_TRAN" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TSTC>
+    <TCODE>ZPROV</TCODE>
+    <PGMNA>SAPMZ_PROVSION_PROCESS</PGMNA>
+    <DYPNO>9001</DYPNO>
+   </TSTC>
+   <TSTCC>
+    <TCODE>ZPROV</TCODE>
+   </TSTCC>
+   <TSTCT>
+    <SPRSL>E</SPRSL>
+    <TCODE>ZPROV</TCODE>
+    <TTEXT>Provisions GRPO</TTEXT>
+   </TSTCT>
+  </asx:values>
+ </asx:abap>
+</abapGit>

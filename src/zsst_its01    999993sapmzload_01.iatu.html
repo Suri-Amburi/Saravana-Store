@@ -1,0 +1,387 @@
+`if (~currdynpro.speechenabled != "")
+`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+`elseif (~itsmobileStandardsMode == "X")`
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+`end;`
+<html`if (~currdynpro.speechenabled != "")
+    ` xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:vxml="http://www.w3.org/2001/vxml"
+      xmlns:ev="http://www.w3.org/2001/xml-events"
+      xmlns:xv="http://www.voicexml.org/2002/xhtml+voice"
+      class="MobileHtml"`
+  end;`>`
+  if ( ~itsmobileNameSpace != "" )
+    ~current_service = ~itsmobileNameSpace & ~service;
+  elseif ( strsub(~sources, 0, 1) == "/" )
+    ~current_service = strsub(~sources, 0, strchr(~sources, "/", 1)+1) & ~service;
+  else
+    ~current_service = ~service;
+  end;`
+`
+<!-- Generated Template
+      NAME:   SAPMZLOAD_01
+      SCREEN: 9993
+      DATE:   20200122
+      TIME:   153800
+      STYLE:  MOBILE4
+-->
+declare class(name, idx=1), style(name, idx=1), style_attr(name, idx=1), icon(name, idx=1),
+    class_ext(name, idx=1), align(name, idx=1), label(name, idx=1), has_label(name, idx=1),
+    width(i, a), margin_left(i, a), w(i, a), sh(), mkid(s) in "some.html";
+if ( ~itsmobileFuncInclude != "" )
+    include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileFuncInclude, ~style="x");
+else
+    include(~service="itsmobile", ~language="", ~theme="99", ~name=nonExt&"functions", ~style="x");
+end;`
+`
+    `<head>`
+    if ( ~itsmobileDeviceInclude != "" )
+       include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileDeviceInclude & ".html");
+    end;`
+`
+        `<title>`~windowtitle`</title>
+`if (~resp_content_type == "") ~resp_content_type = "text/html"; end;`
+        <meta http-equiv="Content-Type" content="`~resp_content_type`; charset=`~resp_content_charset`" `sh()`>`
+if ( ~itsmobileSoundInclude != "" ) <!-- customers sound -->
+   include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileSoundInclude & ".html");
+else <!-- default -->
+   include(~service="itsmobile", ~language="", ~theme="99", ~name="include/sound.html");
+end;
+ if ( ~itsmobileCssInclude != "" ) <!-- customer include from gui settings -->`
+        <link rel="stylesheet" href="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~itsmobileCssInclude & ".css")`" type="text/css" `sh()`>
+` else <!-- default include from itsmobile --> `
+        <link rel="stylesheet" href="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="styles/all/mobile.css")`" type="text/css" `sh()`>
+` end;
+ if ( ~itsmobileJsInclude != "" ) <!-- customer include specified in gui settings -->`
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~itsmobileJsInclude & ".js")`"></script>
+` else <!-- default include from itsmobile -->`
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="scripts/all/mobile.js")`"></script>
+` end;
+  if ( ~itsmobileCustomJsInclude != "" )`
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~itsmobileCustomJsInclude & ".js")`"></script>
+` end;`
+        <script type="text/javascript" language="Javascript">
+           var itsmobile_eos = "`wgateurl(~okcode="/nex")`";
+        </script>
+` <!-- rfid values --------------------------- -->
+  if ( ~RfidEnabledFields != "" ) `
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="rfid/rfbutton.js")`"></script>
+        <script type="text/javascript" language="Javascript">
+           var rfid_fields = new Object;
+`   repeat with i from 1 to ~RfidEnabledFields.dim
+      <!-- get field name and index -->
+      rfidField = ~RfidEnabledFields[i];
+      rfidFieldIdx = ~RfidEnabledFields[i].idx;
+      rfidFieldParams = ~RfidEnabledFields[i].params; `
+           rfid_fields["`rfidField`[`rfidFieldIdx`]"] = { `rfidFieldParams` };
+`   end;`
+        </script>
+` end;`
+
+`       <!-- Check if screen supports voice integration -->
+        if ( ~currdynpro.speechenabled != "" )
+          <!-- include the htmlb functions for voice integration -->
+          if ( ~itsmobileVoiceInclude != "" ) <!-- customers voice generation html -->
+            include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileVoiceInclude & ".html");
+          else <!-- default its default voice include -->
+            include(~service="itsmobile", ~language="", ~theme="99", ~name="include/voice.html");
+          end;
+        end;`
+`
+    `</head>`
+    `<body class="MobileBody `class("~currdynpro", 1)`" `style_attr("~currdynpro", 1);
+      if (~currdynpro.speechenabled != "")` id="MobileBody" ev:event="load" ev:handler="#sayOnPageLoad"` else
+      ` onload="setFocus('`~focusfield`');`~itsmobileOnloadHandler`"` end;
+      ` onkeydown="return processKeyEvent(event);" onhelp="return false;">
+`
+        `<form method="post" action="`WGateURL()`" id="mobileform" name="mobileform" onsubmit="return firstSend()" style="display:inline">
+            <input type="hidden" name="~OkCode" value="/0"`sh()`>
+            <input type="hidden" name="~FKey" value=""`sh()`>
+            <input type="hidden" name="~Focusfield" value=""`sh()`>`if (~SEC_SESSTOKEN != "")`
+            <input type="hidden" name="~SEC_SESSTOKEN" value="`~SEC_SESSTOKEN`"`sh()`>`end`
+`if (~active_timer != "")
+    include(~service="itsmobile", ~theme="99", ~name="timer.html");
+    timer(~active_timer, width, height);
+end`
+`
+`<!-- main screen begin -->
+<div>`
+    if ( ~itsmobileCuaInclude != "" ) <!-- customers cua area -->
+       include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileCuaInclude & ".html");
+    elseif ( ~itsmobileNoCuaInclude != "1" && ~itsmobileNoCuaInclude != "X" ) <!-- default cua area -->
+       include(~service="itsmobile", ~language="", ~theme="99", ~name="include/cuaarea.html");
+    end;`
+</div>
+<div class="MobileUserArea">`
+if ( ( ~DYNPRO_COMPRESSION != "1" && ~DYNPRO_COMPRESSION != "X" ) ||
+     ( 'QUES1'[1].exists == "X" && 'QUES1'[1].visible == "X" ) ||
+     0 )
+`<!-- line 1 -->
+<div class="MobileRow">`
+if ( 3 != 0 )
+    `<span style="`margin_left("3", "2.460em")`; height:1px"></span>`
+end;
+if ( ( 'QUES1'[1].exists == "X" ) && ( 'QUES1'[1].visible == "X" ) )
+    icon( "QUES1", 1 );
+    `<span style="`width("19", "15.580em"); align("QUES1", 1); style("QUES1", 1)`" `
+    if ( 'QUES1'[1].highlighted == "X" )
+        `class="MobileLabelHighlighted `class("QUES1", 1)`" `
+    else
+        `class="MobileLabel `class("QUES1", 1)`" `
+    end
+    `>`label("QUES1", 1)`</span>`
+else
+    `<span style="`margin_left("19", "15.580em")`; height:1px"></span>`
+end;
+if ( 4 != 0 )
+    `<span style="`margin_left("4", "3.280em")`; height:1px"></span>`
+end;
+<!-- content row end -->`
+</div>
+`end;
+if ( ( ~DYNPRO_COMPRESSION != "1" && ~DYNPRO_COMPRESSION != "X" ) ||
+     ( 'AEXIDV'[1].exists == "X" && 'AEXIDV'[1].visible == "X" ) ||
+     0 )
+`<!-- line 2 -->
+<div class="MobileRow">`
+if ( 2 != 0 )
+    `<span style="`margin_left("2", "1.640em")`; height:1px"></span>`
+end;
+if ( 'AEXIDV'[1].exists == "X" )
+    if ( 'AEXIDV'[1].mode == "multiline" )
+        `<textarea `
+         `class="MobileEditMultiline`class_ext('AEXIDV', 1); class("AEXIDV", 1)`" `
+         if ( 'AEXIDV'[1].disabled == "X" ) `disabled="disabled" `end;
+         if ( 'AEXIDV'[1].readonly == "X" ) `readonly="readonly" `end;
+         if ( 'AEXIDV'[1].okcode != "" )
+             `onchange="setOkCode('`'AEXIDV'[1].okcode`');return false;" `
+         end;
+         `style="`width("21", "17.220em"); style("AEXIDV", 1)`" `
+         `rows="`'AEXIDV'[1].rows`" cols="21" `
+         `onfocus="setFocusField('`'AEXIDV'[1].name`');" `
+         `onblur="leaveFocusField('`'AEXIDV'[1].name`');" `
+         `name="`'AEXIDV'[1].name`">`'AEXIDV'[1]`</textarea>`
+    else
+        if ( 'AEXIDV'[1].disabled == "X" )
+            if ( 'AEXIDV'[1].visible != "X" )
+                `<input type="hidden" `
+            elseif ( 'AEXIDV'[1].type == "Password" )
+                `<input type="password" readonly="readonly" tabindex="-1" `
+                `style="`width("21", "17.220em"); style("AEXIDV", 1)`" `
+                if ( 'AEXIDV'[1].highlighted == "X" )
+                    `class="MobilePasswordHighlightedDisabled `class("AEXIDV", 1)`" `
+                else;
+                    `class="MobilePasswordDisabled `class("AEXIDV", 1)`" `
+                end;
+            elseif ( 'AEXIDV'[1].inputrequired == "X" )
+                `<input type="text" readonly="readonly" tabindex="-1" `
+                `style="`width("21", "17.220em"); align("AEXIDV", 1); style("AEXIDV", 1)`" `
+                if ( 'AEXIDV'[1].highlighted == "X" )
+                    `class="MobileEditRequiredHighlightedDisabled `class("AEXIDV", 1)`" `
+                else;
+                    `class="MobileEditRequiredDisabled `class("AEXIDV", 1)`" `
+                end;
+            else
+                `<input type="text" readonly="readonly" tabindex="-1" `
+                `style="`width("21", "17.220em"); align("AEXIDV", 1); style("AEXIDV", 1)`" `
+                if ( 'AEXIDV'[1].highlighted == "X" )
+                    `class="MobileEditHighlightedDisabled `class("AEXIDV", 1)`" `
+                else;
+                    `class="MobileEditDisabled `class("AEXIDV", 1)`" `
+                end;
+            end;
+            `onfocus="focusField('`'AEXIDV'[1].name`');" `
+            `name="`'AEXIDV'[1].name`" `
+            if ( ( 'AEXIDV'[1].inputrequired == "X" ) && ( 'AEXIDV'[1] == "?" ) )
+                 `value="" `
+            else
+                 `value="`strmaskext('AEXIDV'[1], 1)`" `
+            end;
+            `size="`'AEXIDV'[1].width`" maxlength="`'AEXIDV'[1].maxinputsize`"
+            `sh()`>`
+        else                                     <!-- not disabled -->
+            icon( "AEXIDV", 1 );
+            if ( 'AEXIDV'[1].visible != "X" )
+                `<input type="hidden" `
+            elseif ( 'AEXIDV'[1].type == "Password" )
+                `<input type="password" `
+                `style="`width("21", "17.220em"); style("AEXIDV", 1)`" `
+                if ( 'AEXIDV'[1].highlighted == "X" )
+                    `class="MobilePasswordHighlighted `class("AEXIDV", 1)`" `
+                else
+                    `class="MobilePassword `class("AEXIDV", 1)`" `
+                end;
+            elseif ( 'AEXIDV'[1].inputrequired == "X" )
+                `<input type="text" `
+                `style="`width("21", "17.220em"); align("AEXIDV", 1); style("AEXIDV", 1)`" `
+                if ( 'AEXIDV'[1].highlighted == "X" )
+                    `class="MobileEditRequiredHighlighted `class("AEXIDV", 1)`" `
+                else
+                    `class="MobileEditRequired `class("AEXIDV", 1)`" `
+                end;
+            else
+                `<input type="text" `
+                `style="`width("21", "17.220em"); align("AEXIDV", 1); style("AEXIDV", 1)`" `
+                if ( 'AEXIDV'[1].highlighted == "X" )
+                    `class="MobileEditHighlighted `class("AEXIDV", 1)`" `
+                else
+                    `class="MobileEdit `class("AEXIDV", 1)`" `
+                end;
+            end;
+            if ( 'AEXIDV'[1].okcode != "" )
+                `onchange="setOkCode('`'AEXIDV'[1].okcode`');return false;" `
+            end;
+            `onfocus="setFocusField('`'AEXIDV'[1].name`');" `
+            `onblur="leaveFocusField('`'AEXIDV'[1].name`');" `
+            `name="`'AEXIDV'[1].name`" `
+            if ( ~currdynpro.speechenabled != "" ) `id="`'AEXIDV'[1].name`" `end;
+            if ( ( 'AEXIDV'[1].inputrequired == "X" ) && ( 'AEXIDV'[1] == "?" ) )
+                `value="" `
+            else
+                `value="`strmaskext('AEXIDV'[1], 1)`" `
+            end;
+            `size="`'AEXIDV'[1].width`" maxlength="`'AEXIDV'[1].maxinputsize`"`
+            sh()`>`
+        end;
+    end;
+else
+    `<span style="`margin_left("21", "17.220em")`; height:1px"></span>`
+end;
+if ( 3 != 0 )
+    `<span style="`margin_left("3", "2.460em")`; height:1px"></span>`
+end;
+<!-- content row end -->`
+</div>
+`end;
+if ( ( ~DYNPRO_COMPRESSION != "1" && ~DYNPRO_COMPRESSION != "X" ) ||
+     ( 'QUES2'[1].exists == "X" && 'QUES2'[1].visible == "X" ) ||
+     0 )
+`<!-- line 3 -->
+<div class="MobileRow">`
+if ( 2 != 0 )
+    `<span style="`margin_left("2", "1.640em")`; height:1px"></span>`
+end;
+if ( ( 'QUES2'[1].exists == "X" ) && ( 'QUES2'[1].visible == "X" ) )
+    icon( "QUES2", 1 );
+    `<span style="`width("21", "17.220em"); align("QUES2", 1); style("QUES2", 1)`" `
+    if ( 'QUES2'[1].highlighted == "X" )
+        `class="MobileLabelHighlighted `class("QUES2", 1)`" `
+    else
+        `class="MobileLabel `class("QUES2", 1)`" `
+    end
+    `>`label("QUES2", 1)`</span>`
+else
+    `<span style="`margin_left("21", "17.220em")`; height:1px"></span>`
+end;
+if ( 3 != 0 )
+    `<span style="`margin_left("3", "2.460em")`; height:1px"></span>`
+end;
+<!-- content row end -->`
+</div>
+`end;
+if ( ( ~DYNPRO_COMPRESSION != "1" && ~DYNPRO_COMPRESSION != "X" ) ||
+     ( 'AAOK'[1].exists == "X" && 'AAOK'[1].visible == "X" ) ||
+     ( 'AANO'[1].exists == "X" && 'AANO'[1].visible == "X" ) ||
+     0 )
+`<!-- line 4 -->
+<div class="MobileRow">`
+if ( 2 != 0 )
+    `<span style="`margin_left("2", "1.640em")`; height:1px"></span>`
+end;
+if ( ( 'AAOK'[1].exists == "X" ) && ( 'AAOK'[1].visible == "X" ) )
+    `<input type="button" style="`width("8", "6.560em"); style("AAOK", 1)`" `
+    `class="MobileButton`class_ext("AAOK", 1)` `class("AAOK", 1)`" `
+    if ( 'AAOK'[1].disabled == "X" ) `disabled="disabled" `end;
+    `name="`'AAOK'[1].name`" `
+    if ( ~currdynpro.speechenabled != "" ) `id="`'AAOK'[1].name`" `end;
+    `value="`label("AAOK", 1)`" `
+    if ( 'AAOK'[1].onclick != "" )
+         `onclick="`'AAOK'[1].onclick`;" `
+    elseif ( 'AAOK'[1].rfidenabled == "X" )
+        `onfocus="setFocusField('`'AAOK'[1].name`');"
+        onblur="leaveFocusField('`'AAOK'[1].name`');"
+        onclick="RfidButtonClick();" `
+    else
+        `onclick="setOkCode('`'AAOK'[1].okcode`');" `
+    end;
+    sh()`>`
+else
+    `<span style="`margin_left("8", "6.560em")`; height:1px"></span>`
+end;
+if ( 5 != 0 )
+    `<span style="`margin_left("5", "4.100em")`; height:1px"></span>`
+end;
+if ( ( 'AANO'[1].exists == "X" ) && ( 'AANO'[1].visible == "X" ) )
+    `<input type="button" style="`width("8", "6.560em"); style("AANO", 1)`" `
+    `class="MobileButton`class_ext("AANO", 1)` `class("AANO", 1)`" `
+    if ( 'AANO'[1].disabled == "X" ) `disabled="disabled" `end;
+    `name="`'AANO'[1].name`" `
+    if ( ~currdynpro.speechenabled != "" ) `id="`'AANO'[1].name`" `end;
+    `value="`label("AANO", 1)`" `
+    if ( 'AANO'[1].onclick != "" )
+         `onclick="`'AANO'[1].onclick`;" `
+    elseif ( 'AANO'[1].rfidenabled == "X" )
+        `onfocus="setFocusField('`'AANO'[1].name`');"
+        onblur="leaveFocusField('`'AANO'[1].name`');"
+        onclick="RfidButtonClick();" `
+    else
+        `onclick="setOkCode('`'AANO'[1].okcode`');" `
+    end;
+    sh()`>`
+else
+    `<span style="`margin_left("8", "6.560em")`; height:1px"></span>`
+end;
+if ( 3 != 0 )
+    `<span style="`margin_left("3", "2.460em")`; height:1px"></span>`
+end;
+<!-- content row end -->`
+</div>
+`end;
+if ( ( ~DYNPRO_COMPRESSION != "1" && ~DYNPRO_COMPRESSION != "X" ) ||
+     1 )
+`<!-- line 5 -->
+<div class="MobileRow">`
+if ( 26 != 0 )
+    `<span style="`margin_left("26", "21.320em")`; height:1px"></span>`
+end;
+<!-- content row end -->`
+</div>
+`end;
+if ( ( ~DYNPRO_COMPRESSION != "1" && ~DYNPRO_COMPRESSION != "X" ) ||
+     1 )
+`<!-- line 6 -->
+<div class="MobileRow">`
+if ( 26 != 0 )
+    `<span style="`margin_left("26", "21.320em")`; height:1px"></span>`
+end;
+<!-- content row end -->`
+</div>
+`end;
+if ( ( ~DYNPRO_COMPRESSION != "1" && ~DYNPRO_COMPRESSION != "X" ) ||
+     1 )
+`<!-- line 7 -->
+<div class="MobileRow">`
+if ( 26 != 0 )
+    `<span style="`margin_left("26", "21.320em")`; height:1px"></span>`
+end;
+<!-- content row end -->`
+</div>
+`end;
+if ( ( ~DYNPRO_COMPRESSION != "1" && ~DYNPRO_COMPRESSION != "X" ) ||
+     1 )
+`<!-- line 8 -->
+<div class="MobileRow">`
+if ( 26 != 0 )
+    `<span style="`margin_left("26", "21.320em")`; height:1px"></span>`
+end;
+<!-- content row end -->`
+</div>
+`end;
+`</div>
+<!-- main screen end -->`
+        `</form>`
+    `</body>`
+`</html>
+                                                                                                                

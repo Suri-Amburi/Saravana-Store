@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>FG FOR VENDOR OR AGENT MAIL</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZSST_MAILTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZSST_MAIL</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZFM_AGENT_VENDOR_MAIL</FUNCNAME>
+     <SHORT_TEXT>AGENT OR VENDOR DEBIT CREDIT GRPO MAIL</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>LV_QR_CODE</PARAMETER>
+       <TYP>ZINW_T_HDR-QR_CODE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>RETURN_PO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>TATKAL_PO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>GRPO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>AGENT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>VENDOR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PRINT_PREVIEW</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>LV_QR_CODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>QR Code</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>RETURN_PO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>DEBIT NOTE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TATKAL_PO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>CREDIT NOTE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GRPO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>GRPO SUMMARY</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>AGENT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>VENDOR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PRINT_PREVIEW</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

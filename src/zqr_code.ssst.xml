@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SSST" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <HEADER>
+    <STYLENAME>ZQR_CODE</STYLENAME>
+    <MASTERLANG>E</MASTERLANG>
+    <LANGU>E</LANGU>
+    <CAPTION>Style QR Code</CAPTION>
+    <V_CAPTION>Style QR Code</V_CAPTION>
+    <TDFIRSTPAR>P1</TDFIRSTPAR>
+    <CPI>10.0</CPI>
+    <LPI>6.0</LPI>
+    <TDTABDIST>1.0</TDTABDIST>
+    <TDTABDISTU>CM</TDTABDISTU>
+    <ACTIVE>A</ACTIVE>
+    <TDFAMILY>COURIER</TDFAMILY>
+    <TDHEIGHT>120</TDHEIGHT>
+   </HEADER>
+   <SSFPARAS>
+    <SSFPARAS>
+     <ACTIVE>A</ACTIVE>
+     <STYLENAME>ZQR_CODE</STYLENAME>
+     <TDPARGRAPH>P1</TDPARGRAPH>
+     <TDPJUSTIFY>CENTER</TDPJUSTIFY>
+     <TDPLDISTU>LN</TDPLDISTU>
+     <TDPTOPU>CM</TDPTOPU>
+     <TDPBOTU>CM</TDPBOTU>
+     <TDPLEFTU>CM</TDPLEFTU>
+     <TDPRIGHTU>CM</TDPRIGHTU>
+     <TDPENTRYU>CM</TDPENTRYU>
+     <TDBOLD>*</TDBOLD>
+     <TDITALIC>*</TDITALIC>
+     <TDUNDERLIN>*</TDUNDERLIN>
+     <LANGU>E</LANGU>
+     <CAPTION>Style QR Code</CAPTION>
+    </SSFPARAS>
+   </SSFPARAS>
+   <SSFSTRINGS>
+    <SSFSTRINGS>
+     <ACTIVE>A</ACTIVE>
+     <STYLENAME>ZQR_CODE</STYLENAME>
+     <TDSTRING>C1</TDSTRING>
+     <TDSUPER>*</TDSUPER>
+     <TDSUB>*</TDSUB>
+     <TDHIDDEN>*</TDHIDDEN>
+     <TDPROTLINE>*</TDPROTLINE>
+     <TDBARCODE>ZQRCODE</TDBARCODE>
+     <TDBOLD>*</TDBOLD>
+     <TDITALIC>*</TDITALIC>
+     <TDUNDERLIN>*</TDUNDERLIN>
+     <LANGU>E</LANGU>
+     <CAPTION>C1</CAPTION>
+    </SSFSTRINGS>
+   </SSFSTRINGS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

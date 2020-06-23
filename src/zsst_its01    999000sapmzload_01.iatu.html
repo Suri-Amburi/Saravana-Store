@@ -1,0 +1,5175 @@
+`   if ( ~itsmobileFuncInclude != "" )
+        declare width(i, a), w(i, a), pos(t, l), alignment(elem) in "some.html";
+        include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileFuncInclude & ".html", ~style="x");
+    else
+        include(~service="itsmobile", ~language="", ~theme="99", ~name="functions.html", ~style="x");;
+    end;
+if (~currdynpro.speechenabled != "")
+`<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+`end`
+<html`if (~currdynpro.speechenabled != "")
+    ` xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:vxml="http://www.w3.org/2001/vxml"
+      xmlns:ev="http://www.w3.org/2001/xml-events"
+      xmlns:xv="http://www.voicexml.org/2002/xhtml+voice"`
+  end` `
+`class="MobileHtml" `
+` style="" >`
+  if ( ~itsmobileNameSpace != "" )
+    ~current_service = ~itsmobileNameSpace & ~service;
+  elseif ( strsub(~sources, 0, 1) == "/" )
+    ~current_service = strsub(~sources, 0, strchr(~sources, "/", 1)+1) & ~service;
+  else
+    ~current_service = ~service;
+  end;
+  if ( ~AttrMimeUrlService == "" ) ~AttrMimeUrlService = ~current_service; end;
+  if ( ~AttrMimeUrlTheme == "" ) ~AttrMimeUrlTheme = ~theme; end;`
+
+`
+<!-- Generated Template
+      NAME:   SAPMZLOAD_01
+      SCREEN: 9000
+      DATE:   20200201
+      TIME:   212424
+      STYLE:  MOBILEEDIT
+-->
+    `<head>`
+    if (  ~itsmobileDeviceInclude != "" )
+       include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileDeviceInclude & ".html");
+    end;
+        `<title>`~windowtitle`</title>
+`if (NOTIFY_BELL_SIGNAL > 0)
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsounderr.wav")`" loop="`NOTIFY_BELL_SIGNAL`">
+`end;
+if ( ( ~messageline != "" ) && ( ~itsmobilemsgsound == "1" ) || ( ~currdynpro.messagesound != "" ) )
+   if ( ~messagetype == "S" || ~currdynpro.messagesound == "S" )
+         <!-- sucess message -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsoundmsg.wav")`" loop="1" />
+`  elseif ( ~messagetype == "I" || ~currdynpro.messagesound == "I" )
+         <!-- information message -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsoundmsg.wav")`" loop="1" />
+`  elseif ( ~messagetype == "W" || ~currdynpro.messagesound == "W" )
+         <!-- warning message -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsounderr.wav")`" loop="1" />
+`  elseif ( ~messagetype == "E" || ~currdynpro.messagesound == "E" )
+         <!-- error message -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsounderr.wav")`" loop="3" />
+`  elseif ( ~currdynpro.messagesound != "" )
+         <!-- message type not set -->
+`        <bgsound src="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~currdynpro.messagesound)`" loop="1" />
+`  else
+         <!-- message type not set -->
+`        <bgsound src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="sounds/all/sapsoundmsg.wav")`" loop="1" />
+`  end;
+end;
+ if ( ~itsmobileCssInclude != "" ) <!-- customer include from gui settings -->`
+        <link rel="stylesheet" href="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~itsmobileCssInclude & ".css")`" type="text/css" />
+` else <!-- default include from itsmobile --> `
+        <link rel="stylesheet" href="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="styles/all/mobile_e.css")`" type="text/css" />
+` end;
+ if ( ~itsmobileJsInclude != "" ) <!-- customer include specified in gui settings -->`
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service=~current_service, ~theme=~theme, ~language="", ~name=~itsmobileJsInclude & ".js")`"></script>
+` else <!-- default include from itsmobile -->`
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="scripts/all/mobile_e.js")`"></script>
+` end;`
+        <script type="text/javascript" language="Javascript">
+           var itsmobile_eos = "`wgateurl(~okcode="/nex")`";
+        </script>
+` <!-- rfid values --------------------------- -->
+  if ( ~RfidEnabledFields != "" ) `
+        <script type="text/javascript" language="javascript" src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="rfid/rfbutton.js")`"></script>
+        <script type="text/javascript" language="Javascript">
+           var rfid_fields = new Object;
+`   repeat with i from 1 to ~RfidEnabledFields.dim
+      <!-- get field name and index -->
+      rfidField = ~RfidEnabledFields[i];
+      rfidFieldIdx = ~RfidEnabledFields[i].idx;
+      rfidFieldParams = ~RfidEnabledFields[i].params; `
+           rfid_fields["`rfidField`[`rfidFieldIdx`]"] = { `rfidFieldParams` };
+`   end;`
+        </script>
+` end;`
+
+`       <!-- Check if screen supports voice integration -->
+        if ( ~currdynpro.speechenabled != "" )
+          <!-- include the htmlb functions for voice integration -->
+          if ( ~itsmobileVoiceInclude != "" ) <!-- customers voice generation html -->
+            include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileVoiceInclude & ".html");
+          else <!-- default its default voice include -->
+            include(~service="itsmobile", ~language="", ~theme="99", ~name="include/voice.html");
+          end;
+        end;
+    `</head>`
+    `<body `
+      if (~currdynpro.speechenabled != "")` ev:event="load" ev:handler="#sayOnPageLoad"` else
+      ` onload="setFocus('`~focusfield`')"` end;
+      ` onkeydown="return processKeyEvent(event);" onhelp="return false;"`
+      ` style="" `
+`class="MobileBody" `
+`id="MobileBody" `
+` >
+`
+        `<form method="post" action="`WGateURL()`" `
+`class="mobileform" `
+`id="mobileform" `
+`name="mobileform" `
+` onsubmit="return firstSend()" style="`
+`display:inline; `
+`">
+            <!-- hidden okcode field -->
+            <input type="hidden" id="~OkCode" name="~OkCode" value="/0" />
+            <!-- hidden fkey field -->
+            <input type="hidden" id="~FKey" name="~FKey" value="" />
+            <!-- hidden focus field -->
+            <input type="hidden" id="~Focusfield" name="~Focusfield" value="" />
+            <!-- already send flag -->
+            <input type="hidden" id="~ItsMobFirstSend" name="~ItsMobFirstSend" value="" />
+            `if (~SEC_SESSTOKEN != "")`<input type="hidden" name="~SEC_SESSTOKEN" value="`~SEC_SESSTOKEN`" />`end;
+xFactorFromGenerator=1000`
+`yFactorFromGenerator=1000
+`<!-- main screen begin -->`
+`<div width="100%" >`
+    if ( ~itsmobileCuaInclude != "" ) <!-- customers cua area -->
+       include(~service=~current_service, ~language="", ~theme=~theme, ~name=~itsmobileCuaInclude & ".html");
+    elseif ( ~itsmobileNoCuaInclude != "1" && ~itsmobileNoCuaInclude != "X" ) <!-- default cua area -->
+       include(~service="itsmobile", ~language="", ~theme="99", ~name="include/cuaarea.html");
+    end
+`</div>`
+`<div `
+`class="MobileUserArea" `
+` style="`
+`height:`y_length("800")`; `
+`position:relative; `
+`width:`x_length("800")`; `
+` ">`
+if ( ( 'TXT1'[1].exists == "X" ) && ( 'TXT1'[1].visible == "X" ) )
+    `<span `
+    if ( 'TXT1'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted" `
+` `
+           `style=" `if ( 'TXT1'[1].alignment == "right" )` text-align: right; `end
+              ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("59")`; `
+`width:`x_length("36")`; `
+``
+                `display:block; `
+                `" `
+    else
+        ``
+`class="MobileLabel" `
+` `
+           `style=" `if ( 'TXT1'[1].alignment == "right" )` text-align: right; `end
+              ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("59")`; `
+`width:`x_length("36")`; `
+``
+                `display:block; `
+                `" `
+    end
+    `>`strmask('TXT1'[1].label)`</span>`
+end;
+if ( ( 'TXT2'[1].exists == "X" ) && ( 'TXT2'[1].visible == "X" ) )
+    `<span `
+    if ( 'TXT2'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted" `
+` `
+           `style=" `if ( 'TXT2'[1].alignment == "right" )` text-align: right; `end
+              ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("60")`; `
+`width:`x_length("132")`; `
+``
+                `display:block; `
+                `" `
+    else
+        ``
+`class="MobileLabel" `
+` `
+           `style=" `if ( 'TXT2'[1].alignment == "right" )` text-align: right; `end
+              ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("60")`; `
+`width:`x_length("132")`; `
+``
+                `display:block; `
+                `" `
+    end
+    `>`strmask('TXT2'[1].label)`</span>`
+end;
+if ( ( 'VEHICLE'[1].exists == "X" ) && ( 'VEHICLE'[1].visible == "X" ) )
+    `<span `
+    if ( 'VEHICLE'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted" `
+` `
+           `style=" `if ( 'VEHICLE'[1].alignment == "right" )` text-align: right; `end
+              ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("60")`; `
+`width:`x_length("168")`; `
+``
+                `display:block; `
+                `" `
+    else
+        ``
+`class="MobileLabel" `
+` `
+           `style=" `if ( 'VEHICLE'[1].alignment == "right" )` text-align: right; `end
+              ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("60")`; `
+`width:`x_length("168")`; `
+``
+                `display:block; `
+                `" `
+    end
+    `>`strmask('VEHICLE'[1].label)`</span>`
+end;
+if ( 'GS_SHIP-1SLNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-1SLNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-1SLNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-1SLNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-1SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-1SLNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-1SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-1SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-1SLNUM'[1].name`" `
+        if ( 'GS_SHIP-1SLNUM'[1].inputrequired == "X" && 'GS_SHIP-1SLNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-1SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-1SLNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-1SLNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-1SLNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-1SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-1SLNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-1SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-1SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1SLNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("79")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-1SLNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-1SLNUM'[1].range`" `
+        elseif ( 'GS_SHIP-1SLNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-1SLNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-1SLNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-1SLNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-1SLNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-1SLNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-1SLNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-1SLNUM'[1].name`');" `
+        `name="`'GS_SHIP-1SLNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-1SLNUM'[1].name`" `end;
+        if ( 'GS_SHIP-1SLNUM'[1].inputrequired == "X" && 'GS_SHIP-1SLNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-1SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-1SLNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-1TKNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-1TKNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-1TKNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-1TKNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-1TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-1TKNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-1TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-1TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-1TKNUM'[1].name`" `
+        if ( 'GS_SHIP-1TKNUM'[1].inputrequired == "X" && 'GS_SHIP-1TKNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-1TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-1TKNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-1TKNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-1TKNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-1TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-1TKNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-1TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-1TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1TKNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-1TKNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-1TKNUM'[1].range`" `
+        elseif ( 'GS_SHIP-1TKNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-1TKNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-1TKNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-1TKNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-1TKNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-1TKNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-1TKNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-1TKNUM'[1].name`');" `
+        `name="`'GS_SHIP-1TKNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-1TKNUM'[1].name`" `end;
+        if ( 'GS_SHIP-1TKNUM'[1].inputrequired == "X" && 'GS_SHIP-1TKNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-1TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-1TKNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-1SIGNI'[1].exists == "X" )
+    if ( 'GS_SHIP-1SIGNI'[1].disabled == "X" )
+        if ( 'GS_SHIP-1SIGNI'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-1SIGNI'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-1SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-1SIGNI'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-1SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-1SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-1SIGNI'[1].name`" `
+        if ( 'GS_SHIP-1SIGNI'[1].inputrequired == "X" && 'GS_SHIP-1SIGNI'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-1SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-1SIGNI'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-1SIGNI'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-1SIGNI'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-1SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-1SIGNI'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-1SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-1SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1SIGNI'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-1SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("80")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-1SIGNI'[1].range != "" )
+            `its:range="`'GS_SHIP-1SIGNI'[1].range`" `
+        elseif ( 'GS_SHIP-1SIGNI'[1].list != "" )
+            `its:list="`'GS_SHIP-1SIGNI'[1].list`" `
+        end;
+        if ( 'GS_SHIP-1SIGNI'[1].next != "" )
+            `its:next="`'GS_SHIP-1SIGNI'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-1SIGNI'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-1SIGNI'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-1SIGNI'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-1SIGNI'[1].name`');" `
+        `name="`'GS_SHIP-1SIGNI'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-1SIGNI'[1].name`" `end;
+        if ( 'GS_SHIP-1SIGNI'[1].inputrequired == "X" && 'GS_SHIP-1SIGNI'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-1SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-1SIGNI'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-2SLNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-2SLNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-2SLNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-2SLNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-2SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-2SLNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-2SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-2SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-2SLNUM'[1].name`" `
+        if ( 'GS_SHIP-2SLNUM'[1].inputrequired == "X" && 'GS_SHIP-2SLNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-2SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-2SLNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-2SLNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-2SLNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-2SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-2SLNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-2SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-2SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2SLNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("99")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-2SLNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-2SLNUM'[1].range`" `
+        elseif ( 'GS_SHIP-2SLNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-2SLNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-2SLNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-2SLNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-2SLNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-2SLNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-2SLNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-2SLNUM'[1].name`');" `
+        `name="`'GS_SHIP-2SLNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-2SLNUM'[1].name`" `end;
+        if ( 'GS_SHIP-2SLNUM'[1].inputrequired == "X" && 'GS_SHIP-2SLNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-2SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-2SLNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-2TKNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-2TKNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-2TKNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-2TKNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-2TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-2TKNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-2TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-2TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-2TKNUM'[1].name`" `
+        if ( 'GS_SHIP-2TKNUM'[1].inputrequired == "X" && 'GS_SHIP-2TKNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-2TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-2TKNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-2TKNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-2TKNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-2TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-2TKNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-2TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-2TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2TKNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-2TKNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-2TKNUM'[1].range`" `
+        elseif ( 'GS_SHIP-2TKNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-2TKNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-2TKNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-2TKNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-2TKNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-2TKNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-2TKNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-2TKNUM'[1].name`');" `
+        `name="`'GS_SHIP-2TKNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-2TKNUM'[1].name`" `end;
+        if ( 'GS_SHIP-2TKNUM'[1].inputrequired == "X" && 'GS_SHIP-2TKNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-2TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-2TKNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-2SIGNI'[1].exists == "X" )
+    if ( 'GS_SHIP-2SIGNI'[1].disabled == "X" )
+        if ( 'GS_SHIP-2SIGNI'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-2SIGNI'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-2SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-2SIGNI'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-2SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-2SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-2SIGNI'[1].name`" `
+        if ( 'GS_SHIP-2SIGNI'[1].inputrequired == "X" && 'GS_SHIP-2SIGNI'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-2SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-2SIGNI'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-2SIGNI'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-2SIGNI'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-2SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-2SIGNI'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-2SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-2SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2SIGNI'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-2SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("100")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-2SIGNI'[1].range != "" )
+            `its:range="`'GS_SHIP-2SIGNI'[1].range`" `
+        elseif ( 'GS_SHIP-2SIGNI'[1].list != "" )
+            `its:list="`'GS_SHIP-2SIGNI'[1].list`" `
+        end;
+        if ( 'GS_SHIP-2SIGNI'[1].next != "" )
+            `its:next="`'GS_SHIP-2SIGNI'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-2SIGNI'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-2SIGNI'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-2SIGNI'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-2SIGNI'[1].name`');" `
+        `name="`'GS_SHIP-2SIGNI'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-2SIGNI'[1].name`" `end;
+        if ( 'GS_SHIP-2SIGNI'[1].inputrequired == "X" && 'GS_SHIP-2SIGNI'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-2SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-2SIGNI'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-3SLNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-3SLNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-3SLNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-3SLNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-3SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-3SLNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-3SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-3SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-3SLNUM'[1].name`" `
+        if ( 'GS_SHIP-3SLNUM'[1].inputrequired == "X" && 'GS_SHIP-3SLNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-3SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-3SLNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-3SLNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-3SLNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-3SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-3SLNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-3SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-3SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3SLNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("119")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-3SLNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-3SLNUM'[1].range`" `
+        elseif ( 'GS_SHIP-3SLNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-3SLNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-3SLNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-3SLNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-3SLNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-3SLNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-3SLNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-3SLNUM'[1].name`');" `
+        `name="`'GS_SHIP-3SLNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-3SLNUM'[1].name`" `end;
+        if ( 'GS_SHIP-3SLNUM'[1].inputrequired == "X" && 'GS_SHIP-3SLNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-3SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-3SLNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-3TKNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-3TKNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-3TKNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-3TKNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-3TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-3TKNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-3TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-3TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-3TKNUM'[1].name`" `
+        if ( 'GS_SHIP-3TKNUM'[1].inputrequired == "X" && 'GS_SHIP-3TKNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-3TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-3TKNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-3TKNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-3TKNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-3TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-3TKNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-3TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-3TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3TKNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-3TKNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-3TKNUM'[1].range`" `
+        elseif ( 'GS_SHIP-3TKNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-3TKNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-3TKNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-3TKNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-3TKNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-3TKNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-3TKNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-3TKNUM'[1].name`');" `
+        `name="`'GS_SHIP-3TKNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-3TKNUM'[1].name`" `end;
+        if ( 'GS_SHIP-3TKNUM'[1].inputrequired == "X" && 'GS_SHIP-3TKNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-3TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-3TKNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-3SIGNI'[1].exists == "X" )
+    if ( 'GS_SHIP-3SIGNI'[1].disabled == "X" )
+        if ( 'GS_SHIP-3SIGNI'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-3SIGNI'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-3SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-3SIGNI'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-3SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-3SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-3SIGNI'[1].name`" `
+        if ( 'GS_SHIP-3SIGNI'[1].inputrequired == "X" && 'GS_SHIP-3SIGNI'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-3SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-3SIGNI'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-3SIGNI'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-3SIGNI'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-3SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-3SIGNI'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-3SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-3SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3SIGNI'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-3SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("120")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-3SIGNI'[1].range != "" )
+            `its:range="`'GS_SHIP-3SIGNI'[1].range`" `
+        elseif ( 'GS_SHIP-3SIGNI'[1].list != "" )
+            `its:list="`'GS_SHIP-3SIGNI'[1].list`" `
+        end;
+        if ( 'GS_SHIP-3SIGNI'[1].next != "" )
+            `its:next="`'GS_SHIP-3SIGNI'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-3SIGNI'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-3SIGNI'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-3SIGNI'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-3SIGNI'[1].name`');" `
+        `name="`'GS_SHIP-3SIGNI'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-3SIGNI'[1].name`" `end;
+        if ( 'GS_SHIP-3SIGNI'[1].inputrequired == "X" && 'GS_SHIP-3SIGNI'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-3SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-3SIGNI'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-4SLNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-4SLNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-4SLNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-4SLNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-4SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-4SLNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-4SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-4SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-4SLNUM'[1].name`" `
+        if ( 'GS_SHIP-4SLNUM'[1].inputrequired == "X" && 'GS_SHIP-4SLNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-4SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-4SLNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-4SLNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-4SLNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-4SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-4SLNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-4SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-4SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4SLNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("139")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-4SLNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-4SLNUM'[1].range`" `
+        elseif ( 'GS_SHIP-4SLNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-4SLNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-4SLNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-4SLNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-4SLNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-4SLNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-4SLNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-4SLNUM'[1].name`');" `
+        `name="`'GS_SHIP-4SLNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-4SLNUM'[1].name`" `end;
+        if ( 'GS_SHIP-4SLNUM'[1].inputrequired == "X" && 'GS_SHIP-4SLNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-4SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-4SLNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-4TKNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-4TKNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-4TKNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-4TKNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-4TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-4TKNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-4TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-4TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-4TKNUM'[1].name`" `
+        if ( 'GS_SHIP-4TKNUM'[1].inputrequired == "X" && 'GS_SHIP-4TKNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-4TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-4TKNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-4TKNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-4TKNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-4TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-4TKNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-4TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-4TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4TKNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-4TKNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-4TKNUM'[1].range`" `
+        elseif ( 'GS_SHIP-4TKNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-4TKNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-4TKNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-4TKNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-4TKNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-4TKNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-4TKNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-4TKNUM'[1].name`');" `
+        `name="`'GS_SHIP-4TKNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-4TKNUM'[1].name`" `end;
+        if ( 'GS_SHIP-4TKNUM'[1].inputrequired == "X" && 'GS_SHIP-4TKNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-4TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-4TKNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-4SIGNI'[1].exists == "X" )
+    if ( 'GS_SHIP-4SIGNI'[1].disabled == "X" )
+        if ( 'GS_SHIP-4SIGNI'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-4SIGNI'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-4SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-4SIGNI'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-4SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-4SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-4SIGNI'[1].name`" `
+        if ( 'GS_SHIP-4SIGNI'[1].inputrequired == "X" && 'GS_SHIP-4SIGNI'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-4SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-4SIGNI'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-4SIGNI'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-4SIGNI'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-4SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-4SIGNI'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-4SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-4SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4SIGNI'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-4SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("140")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-4SIGNI'[1].range != "" )
+            `its:range="`'GS_SHIP-4SIGNI'[1].range`" `
+        elseif ( 'GS_SHIP-4SIGNI'[1].list != "" )
+            `its:list="`'GS_SHIP-4SIGNI'[1].list`" `
+        end;
+        if ( 'GS_SHIP-4SIGNI'[1].next != "" )
+            `its:next="`'GS_SHIP-4SIGNI'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-4SIGNI'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-4SIGNI'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-4SIGNI'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-4SIGNI'[1].name`');" `
+        `name="`'GS_SHIP-4SIGNI'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-4SIGNI'[1].name`" `end;
+        if ( 'GS_SHIP-4SIGNI'[1].inputrequired == "X" && 'GS_SHIP-4SIGNI'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-4SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-4SIGNI'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-5SLNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-5SLNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-5SLNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-5SLNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-5SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-5SLNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-5SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-5SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-5SLNUM'[1].name`" `
+        if ( 'GS_SHIP-5SLNUM'[1].inputrequired == "X" && 'GS_SHIP-5SLNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-5SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-5SLNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-5SLNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-5SLNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-5SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-5SLNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-5SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-5SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5SLNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("159")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-5SLNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-5SLNUM'[1].range`" `
+        elseif ( 'GS_SHIP-5SLNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-5SLNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-5SLNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-5SLNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-5SLNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-5SLNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-5SLNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-5SLNUM'[1].name`');" `
+        `name="`'GS_SHIP-5SLNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-5SLNUM'[1].name`" `end;
+        if ( 'GS_SHIP-5SLNUM'[1].inputrequired == "X" && 'GS_SHIP-5SLNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-5SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-5SLNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-5TKNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-5TKNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-5TKNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-5TKNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-5TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-5TKNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-5TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-5TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-5TKNUM'[1].name`" `
+        if ( 'GS_SHIP-5TKNUM'[1].inputrequired == "X" && 'GS_SHIP-5TKNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-5TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-5TKNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-5TKNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-5TKNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-5TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-5TKNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-5TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-5TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5TKNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-5TKNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-5TKNUM'[1].range`" `
+        elseif ( 'GS_SHIP-5TKNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-5TKNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-5TKNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-5TKNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-5TKNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-5TKNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-5TKNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-5TKNUM'[1].name`');" `
+        `name="`'GS_SHIP-5TKNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-5TKNUM'[1].name`" `end;
+        if ( 'GS_SHIP-5TKNUM'[1].inputrequired == "X" && 'GS_SHIP-5TKNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-5TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-5TKNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-5SIGNI'[1].exists == "X" )
+    if ( 'GS_SHIP-5SIGNI'[1].disabled == "X" )
+        if ( 'GS_SHIP-5SIGNI'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-5SIGNI'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-5SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-5SIGNI'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-5SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-5SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-5SIGNI'[1].name`" `
+        if ( 'GS_SHIP-5SIGNI'[1].inputrequired == "X" && 'GS_SHIP-5SIGNI'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-5SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-5SIGNI'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-5SIGNI'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-5SIGNI'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-5SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-5SIGNI'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-5SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-5SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5SIGNI'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-5SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("160")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-5SIGNI'[1].range != "" )
+            `its:range="`'GS_SHIP-5SIGNI'[1].range`" `
+        elseif ( 'GS_SHIP-5SIGNI'[1].list != "" )
+            `its:list="`'GS_SHIP-5SIGNI'[1].list`" `
+        end;
+        if ( 'GS_SHIP-5SIGNI'[1].next != "" )
+            `its:next="`'GS_SHIP-5SIGNI'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-5SIGNI'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-5SIGNI'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-5SIGNI'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-5SIGNI'[1].name`');" `
+        `name="`'GS_SHIP-5SIGNI'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-5SIGNI'[1].name`" `end;
+        if ( 'GS_SHIP-5SIGNI'[1].inputrequired == "X" && 'GS_SHIP-5SIGNI'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-5SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-5SIGNI'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-6SLNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-6SLNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-6SLNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-6SLNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-6SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-6SLNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-6SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-6SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-6SLNUM'[1].name`" `
+        if ( 'GS_SHIP-6SLNUM'[1].inputrequired == "X" && 'GS_SHIP-6SLNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-6SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-6SLNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-6SLNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-6SLNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-6SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-6SLNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-6SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-6SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6SLNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("179")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-6SLNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-6SLNUM'[1].range`" `
+        elseif ( 'GS_SHIP-6SLNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-6SLNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-6SLNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-6SLNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-6SLNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-6SLNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-6SLNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-6SLNUM'[1].name`');" `
+        `name="`'GS_SHIP-6SLNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-6SLNUM'[1].name`" `end;
+        if ( 'GS_SHIP-6SLNUM'[1].inputrequired == "X" && 'GS_SHIP-6SLNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-6SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-6SLNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-6TKNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-6TKNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-6TKNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-6TKNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-6TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-6TKNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-6TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-6TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-6TKNUM'[1].name`" `
+        if ( 'GS_SHIP-6TKNUM'[1].inputrequired == "X" && 'GS_SHIP-6TKNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-6TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-6TKNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-6TKNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-6TKNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-6TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-6TKNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-6TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-6TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6TKNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-6TKNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-6TKNUM'[1].range`" `
+        elseif ( 'GS_SHIP-6TKNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-6TKNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-6TKNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-6TKNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-6TKNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-6TKNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-6TKNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-6TKNUM'[1].name`');" `
+        `name="`'GS_SHIP-6TKNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-6TKNUM'[1].name`" `end;
+        if ( 'GS_SHIP-6TKNUM'[1].inputrequired == "X" && 'GS_SHIP-6TKNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-6TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-6TKNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-6SIGNI'[1].exists == "X" )
+    if ( 'GS_SHIP-6SIGNI'[1].disabled == "X" )
+        if ( 'GS_SHIP-6SIGNI'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-6SIGNI'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-6SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-6SIGNI'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-6SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-6SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-6SIGNI'[1].name`" `
+        if ( 'GS_SHIP-6SIGNI'[1].inputrequired == "X" && 'GS_SHIP-6SIGNI'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-6SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-6SIGNI'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-6SIGNI'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-6SIGNI'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-6SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-6SIGNI'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-6SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-6SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6SIGNI'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-6SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("180")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-6SIGNI'[1].range != "" )
+            `its:range="`'GS_SHIP-6SIGNI'[1].range`" `
+        elseif ( 'GS_SHIP-6SIGNI'[1].list != "" )
+            `its:list="`'GS_SHIP-6SIGNI'[1].list`" `
+        end;
+        if ( 'GS_SHIP-6SIGNI'[1].next != "" )
+            `its:next="`'GS_SHIP-6SIGNI'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-6SIGNI'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-6SIGNI'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-6SIGNI'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-6SIGNI'[1].name`');" `
+        `name="`'GS_SHIP-6SIGNI'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-6SIGNI'[1].name`" `end;
+        if ( 'GS_SHIP-6SIGNI'[1].inputrequired == "X" && 'GS_SHIP-6SIGNI'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-6SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-6SIGNI'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-7SLNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-7SLNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-7SLNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-7SLNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-7SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-7SLNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-7SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-7SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-7SLNUM'[1].name`" `
+        if ( 'GS_SHIP-7SLNUM'[1].inputrequired == "X" && 'GS_SHIP-7SLNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-7SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-7SLNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-7SLNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+        elseif ( 'GS_SHIP-7SLNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-7SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-7SLNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-7SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-7SLNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7SLNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7SLNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("76")`; `
+`position:absolute; `
+`top:`y_length("199")`; `
+`width:`x_length("36")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-7SLNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-7SLNUM'[1].range`" `
+        elseif ( 'GS_SHIP-7SLNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-7SLNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-7SLNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-7SLNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-7SLNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-7SLNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-7SLNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-7SLNUM'[1].name`');" `
+        `name="`'GS_SHIP-7SLNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-7SLNUM'[1].name`" `end;
+        if ( 'GS_SHIP-7SLNUM'[1].inputrequired == "X" && 'GS_SHIP-7SLNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-7SLNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-7SLNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-7TKNUM'[1].exists == "X" )
+    if ( 'GS_SHIP-7TKNUM'[1].disabled == "X" )
+        if ( 'GS_SHIP-7TKNUM'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-7TKNUM'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-7TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-7TKNUM'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-7TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-7TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-7TKNUM'[1].name`" `
+        if ( 'GS_SHIP-7TKNUM'[1].inputrequired == "X" && 'GS_SHIP-7TKNUM'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-7TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-7TKNUM'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-7TKNUM'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+        elseif ( 'GS_SHIP-7TKNUM'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-7TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-7TKNUM'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-7TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-7TKNUM'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7TKNUM'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7TKNUM'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("116")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("132")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-7TKNUM'[1].range != "" )
+            `its:range="`'GS_SHIP-7TKNUM'[1].range`" `
+        elseif ( 'GS_SHIP-7TKNUM'[1].list != "" )
+            `its:list="`'GS_SHIP-7TKNUM'[1].list`" `
+        end;
+        if ( 'GS_SHIP-7TKNUM'[1].next != "" )
+            `its:next="`'GS_SHIP-7TKNUM'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-7TKNUM'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-7TKNUM'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-7TKNUM'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-7TKNUM'[1].name`');" `
+        `name="`'GS_SHIP-7TKNUM'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-7TKNUM'[1].name`" `end;
+        if ( 'GS_SHIP-7TKNUM'[1].inputrequired == "X" && 'GS_SHIP-7TKNUM'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-7TKNUM'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-7TKNUM'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'GS_SHIP-7SIGNI'[1].exists == "X" )
+    if ( 'GS_SHIP-7SIGNI'[1].disabled == "X" )
+        if ( 'GS_SHIP-7SIGNI'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-7SIGNI'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GS_SHIP-7SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-7SIGNI'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-7SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GS_SHIP-7SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        end;
+        `name="`'GS_SHIP-7SIGNI'[1].name`" `
+        if ( 'GS_SHIP-7SIGNI'[1].inputrequired == "X" && 'GS_SHIP-7SIGNI'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GS_SHIP-7SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-7SIGNI'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GS_SHIP-7SIGNI'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+        elseif ( 'GS_SHIP-7SIGNI'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GS_SHIP-7SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+`" `
+            end;
+        elseif ( 'GS_SHIP-7SIGNI'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GS_SHIP-7SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GS_SHIP-7SIGNI'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7SIGNI'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GS_SHIP-7SIGNI'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("260")`; `
+`position:absolute; `
+`top:`y_length("200")`; `
+`width:`x_length("168")`; `
+` " `
+            end;
+        end;
+        if ( 'GS_SHIP-7SIGNI'[1].range != "" )
+            `its:range="`'GS_SHIP-7SIGNI'[1].range`" `
+        elseif ( 'GS_SHIP-7SIGNI'[1].list != "" )
+            `its:list="`'GS_SHIP-7SIGNI'[1].list`" `
+        end;
+        if ( 'GS_SHIP-7SIGNI'[1].next != "" )
+            `its:next="`'GS_SHIP-7SIGNI'[1].next`[1]" `
+        end;
+        if ( 'GS_SHIP-7SIGNI'[1].okcode != "" )
+            `onchange="setOkCode('`'GS_SHIP-7SIGNI'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GS_SHIP-7SIGNI'[1].name`');" `
+        `onblur="leaveFocusField('`'GS_SHIP-7SIGNI'[1].name`');" `
+        `name="`'GS_SHIP-7SIGNI'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GS_SHIP-7SIGNI'[1].name`" `end;
+        if ( 'GS_SHIP-7SIGNI'[1].inputrequired == "X" && 'GS_SHIP-7SIGNI'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GS_SHIP-7SIGNI'[1], 1)`" `
+        end;
+        `maxlength="`'GS_SHIP-7SIGNI'[1].maxinputsize`"/>`
+    end;
+end`
+`
+if ( 'BACK'[1].exists == "X" && 'BACK'[1].visible == "X" )
+    `<input type="button"
+        `
+    if ( 'BACK'[1].disabled == "X" )
+        ``
+`class="MobileButtonDisabled" `
+` disabled="disabled" style="`
+`height:`y_length("40")`; `
+`left:`x_length("25")`; `
+`position:absolute; `
+`top:`y_length("16")`; `
+`width:`x_length("96")`; `
+`" `
+    else
+        ``
+`class="MobileButton" `
+` style="`
+`background:red; `
+`border:dashed 2px; `
+`color:black; `
+`height:`y_length("40")`; `
+`left:`x_length("25")`; `
+`position:absolute; `
+`text-align:center; `
+`top:`y_length("16")`; `
+`width:`x_length("96")`; `
+`" `
+    end;
+    `name="`'BACK'[1].name`" `
+    if ( ~currdynpro.speechenabled != "" )`id="`'BACK'[1].name`" `end;
+    `value="`strmask('BACK'[1].label)`" `
+    if ( 'BACK'[1].onclick != "" )
+         `onclick="`'BACK'[1].onclick`;" `
+    elseif ( 'BACK'[1].rfidenabled == "X" )
+        `onfocus="setFocusField('`'BACK'[1].name`');"
+        onblur="leaveFocusField('`'BACK'[1].name`');"
+        onclick="RfidButtonClick();" `
+    else
+        `onclick="setOkCode('`'BACK'[1].okcode`');" `
+    end;
+    `/>`
+end;
+if ( 'PG_UP'[1].exists == "X" && 'PG_UP'[1].visible == "X" )
+    `<input type="button"
+        `
+    if ( 'PG_UP'[1].disabled == "X" )
+        ``
+`class="MobileButtonDisabled" `
+` disabled="disabled" style="`
+`height:`y_length("20")`; `
+`left:`x_length("164")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("108")`; `
+`" `
+    else
+        ``
+`class="MobileButton" `
+` style="`
+`height:`y_length("20")`; `
+`left:`x_length("164")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("108")`; `
+`" `
+    end;
+    `name="`'PG_UP'[1].name`" `
+    if ( ~currdynpro.speechenabled != "" )`id="`'PG_UP'[1].name`" `end;
+    `value="`strmask('PG_UP'[1].label)`" `
+    if ( 'PG_UP'[1].onclick != "" )
+         `onclick="`'PG_UP'[1].onclick`;" `
+    elseif ( 'PG_UP'[1].rfidenabled == "X" )
+        `onfocus="setFocusField('`'PG_UP'[1].name`');"
+        onblur="leaveFocusField('`'PG_UP'[1].name`');"
+        onclick="RfidButtonClick();" `
+    else
+        `onclick="setOkCode('`'PG_UP'[1].okcode`');" `
+    end;
+    `/>`
+end;
+if ( 'PG_DN'[1].exists == "X" && 'PG_DN'[1].visible == "X" )
+    `<input type="button"
+        `
+    if ( 'PG_DN'[1].disabled == "X" )
+        ``
+`class="MobileButtonDisabled" `
+` disabled="disabled" style="`
+`height:`y_length("20")`; `
+`left:`x_length("272")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("108")`; `
+`" `
+    else
+        ``
+`class="MobileButton" `
+` style="`
+`height:`y_length("20")`; `
+`left:`x_length("272")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("108")`; `
+`" `
+    end;
+    `name="`'PG_DN'[1].name`" `
+    if ( ~currdynpro.speechenabled != "" )`id="`'PG_DN'[1].name`" `end;
+    `value="`strmask('PG_DN'[1].label)`" `
+    if ( 'PG_DN'[1].onclick != "" )
+         `onclick="`'PG_DN'[1].onclick`;" `
+    elseif ( 'PG_DN'[1].rfidenabled == "X" )
+        `onfocus="setFocusField('`'PG_DN'[1].name`');"
+        onblur="leaveFocusField('`'PG_DN'[1].name`');"
+        onclick="RfidButtonClick();" `
+    else
+        `onclick="setOkCode('`'PG_DN'[1].okcode`');" `
+    end;
+    `/>`
+end;
+if ( ( 'TXT5'[1].exists == "X" ) && ( 'TXT5'[1].visible == "X" ) )
+    `<span `
+    if ( 'TXT5'[1].highlighted == "X" )
+        ``
+`class="MobileLabelHighlighted" `
+` `
+           `style=" `if ( 'TXT5'[1].alignment == "right" )` text-align: right; `end
+              ``
+`height:`y_length("20")`; `
+`left:`x_length("380")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+``
+                `display:block; `
+                `" `
+    else
+        ``
+`class="MobileLabel" `
+` `
+           `style=" `if ( 'TXT5'[1].alignment == "right" )` text-align: right; `end
+              ``
+`height:`y_length("20")`; `
+`left:`x_length("380")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+``
+                `display:block; `
+                `" `
+    end
+    `>`strmask('TXT5'[1].label)`</span>`
+end;
+if ( 'GV_SEL'[1].exists == "X" )
+    if ( 'GV_SEL'[1].disabled == "X" )
+        if ( 'GV_SEL'[1].visible != "X" )
+            `<input type="hidden" readonly="readonly" `
+            ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+        elseif ( 'GV_SEL'[1].type == "Password" )
+            `<input type="password" readonly="readonly" `
+            if ( 'GV_SEL'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+            else;
+                ``
+`class="MobilePasswordDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+            end;
+        elseif ( 'GV_SEL'[1].inputrequired == "X" )
+            `<input type="text" readonly="readonly" `
+            if ( 'GV_SEL'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+            else;
+                ``
+`class="MobileEditRequiredDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+            end;
+        else
+            `<input type="text" readonly="readonly" `
+            if ( 'GV_SEL'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlightedDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+            else;
+                ``
+`class="MobileEditDisabled" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+            end;
+        end;
+        `name="`'GV_SEL'[1].name`" `
+        if ( 'GV_SEL'[1].inputrequired == "X" && 'GV_SEL'[1] == "?" )
+             `value="" `
+        else
+             `value="`strmaskext('GV_SEL'[1], 1)`" `
+        end;
+        `maxlength="`'GV_SEL'[1].maxinputsize`"/>`
+    else                                     <!-- not disabled -->
+        if ( 'GV_SEL'[1].visible != "X" )
+            `<input type="hidden" `
+`class="MobileEdit" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+        elseif ( 'GV_SEL'[1].type == "Password" )
+            `<input type="password" `
+            if ( 'GV_SEL'[1].highlighted == "X" )
+                ``
+`class="MobilePasswordHighlighted" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+            else
+                ``
+`class="MobilePassword" `
+` `
+                   `style="`
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+`" `
+            end;
+        elseif ( 'GV_SEL'[1].inputrequired == "X" )
+            `<input type="text" `
+            if ( 'GV_SEL'[1].highlighted == "X" )
+                ``
+`class="MobileEditRequiredHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GV_SEL'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+` " `
+            else
+                ``
+`class="MobileEditRequired" `
+` `
+                   `style=" `
+                        if ( 'GV_SEL'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+` " `
+            end;
+        else
+            `<input type="text" `
+            if ( 'GV_SEL'[1].highlighted == "X" )
+                ``
+`class="MobileEditHighlighted" `
+` `
+                   `style=" `
+                        if ( 'GV_SEL'[1].alignment == "right" )`text-align: right; `end
+                     ``
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+` " `
+            else
+                ``
+`class="MobileEdit" `
+` `
+                   `style=" `
+                        if ( 'GV_SEL'[1].alignment == "right" )`text-align: right; `end
+                    ``
+`height:`y_length("20")`; `
+`left:`x_length("440")`; `
+`position:absolute; `
+`top:`y_length("220")`; `
+`width:`x_length("60")`; `
+` " `
+            end;
+        end;
+        if ( 'GV_SEL'[1].range != "" )
+            `its:range="`'GV_SEL'[1].range`" `
+        elseif ( 'GV_SEL'[1].list != "" )
+            `its:list="`'GV_SEL'[1].list`" `
+        end;
+        if ( 'GV_SEL'[1].next != "" )
+            `its:next="`'GV_SEL'[1].next`[1]" `
+        end;
+        if ( 'GV_SEL'[1].okcode != "" )
+            `onchange="setOkCode('`'GV_SEL'[1].okcode`');return false;" `
+        end;
+        `onfocus="setFocusField('`'GV_SEL'[1].name`');" `
+        `onblur="leaveFocusField('`'GV_SEL'[1].name`');" `
+        `name="`'GV_SEL'[1].name`" `
+        if ( ~currdynpro.speechenabled != "" )`id="`'GV_SEL'[1].name`" `end;
+        if ( 'GV_SEL'[1].inputrequired == "X" && 'GV_SEL'[1] == "?" )
+            `value="" `
+        else
+            `value="`strmaskext('GV_SEL'[1], 1)`" `
+        end;
+        `maxlength="`'GV_SEL'[1].maxinputsize`"/>`
+    end;
+end`
+`
+`</div>
+<!-- main screen end -->`
+        `</form>`
+    `</body>`
+`</html>
+                                                                                                                                                                                             

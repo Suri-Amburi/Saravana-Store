@@ -1,0 +1,1392 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>POS download processing</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LWPUEECO</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF01</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF02</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF03</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF04</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF05</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF06</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF07</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF08</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF09</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF11</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF12</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF13</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF14</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF15</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF16</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF17</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDAF18</SOBJ_NAME>
+    <SOBJ_NAME>LZWPDATOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZWPDA</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZZMASTERIDOC_CREATE_DLPART</FUNCNAME>
+     <SHORT_TEXT>POS-Schnittstelle: IDOC-Sätze für Artikelstamm selektieren und schreiben</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>PI_ARTNR</PARAMETER>
+       <DBFIELD>WLK1-ARTNR</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DATUM_AB</PARAMETER>
+       <DBFIELD>WPSTRUC-DATUM</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DATBI_LIST</PARAMETER>
+       <DBFIELD>WPSTRUC-DATUM</DBFIELD>
+       <DEFAULT>&apos;00000000&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DATUM_BIS</PARAMETER>
+       <DBFIELD>WPSTRUC-DATUM</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DEBUG</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PX_DLDLFDNR</PARAMETER>
+       <DBFIELD>WDLSP-LFDNR</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DLDNR</PARAMETER>
+       <DBFIELD>WDLS-DLDNR</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_EXPRESS</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_FILIA</PARAMETER>
+       <DBFIELD>T001W-WERKS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_LOESCHEN</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_MODE</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA02</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA03</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA04</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA05</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA07</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA08</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA09</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA10</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPA11</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VKORG</PARAMETER>
+       <DBFIELD>WPSTRUC-VKORG</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VRKME</PARAMETER>
+       <DBFIELD>WLK1-VRKME</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VTWEG</PARAMETER>
+       <DBFIELD>WPSTRUC-VTWEG</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PX_SEGMENT_COUNTER</PARAMETER>
+       <DBFIELD>WDLSP-ANSEG</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_AENDTYP</PARAMETER>
+       <DBFIELD>E1WPA01-AENDTYP</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_FILIA_CONST</PARAMETER>
+       <DBFIELD>WPFILCONST</DBFIELD>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>PXT_IDOC_DATA</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>SHORT_EDIDD</TYP>
+      </RSCHA>
+     </CHANGING>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>PX_SEGMENT_COUNTER</PARAMETER>
+       <DBFIELD>WDLSP-ANSEG</DBFIELD>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>PIT_LISTUNG</PARAMETER>
+       <DBSTRUCT>WPWLK1</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_ART_EQUAL</PARAMETER>
+       <DBSTRUCT>WPART</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_OT3_ARTSTM</PARAMETER>
+       <DBSTRUCT>WPAOT3</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_WORKDAYS</PARAMETER>
+       <DBSTRUCT>WPWORKDAYS</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>DOWNLOAD_EXIT</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>PI_ARTNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Artikelnummer</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DATUM_AB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Anfang des Betrachtungs- oder Selektionsbereichs</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DATBI_LIST</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Ende des Listungsbereichs</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DATUM_BIS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Ende des Betrachtungs- oder Selektionsbereichs</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DEBUG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Letzten Key in Pos wird immer akualisiert</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PX_DLDLFDNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Lfd.-Nr. der Positionszeile für Statusverfolgung</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DLDNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Downloadnummer für Statusverfolgung</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_EXPRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: sofort versenden, &apos; &apos;: später versenden</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_FILIA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Filiale</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_LOESCHEN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: sel.Daten löschen, &apos; &apos;: sel. Daten übertrag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;I&apos;: Initialisierung, &apos;A&apos;: Direkte Anforderung</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA02</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA02 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA03</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA03 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA04</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA04 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA05</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA05 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA07</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA07 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA08</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA08 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA09</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA09 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA10</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA10 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPA11</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>= &apos;X&apos;, wenn Segment E1WPA11 versend. werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VKORG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Verkaufsorganisation</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VRKME</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Verkaufsmengeneinheit des Artikels</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VTWEG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Vertriebsweg</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PX_SEGMENT_COUNTER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Segmentzähler</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_AENDTYP</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Änderungstyp (&apos;ALL&apos;, &apos;COND&apos;, &apos;MATR&apos;, &apos; &apos;)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_FILIA_CONST</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PX_SEGMENT_COUNTER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Segmentzähler</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_LISTUNG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Listungen des Artikels</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_ART_EQUAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Liste Artikel mit SELECT-OPTION &apos;EQUAL&apos;</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_OT3_ARTSTM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Artikel (Nur für Änderungs- und Restart-Fall)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_WORKDAYS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Tabelle der Arbeitstage</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PXT_IDOC_DATA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>POS-Ausgang: Verkürzte EDIDD für IDOC-Daten</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>DOWNLOAD_EXIT</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Es sind Fehler beim Download aufgetreten</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZZMASTERIDOC_CREATE_DLPWRGP</FUNCNAME>
+     <SHORT_TEXT>POS-Schnittstelle: IDOC-Sätze für Warengruppen selektieren und schreiben</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>PI_AKTIVDAT</PARAMETER>
+       <DBFIELD>WPSTRUC-DATUM</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_BASE_MATKL</PARAMETER>
+       <DBFIELD>WWG02</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DEBUG</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PX_DLDLFDNR</PARAMETER>
+       <DBFIELD>WDLSP-LFDNR</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DLDNR</PARAMETER>
+       <DBFIELD>WDLS-DLDNR</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_EXPRESS</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VTWEG</PARAMETER>
+       <DBFIELD>WPSTRUC-VTWEG</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VKORG</PARAMETER>
+       <DBFIELD>WPSTRUC-VKORG</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_FILIA</PARAMETER>
+       <DBFIELD>T001W-WERKS</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_LOESCHEN</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPW02</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPW05</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_E1WPW03</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PX_SEGMENT_COUNTER</PARAMETER>
+       <DBFIELD>WDLSP-ANSEG</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_FILIA_CONST</PARAMETER>
+       <DBFIELD>WPFILCONST</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_MESTYPE</PARAMETER>
+       <DBFIELD>EDIMSG-MESTYP</DBFIELD>
+       <DEFAULT>&apos;WPDWGR&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING>
+      <RSCHA>
+       <PARAMETER>PXT_IDOC_DATA</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>SHORT_EDIDD</TYP>
+      </RSCHA>
+     </CHANGING>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>PX_SEGMENT_COUNTER</PARAMETER>
+       <DBFIELD>WDLSP-ANSEG</DBFIELD>
+      </RSEXP>
+     </EXPORT>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>DOWNLOAD_EXIT</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>PI_AKTIVDAT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Datum zu dem die Daten aktiv werden sollen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_BASE_MATKL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Daten der Basiswarengruppe</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DEBUG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Letzten Key in Pos wird immer akualisiert</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PX_DLDLFDNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Lfd.-Nr. der Positionszeile für Statusverfolgung</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DLDNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Downloadnummer für Statusverfolgung</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_EXPRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: sofort versenden, &apos; &apos;: später versenden</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VTWEG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Vertriebsweg</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VKORG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Verkaufsorganisation</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_FILIA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Filiale</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_LOESCHEN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: sel.Daten löschen, &apos; &apos;: sel. Daten übertrag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPW02</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>=&apos;X&apos;, wenn Segment E1WPW02 versendet werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPW05</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>=&apos;X&apos;, wenn Segment E1WPW05 versendet werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_E1WPW03</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>=&apos;X&apos;, wenn Segment E1WPW03 versendet werden soll</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PX_SEGMENT_COUNTER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Segmentzähler</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_FILIA_CONST</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Filialkonstanten</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_MESTYPE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Nachrichtentyp für Warengruppen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PX_SEGMENT_COUNTER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Segmentzähler</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PXT_IDOC_DATA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>POS-Ausgang: Verkürzte EDIDD für IDOC-Daten</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>DOWNLOAD_EXIT</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Es sind Fehler beim Download aufgetreten</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZZMASTERIDOC_CREATE_REQ_W_PDLD</FUNCNAME>
+     <SHORT_TEXT>POS-Schnittstelle: Download über Initialisierung / direkte Anforderung</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>PI_ART</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DATUM_AB</PARAMETER>
+       <DBFIELD>WPSTRUC-DATUM</DBFIELD>
+       <DEFAULT>&apos;00000000&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DATUM_BIS</PARAMETER>
+       <DBFIELD>WPSTRUC-DATUM</DBFIELD>
+       <DEFAULT>&apos;00000000&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_DEBUG</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_EAN</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_EXPRESS</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_LOESCHEN</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_MODE</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos;I&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_NART</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_PDAT</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_SETS</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_STEUERN</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VKORG</PARAMETER>
+       <DBFIELD>WPSTRUC-VKORG</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_VTWEG</PARAMETER>
+       <DBFIELD>WPSTRUC-VTWEG</DBFIELD>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_WKURS</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_WRG</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_BBUY</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_PROMO</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_NO_DIALOG</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos; &apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PI_NO_BBY</PARAMETER>
+       <DBFIELD>WPSTRUC-MODUS</DBFIELD>
+       <DEFAULT>&apos;X&apos;</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSIMP>
+     </IMPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>PIT_ARTIKEL</PARAMETER>
+       <DBSTRUCT>WPART</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_LOCNR</PARAMETER>
+       <DBSTRUCT>WDL_KUNNR</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_FILIA</PARAMETER>
+       <DBSTRUCT>WPFILIA</DBSTRUCT>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_KUNNR</PARAMETER>
+       <DBSTRUCT>WPPDOT3</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_ART_EQUAL</PARAMETER>
+       <DBSTRUCT>WPART</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_BBUY</PARAMETER>
+       <DBSTRUCT>WPBOBUY</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+      <RSTBL>
+       <PARAMETER>PIT_PROMO</PARAMETER>
+       <DBSTRUCT>WPROMO</DBSTRUCT>
+       <OPTIONAL>X</OPTIONAL>
+      </RSTBL>
+     </TABLES>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>DOWNLOAD_EXIT</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>PI_ART</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Artikeldaten übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DATUM_AB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Daten gültig ab, Default: Heute</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DATUM_BIS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Daten gültig bis, Default: Heute + Vorl.zeit Fil</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_DEBUG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Letzten Key in Pos wird immer akualisiert</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_EAN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: EAN-Referenzen übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_EXPRESS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: sofort versenden, &apos; &apos;: später versenden</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_LOESCHEN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: sel.Daten löschen, &apos; &apos;: sel. Daten übertrag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_MODE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;I&apos;: Initialisierung, &apos;A&apos;: Direkte Anforderung</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_NART</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Nachzugsartikel übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_PDAT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Personendaten übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_SETS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Sets übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_STEUERN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Steuern übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VKORG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Vetriebsweg</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_VTWEG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Verkaufsorganisation</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_WKURS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Wechselkurse übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_WRG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Warengruppen übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_BBUY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Bonuskäufe übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_PROMO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;: Aktionsrabatte übertragen, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_NO_DIALOG</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>&apos;X&apos;, Listausgabe unterdrücken, sonst SPACE</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PI_NO_BBY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>POS-Schnittstelle: Modus-Flag für verschiedene Anwendungen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_ARTIKEL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Liste der zu übertragenen Artikel</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_LOCNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Erst für Umstellung auf Filia 10-stellig nötig</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_FILIA</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Liste der zu versorgenden Filialen</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_KUNNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Liste der zu übertragenen Kunden</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_ART_EQUAL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Liste Artikel mit SELECT-OPTION &apos;EQUAL&apos;</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_BBUY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Liste Bonuskäufe</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PIT_PROMO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Aktionstabelle AktNr</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>DOWNLOAD_EXIT</PARAMETER>
+       <KIND>X</KIND>
+       <STEXT>Es sind Fehler beim Download aufgetreten</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+   <I18N_TPOOL>
+    <item>
+     <LANGUAGE>D</LANGUAGE>
+     <TEXTPOOL>
+      <item>
+       <ID>I</ID>
+       <KEY>001</KEY>
+       <ENTRY>Triggerfile für Status-ID:</ENTRY>
+       <LENGTH>27</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>003</KEY>
+       <ENTRY>erzeugt.</ENTRY>
+       <LENGTH>8</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>004</KEY>
+       <ENTRY>brauchte nicht erzeugt zu werden.</ENTRY>
+       <LENGTH>33</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>005</KEY>
+       <ENTRY>konnte nicht erzeugt werden</ENTRY>
+       <LENGTH>27</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>006</KEY>
+       <ENTRY>(--&gt; POS-Ausgangs-Protokoll).</ENTRY>
+       <LENGTH>29</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>007</KEY>
+       <ENTRY>Empfänger:</ENTRY>
+       <LENGTH>10</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>008</KEY>
+       <ENTRY>Es wurden insgesamt</ENTRY>
+       <LENGTH>19</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>009</KEY>
+       <ENTRY>Änderungsbelege überprüft</ENTRY>
+       <LENGTH>29</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>010</KEY>
+       <ENTRY>Warengruppen</ENTRY>
+       <LENGTH>15</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>011</KEY>
+       <ENTRY>Analysierte filialabhängige Änderungen:</ENTRY>
+       <LENGTH>39</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>012</KEY>
+       <ENTRY>Analysierte filialunabhängige Änderungen:</ENTRY>
+       <LENGTH>41</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>013</KEY>
+       <ENTRY>Aufzubereitende Objekte:</ENTRY>
+       <LENGTH>24</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>014</KEY>
+       <ENTRY>Materialstamm</ENTRY>
+       <LENGTH>15</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>015</KEY>
+       <ENTRY>EAN-Referenzen</ENTRY>
+       <LENGTH>14</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>016</KEY>
+       <ENTRY>Set-Zuordnungen</ENTRY>
+       <LENGTH>15</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>017</KEY>
+       <ENTRY>Nachzugsartikel</ENTRY>
+       <LENGTH>15</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>018</KEY>
+       <ENTRY>Personendaten</ENTRY>
+       <LENGTH>13</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>019</KEY>
+       <ENTRY>Analys. Kreditkontrollbereichsabhängige Änd.:</ENTRY>
+       <LENGTH>45</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>020</KEY>
+       <ENTRY>Analys. Kreditkontrollbereichsunabhängige Änd.:</ENTRY>
+       <LENGTH>47</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>021</KEY>
+       <ENTRY>Ignorierte Objekte:</ENTRY>
+       <LENGTH>19</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>022</KEY>
+       <ENTRY>Zwbeleg.</ENTRY>
+       <LENGTH>8</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>023</KEY>
+       <ENTRY>, Struktur</ENTRY>
+       <LENGTH>10</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>024</KEY>
+       <ENTRY>, mit</ENTRY>
+       <LENGTH>5</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>025</KEY>
+       <ENTRY>Segmenten erzeugt</ENTRY>
+       <LENGTH>17</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>026</KEY>
+       <ENTRY>Analyse und Aufbereitung</ENTRY>
+       <LENGTH>24</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>027</KEY>
+       <ENTRY>Erzeugte Zwischenbelege</ENTRY>
+       <LENGTH>23</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>028</KEY>
+       <ENTRY>Warengruppen:</ENTRY>
+       <LENGTH>16</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>029</KEY>
+       <ENTRY>Materialstamm:</ENTRY>
+       <LENGTH>16</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>030</KEY>
+       <ENTRY>EAN-Referenzen:</ENTRY>
+       <LENGTH>15</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>031</KEY>
+       <ENTRY>Set-Zuordnungen:</ENTRY>
+       <LENGTH>16</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>032</KEY>
+       <ENTRY>Nachzugsartikel:</ENTRY>
+       <LENGTH>16</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>033</KEY>
+       <ENTRY>Wechselkurse:</ENTRY>
+       <LENGTH>15</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>034</KEY>
+       <ENTRY>Steuern:</ENTRY>
+       <LENGTH>8</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>035</KEY>
+       <ENTRY>Personendaten:</ENTRY>
+       <LENGTH>14</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>036</KEY>
+       <ENTRY>keine</ENTRY>
+       <LENGTH>5</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>037</KEY>
+       <ENTRY>Vertriebslinienauswahl</ENTRY>
+       <LENGTH>28</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>038</KEY>
+       <ENTRY>Filialauswahl</ENTRY>
+       <LENGTH>15</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>039</KEY>
+       <ENTRY>Laut Kommunikationsprofil wurden alle Objekte</ENTRY>
+       <LENGTH>47</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>040</KEY>
+       <ENTRY>von der Aufbereitung ausgeschlossen</ENTRY>
+       <LENGTH>35</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>041</KEY>
+       <ENTRY>Pointer-Reorganisation:</ENTRY>
+       <LENGTH>23</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>042</KEY>
+       <ENTRY>Abgearbeitete Änderungszeiger</ENTRY>
+       <LENGTH>29</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>043</KEY>
+       <ENTRY>Gelöschte Änderungszeiger:</ENTRY>
+       <LENGTH>26</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>044</KEY>
+       <ENTRY>Gelöschte Statussätze:</ENTRY>
+       <LENGTH>23</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>045</KEY>
+       <ENTRY>Keine Nachrichten erforderlich.</ENTRY>
+       <LENGTH>31</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>046</KEY>
+       <ENTRY>Status Parallelverarbeitung</ENTRY>
+       <LENGTH>27</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>047</KEY>
+       <ENTRY>Es wurden insgesamt</ENTRY>
+       <LENGTH>19</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>048</KEY>
+       <ENTRY>parallele Tasks erfolgreich beendet</ENTRY>
+       <LENGTH>35</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>049</KEY>
+       <ENTRY>Bei folgenden Destinationen gab es</ENTRY>
+       <LENGTH>34</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>050</KEY>
+       <ENTRY>Verbindungsprobleme:</ENTRY>
+       <LENGTH>20</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>051</KEY>
+       <ENTRY>Bei folgenden Destinationen wurden</ENTRY>
+       <LENGTH>34</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>052</KEY>
+       <ENTRY>eventuell auf der Empfängerseite</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>053</KEY>
+       <ENTRY>Kurzdumps erzeugt:</ENTRY>
+       <LENGTH>18</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>054</KEY>
+       <ENTRY>am</ENTRY>
+       <LENGTH>2</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>055</KEY>
+       <ENTRY>um etwa</ENTRY>
+       <LENGTH>7</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>056</KEY>
+       <ENTRY>Uhr</ENTRY>
+       <LENGTH>3</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>057</KEY>
+       <ENTRY>Die nachträgliche Verarbeitung fehlerhafter</ENTRY>
+       <LENGTH>43</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>058</KEY>
+       <ENTRY>Tasks erfolgte jeweils seriell</ENTRY>
+       <LENGTH>30</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>059</KEY>
+       <ENTRY>Statistik der Aufbereitung</ENTRY>
+       <LENGTH>26</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>060</KEY>
+       <ENTRY>Es wurden</ENTRY>
+       <LENGTH>9</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>061</KEY>
+       <ENTRY>parallele Tasks systemseitig unterbrochen</ENTRY>
+       <LENGTH>41</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>062</KEY>
+       <ENTRY>Bei folgenden Destinationen trat</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>063</KEY>
+       <ENTRY>ein nicht identifizierbarer Fehler auf</ENTRY>
+       <LENGTH>38</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>064</KEY>
+       <ENTRY>, betroffen:</ENTRY>
+       <LENGTH>12</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>065</KEY>
+       <ENTRY>Bonuskäufe:</ENTRY>
+       <LENGTH>11</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>066</KEY>
+       <ENTRY>wurde nicht erzeugt, da Verteilung</ENTRY>
+       <LENGTH>34</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>067</KEY>
+       <ENTRY>über Verteilungsmodell erfolgt</ENTRY>
+       <LENGTH>30</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>070</KEY>
+       <ENTRY>Gesamtlaufzeit der Aufbereitung:</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>071</KEY>
+       <ENTRY>Aktionsrabatte</ENTRY>
+       <LENGTH>14</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>072</KEY>
+       <ENTRY>Aktionsrabatte:</ENTRY>
+       <LENGTH>15</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>073</KEY>
+       <ENTRY>Gesamt-Statistik der Aufbereitung</ENTRY>
+       <LENGTH>33</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>074</KEY>
+       <ENTRY>Gesamtzahl aller aufbereiteten Filialen:</ENTRY>
+       <LENGTH>40</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>075</KEY>
+       <ENTRY>Gesamtzahl aller aufbereiteten Segmente:</ENTRY>
+       <LENGTH>40</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>076</KEY>
+       <ENTRY>Durchschnittlicher Segmentdurchsatz:</ENTRY>
+       <LENGTH>36</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>077</KEY>
+       <ENTRY>Sek. pro Segment</ENTRY>
+       <LENGTH>16</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>078</KEY>
+       <ENTRY>Sekunden</ENTRY>
+       <LENGTH>8</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>079</KEY>
+       <ENTRY>Bezeichnung</ENTRY>
+       <LENGTH>11</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>080</KEY>
+       <ENTRY>wurde entsprechend POS-Ausgangsprofil</ENTRY>
+       <LENGTH>37</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>081</KEY>
+       <ENTRY>nicht erzeugt</ENTRY>
+       <LENGTH>13</LENGTH>
+      </item>
+     </TEXTPOOL>
+    </item>
+   </I18N_TPOOL>
+   <DYNPROS>
+    <item>
+     <HEADER>
+      <PROGRAM>SAPLZWPDA</PROGRAM>
+      <SCREEN>1100</SCREEN>
+      <LANGUAGE>E</LANGUAGE>
+      <DESCRIPT>Dummy screen for list output</DESCRIPT>
+      <TYPE>N</TYPE>
+      <NEXTSCREEN>1100</NEXTSCREEN>
+      <LINES>021</LINES>
+      <COLUMNS>083</COLUMNS>
+     </HEADER>
+     <CONTAINERS>
+      <RPY_DYCATT>
+       <TYPE>SCREEN</TYPE>
+       <NAME>SCREEN</NAME>
+      </RPY_DYCATT>
+     </CONTAINERS>
+     <FIELDS>
+      <RPY_DYFATC>
+       <CONT_TYPE>SCREEN</CONT_TYPE>
+       <CONT_NAME>SCREEN</CONT_NAME>
+       <TYPE>OKCODE</TYPE>
+       <TEXT>____________________</TEXT>
+       <LENGTH>020</LENGTH>
+       <VISLENGTH>020</VISLENGTH>
+       <HEIGHT>001</HEIGHT>
+       <FORMAT>CHAR</FORMAT>
+       <INPUT_FLD>X</INPUT_FLD>
+      </RPY_DYFATC>
+     </FIELDS>
+     <FLOW_LOGIC>
+      <RPY_DYFLOW>
+       <LINE>PROCESS BEFORE OUTPUT.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>* MODULE STATUS_1100.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>*</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>PROCESS AFTER INPUT.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>* MODULE USER_COMMAND_1100.</LINE>
+      </RPY_DYFLOW>
+     </FLOW_LOGIC>
+     <SPACES>
+      <item>0</item>
+      <item>0</item>
+      <item>0</item>
+      <item>0</item>
+      <item>0</item>
+     </SPACES>
+    </item>
+   </DYNPROS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>FG For EAN labels</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZFG_LAB_EANTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZFG_LAB_EAN</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZEAN_PRINT</FUNCNAME>
+     <SHORT_TEXT>Lable Stickers</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_MBLNR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>MBLNR</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_TP3_STICKER</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>I_MJAHR</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>MJAHR</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_MBLNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_TP3_STICKER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>X for Printing TP3</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>I_MJAHR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material Document Year</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

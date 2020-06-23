@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROGDIR>
+    <NAME>LZWPDAF12</NAME>
+    <SUBC>I</SUBC>
+    <APPL>W</APPL>
+    <RLOAD>D</RLOAD>
+   </PROGDIR>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>800</KEY>
+     <ENTRY>Material text does not exist</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>801</KEY>
+     <ENTRY>Promotion alloc. tbl:</ENTRY>
+     <LENGTH>21</LENGTH>
+    </item>
+    <item>
+     <ID>R</ID>
+     <ENTRY>POS interface: FORM routines for FM: POS_REORG_POINTER</ENTRY>
+     <LENGTH>54</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>G OBJECT</KEY>
+     <ENTRY>  FM WAVI PROCESS MESSAGES: parameter FBI MSG OBJECT set wrongI922</ENTRY>
+     <LENGTH>75</LENGTH>
+     <SPLIT>&lt;I921</SPLIT>
+    </item>
+    <item>
+     <ID>T</ID>
+     <KEY>hemen	I6</KEY>
+     <ENTRY>23     Modules#I624       Plant Gr</ENTRY>
+     <LENGTH>34</LENGTH>
+    </item>
+   </TPOOL>
+  </asx:values>
+ </asx:abap>
+</abapGit>

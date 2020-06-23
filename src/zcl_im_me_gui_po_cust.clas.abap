@@ -1,0 +1,67 @@
+class ZCL_IM_ME_GUI_PO_CUST definition
+  public
+  final
+  create public .
+
+public section.
+
+  interfaces IF_EX_ME_GUI_PO_CUST .
+protected section.
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_IM_ME_GUI_PO_CUST IMPLEMENTATION.
+
+
+  method IF_EX_ME_GUI_PO_CUST~EXECUTE.
+  endmethod.
+
+
+  method IF_EX_ME_GUI_PO_CUST~MAP_DYNPRO_FIELDS.
+  endmethod.
+
+
+  METHOD IF_EX_ME_GUI_PO_CUST~SUBSCRIBE.
+*    IF SY-UNAME = 'BREDDY'.
+*      BREAK BREDDY.
+*      DATA: LS_SUBSCRIBER LIKE LINE OF RE_SUBSCRIBERS.
+*
+*      CHECK IM_APPLICATION = 'PO'.
+*      CHECK IM_ELEMENT     = 'HEADER'.
+*      CLEAR RE_SUBSCRIBERS[].
+*
+*      LS_SUBSCRIBER-NAME = OTHER_DATA.
+*      LS_SUBSCRIBER-DYNPRO = '0001'.
+*      LS_SUBSCRIBER-PROGRAM = 'Z'.
+*      LS_SUBSCRIBER-STRUCT_NAME = 'CI_EKKODB'.
+*      LS_SUBSCRIBER-LABEL = TEXT-001.
+*      LS_SUBSCRIBER-POSITION = 11.
+*      VALUE < = 7 A SEVEL LINE SUBSCREEN
+*      VALUE > 7  A 16 LINE SUBSCREEN
+*       LS_SUBSCRIBER-HEIGHT = 7.
+*      APPEND LS_SUBSCRIBER TO RE_SUBSCRIBERS.
+*
+*
+*    ENDIF.
+
+
+  ENDMETHOD.
+
+
+  method IF_EX_ME_GUI_PO_CUST~TRANSPORT_FROM_DYNP.
+  endmethod.
+
+
+  method IF_EX_ME_GUI_PO_CUST~TRANSPORT_FROM_MODEL.
+  endmethod.
+
+
+  method IF_EX_ME_GUI_PO_CUST~TRANSPORT_TO_DYNP.
+  endmethod.
+
+
+  method IF_EX_ME_GUI_PO_CUST~TRANSPORT_TO_MODEL.
+  endmethod.
+ENDCLASS.

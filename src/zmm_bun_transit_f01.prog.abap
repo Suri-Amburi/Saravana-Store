@@ -1,0 +1,504 @@
+*&---------------------------------------------------------------------*
+*& Include          ZMM_BUN_TRANSIT_F01
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Form GET_DATA
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM GET_DATA.
+  DATA : R_DATE   TYPE RANGE OF CDATE,
+         LT_TOTAL TYPE STANDARD TABLE OF TY_TOTAL.
+  FIELD-SYMBOLS :
+    <LS_TOTAL>  TYPE TY_TOTAL,
+    <LS_FINAL1> TYPE TY_FINAL1.
+  IF P_S IS NOT INITIAL.
+*    DATA(LV_DATE) =  SY-DATUM - 15.
+    APPEND VALUE #( LOW = SY-DATUM - 15 SIGN = 'I' OPTION = 'LT' ) TO R_DATE.
+  ELSE.
+    APPEND VALUE #( LOW = SY-DATUM - 15 HIGH = SY-DATUM SIGN = 'I' OPTION = 'BT' ) TO R_DATE.
+  ENDIF.
+
+  SELECT
+       ZINW_T_HDR~QR_CODE,
+       ZINW_T_HDR~INWD_DOC,
+       ZINW_T_HDR~LIFNR,
+       ZINW_T_HDR~NAME1,
+       ZINW_T_HDR~BILL_NUM,
+       ZINW_T_HDR~BILL_DATE,
+       ZINW_T_HDR~TRNS,
+       LFA1~NAME1 AS TRNS_NAME,
+       ZINW_T_HDR~LR_NO,
+       ZINW_T_HDR~LR_DATE,
+       ZINW_T_HDR~ACT_NO_BUD,
+       ZINW_T_HDR~PUR_TOTAL,
+       ZINW_T_ITEM~EBELN,
+       ZINW_T_ITEM~EBELP,
+       ZINW_T_ITEM~MENGE_P,
+       ZINW_T_ITEM~NETPR_P,
+       ZINW_T_ITEM~NETWR_P,
+       ZINW_T_ITEM~MATNR,
+       ZINW_T_ITEM~MAKTX,
+       ZINW_T_ITEM~MATKL,
+       T023T~WGBEZ
+       FROM ZINW_T_HDR AS ZINW_T_HDR
+       INNER JOIN ZINW_T_ITEM AS ZINW_T_ITEM ON ZINW_T_ITEM~QR_CODE = ZINW_T_HDR~QR_CODE
+       INNER JOIN LFA1 AS LFA1 ON LFA1~LIFNR = ZINW_T_HDR~TRNS
+       INNER JOIN T023T AS T023T ON T023T~MATKL = ZINW_T_ITEM~MATKL
+       INTO TABLE @GT_ITEM
+       WHERE ZINW_T_HDR~STATUS = @C_STATUS AND ZINW_T_HDR~LIFNR IN @S_LIFNR AND
+             ZINW_T_HDR~ERDATE IN @R_DATE ."AND ZINW_T_ITEM~MATKL IN ( '91' , '81' ).
+
+  IF GT_ITEM IS NOT INITIAL.
+*** GET MARCHNDISE CAT BY MATERIAL GROUP
+    DATA : R_MATKL TYPE RANGE OF KLASSE_D.
+    REFRESH :R_MATKL.
+    LOOP AT GT_ITEM ASSIGNING FIELD-SYMBOL(<GS_ITEM>).
+      APPEND VALUE #( LOW = <GS_ITEM>-MATKL SIGN = 'I' OPTION = 'EQ' ) TO R_MATKL.
+    ENDLOOP.
+
+    SORT R_MATKL BY LOW.
+    DELETE ADJACENT DUPLICATES FROM R_MATKL COMPARING LOW.
+*** Get Clent ID from Material Group
+    SELECT
+      KSSK~CLINT
+      KLAH~KLART
+      KLAH~CLASS
+      KSSK~OBJEK
+      INTO TABLE GT_KLAH_H
+      FROM KLAH AS KLAH
+      INNER JOIN KSSK AS KSSK  ON KSSK~OBJEK = KLAH~CLINT
+      WHERE KLAH~CLASS IN R_MATKL.
+
+    IF GT_KLAH_H IS NOT INITIAL.
+*** Get Marchandise Cat from Clent ID
+      SELECT
+      KLAH~CLINT,
+      KLAH~KLART,
+      KLAH~CLASS
+      INTO TABLE @GT_KLAH_I
+      FROM KLAH AS KLAH
+      FOR ALL ENTRIES IN @GT_KLAH_H WHERE KLAH~CLINT = @GT_KLAH_H-CLINT.
+    ENDIF.
+  ENDIF.
+
+  CLEAR   : GS_FINAL1.
+  REFRESH : GT_FINAL1.
+
+***  Screen 1 Final table
+*** PREPARING FINAL TABLE
+  SORT GT_KLAH_H BY CLINT.
+  SORT GT_KLAH_I BY CLINT.
+  SORT GT_ITEM BY MATKL.
+  DATA : LV_COUNT TYPE I VALUE 1.
+  DATA(LT_ITEM) = GT_ITEM.
+  SORT LT_ITEM BY QR_CODE.
+  DELETE ADJACENT DUPLICATES FROM LT_ITEM COMPARING QR_CODE.
+  LOOP AT GT_KLAH_I ASSIGNING <GS_KLAH_I>.
+    GS_FINAL1-SNO = LV_COUNT.
+    GS_FINAL1-GRP = <GS_KLAH_I>-CLASS.
+    READ TABLE GT_KLAH_H WITH KEY CLINT = <GS_KLAH_I>-CLINT TRANSPORTING NO FIELDS.
+    LOOP AT GT_KLAH_H ASSIGNING <GS_KLAH_H> FROM SY-TABIX.
+      IF <GS_KLAH_H>-CLINT <> <GS_KLAH_I>-CLINT.
+        EXIT.
+      ENDIF.
+      READ TABLE GT_ITEM WITH KEY MATKL = <GS_KLAH_H>-CLASS TRANSPORTING NO FIELDS.
+      LOOP AT GT_ITEM ASSIGNING <GS_ITEM> FROM SY-TABIX.
+        IF <GS_ITEM>-MATKL <> <GS_KLAH_H>-CLASS.
+          EXIT.
+        ENDIF.
+        ADD <GS_ITEM>-MENGE_P TO GS_FINAL1-MENGE.
+        <GS_ITEM>-GRP = GS_FINAL1-GRP.
+        APPEND VALUE #( GRP = GS_FINAL1-GRP QR_CODE = <GS_ITEM>-QR_CODE PUR_TOTAL = <GS_ITEM>-PUR_TOTAL ACT_NO_BUD = <GS_ITEM>-ACT_NO_BUD ) TO LT_TOTAL.
+      ENDLOOP.
+    ENDLOOP.
+    APPEND  GS_FINAL1 TO GT_FINAL1.
+    CLEAR : GS_FINAL1.
+    LV_COUNT = LV_COUNT + 1.
+  ENDLOOP.
+
+*** For Adding Header Totals
+  SORT LT_TOTAL BY GRP QR_CODE.
+  DELETE ADJACENT DUPLICATES FROM LT_TOTAL COMPARING QR_CODE GRP.
+  SORT LT_TOTAL BY GRP.
+  LOOP AT GT_FINAL1 ASSIGNING <LS_FINAL1>.
+    READ TABLE LT_TOTAL WITH KEY GRP = <LS_FINAL1>-GRP TRANSPORTING NO FIELDS.
+    LOOP AT LT_TOTAL ASSIGNING <LS_TOTAL> FROM SY-TABIX.
+      IF <LS_FINAL1>-GRP <> <LS_TOTAL>-GRP.
+        EXIT.
+      ENDIF.
+      ADD <LS_TOTAL>-PUR_TOTAL TO <LS_FINAL1>-PUR_TOTAL.
+      ADD <LS_TOTAL>-ACT_NO_BUD TO <LS_FINAL1>-ACT_NO_BUD.
+    ENDLOOP.
+  ENDLOOP.
+
+ENDFORM.
+
+FORM DISPLAY_DATA_SCR1.
+*** FIELD CATLOG
+  DATA:
+    LS_LAYOUT   TYPE SLIS_LAYOUT_ALV,
+    LT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV,
+    GS_FIELDCAT TYPE SLIS_FIELDCAT_ALV,
+    WVARI       TYPE DISVARIANT,
+    LT_SORT     TYPE SLIS_T_SORTINFO_ALV.
+
+  WVARI-REPORT    = SY-REPID.
+  WVARI-USERNAME  = SY-UNAME.
+
+  LS_LAYOUT-ZEBRA       = ABAP_TRUE.
+  LS_LAYOUT-COLWIDTH_OPTIMIZE  = ABAP_TRUE.
+
+*** Field Catlog
+  REFRESH LT_FIELDCAT.
+  GS_FIELDCAT-FIELDNAME      = 'SNO'.
+  GS_FIELDCAT-SELTEXT_L      = 'SNO'.
+  GS_FIELDCAT-DDIC_OUTPUTLEN = 4.
+  GS_FIELDCAT-LZERO          = 'X'.
+  GS_FIELDCAT-NO_ZERO        = 'X'.
+  GS_FIELDCAT-REF_TABNAME    = 'LT_FINAL'.
+  APPEND GS_FIELDCAT TO LT_FIELDCAT.
+  CLEAR GS_FIELDCAT.
+
+  GS_FIELDCAT-FIELDNAME      = 'GRP'.
+  GS_FIELDCAT-SELTEXT_L      = 'Group'.
+  GS_FIELDCAT-REF_TABNAME    = 'LT_FINAL'.
+  APPEND GS_FIELDCAT TO LT_FIELDCAT.
+  CLEAR GS_FIELDCAT.
+
+  GS_FIELDCAT-FIELDNAME      = 'MENGE'.
+  GS_FIELDCAT-SELTEXT_L      = 'Quantity'.
+  APPEND GS_FIELDCAT TO LT_FIELDCAT.
+  CLEAR GS_FIELDCAT.
+
+  GS_FIELDCAT-FIELDNAME      = 'ACT_NO_BUD'.
+  GS_FIELDCAT-SELTEXT_L      = 'Num of Bundles'.
+  APPEND GS_FIELDCAT TO LT_FIELDCAT.
+  CLEAR GS_FIELDCAT.
+
+  GS_FIELDCAT-FIELDNAME      = 'PUR_TOTAL'.
+  GS_FIELDCAT-SELTEXT_L      = 'Purchase Value W/O Tax'.
+  GS_FIELDCAT-OUTPUTLEN     = 25.
+  APPEND GS_FIELDCAT TO LT_FIELDCAT.
+  CLEAR GS_FIELDCAT.
+
+**** Dispalying ALV Report
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      I_CALLBACK_PROGRAM      = SY-REPID         " Name of the calling program
+      I_CALLBACK_USER_COMMAND = 'USER_COMMAND_SCR1'            " EXIT routine for command handling
+      IS_LAYOUT               = LS_LAYOUT        " List layout specifications
+      IT_FIELDCAT             = LT_FIELDCAT      " Field catalog with field descriptions
+      I_DEFAULT               = 'X'              " Initial variant active/inactive logic
+      I_SAVE                  = 'A'              " Variants can be saved
+    TABLES
+      T_OUTTAB                = GT_FINAL1                 " Table with data to be displayed
+    EXCEPTIONS
+      PROGRAM_ERROR           = 1                " Program errors
+      OTHERS                  = 2.
+  IF SY-SUBRC <> 0.
+    MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+      WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+ENDFORM.
+
+FORM USER_COMMAND_SCR1 USING  R_UCOMM LIKE SY-UCOMM RS_SELFIELD TYPE SLIS_SELFIELD.
+  FIELD-SYMBOLS : <LS_FINAL1> LIKE LINE OF GT_FINAL1.
+*** Read Data on Double Click
+  READ TABLE GT_FINAL1 ASSIGNING <LS_FINAL1> INDEX RS_SELFIELD-TABINDEX.
+  IF SY-SUBRC = 0.
+    PERFORM CALL_SCREEN2 USING <LS_FINAL1>-GRP.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form CALL_SCREEN2
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> <LS_FINAL1>
+*&---------------------------------------------------------------------*
+FORM CALL_SCREEN2 USING P_GRP.
+  DATA(LT_ITEM_GRP) = GT_ITEM.
+  DELETE LT_ITEM_GRP WHERE GRP <> P_GRP.
+  DATA(LT_ITEM_QR)  = LT_ITEM_GRP.
+  SORT LT_ITEM_QR BY QR_CODE.
+  DELETE ADJACENT DUPLICATES FROM LT_ITEM_QR COMPARING QR_CODE.
+  REFRESH :GT_FINAL2.
+  LOOP AT LT_ITEM_QR ASSIGNING FIELD-SYMBOL(<LS_ITEM_QR>).
+    GS_FINAL2  = <LS_ITEM_QR>.
+    CLEAR :GS_FINAL2-MENGE_P.
+    LOOP AT LT_ITEM_GRP ASSIGNING <GS_ITEM> WHERE QR_CODE = <LS_ITEM_QR>-QR_CODE.
+      ADD <GS_ITEM>-MENGE_P TO GS_FINAL2-MENGE_P.
+    ENDLOOP.
+    APPEND  GS_FINAL2 TO GT_FINAL2.
+    CLEAR : GS_FINAL2.
+  ENDLOOP.
+
+  IF GT_FINAL2 IS NOT INITIAL.
+*** FIELD CATLOG
+    DATA:
+      LS_LAYOUT   TYPE SLIS_LAYOUT_ALV,
+      LT_FIELDCAT TYPE SLIS_T_FIELDCAT_ALV,
+      GS_FIELDCAT TYPE SLIS_FIELDCAT_ALV,
+      WVARI       TYPE DISVARIANT,
+      LT_SORT     TYPE SLIS_T_SORTINFO_ALV.
+
+    WVARI-REPORT    = SY-REPID.
+    WVARI-USERNAME  = SY-UNAME.
+
+    LS_LAYOUT-ZEBRA       = ABAP_TRUE.
+    LS_LAYOUT-COLWIDTH_OPTIMIZE  = ABAP_TRUE.
+*** Field Catlog
+    GS_FIELDCAT-FIELDNAME      = 'BILL_NUM'.
+    GS_FIELDCAT-SELTEXT_L      = 'Bill num'.
+    GS_FIELDCAT-REF_TABNAME    = 'GT_FINAL2'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'BILL_DATE'.
+    GS_FIELDCAT-SELTEXT_L      = 'Bill Date'.
+    GS_FIELDCAT-REF_TABNAME    = 'GT_FINAL2'.
+    GS_FIELDCAT-LZERO          = 'X'.
+    GS_FIELDCAT-INTTYPE        = 'DATS'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'LIFNR'.
+    GS_FIELDCAT-SELTEXT_L      = 'Vendor'.
+    GS_FIELDCAT-REF_TABNAME    = 'GT_FINAL2'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'NAME1'.
+    GS_FIELDCAT-SELTEXT_L      = 'Vendor Name'.
+    GS_FIELDCAT-REF_TABNAME    = 'GT_FINAL2'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'MENGE_P'.
+    GS_FIELDCAT-SELTEXT_L      = 'Quantity'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'PUR_TOTAL'.
+    GS_FIELDCAT-SELTEXT_L      = 'Purchase Value W/O Tax'.
+    GS_FIELDCAT-OUTPUTLEN     = 25.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'ACT_NO_BUD'.
+    GS_FIELDCAT-SELTEXT_L      = 'Num of Bundles'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'LR_NO'.
+    GS_FIELDCAT-SELTEXT_L      = 'LR Number'.
+    GS_FIELDCAT-REF_TABNAME    = 'GT_FINAL2'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'TRNS_NAME'.
+    GS_FIELDCAT-SELTEXT_L      = 'Transporter'.
+    GS_FIELDCAT-REF_TABNAME    = 'GT_FINAL2'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+    GS_FIELDCAT-FIELDNAME      = 'EBELN'.
+    GS_FIELDCAT-SELTEXT_L      = 'PO No'.
+    GS_FIELDCAT-REF_TABNAME    = 'GT_FINAL2'.
+    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+*************added by bhavani********
+*    GS_FIELDCAT-FIELDNAME = 'SEL'.
+*    GS_FIELDCAT-SELTEXT_L = 'Selection'.
+*    GS_FIELDCAT-CHECKBOX = 'X'.
+*    GS_FIELDCAT-EDIT = 'X'.
+*    GS_FIELDCAT-TABNAME = 'GT_FINAL2'.
+*    APPEND GS_FIELDCAT TO LT_FIELDCAT.
+*    CLEAR GS_FIELDCAT.
+************end by bhavani***********
+*** Dispalying ALV Report
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM      = SY-REPID                    " Name of the calling program
+        I_CALLBACK_USER_COMMAND = 'USER_COMMAND_SCR2'         " EXIT routine for command handling
+        IS_LAYOUT               = LS_LAYOUT                   " List layout specifications
+        IT_FIELDCAT             = LT_FIELDCAT                 " Field catalog with field descriptions
+        I_DEFAULT               = 'X'                         " Initial variant active/inactive logic
+        I_SAVE                  = 'A'                         " Variants can be saved
+      TABLES
+        T_OUTTAB                = GT_FINAL2                 " Table with data to be displayed
+      EXCEPTIONS
+        PROGRAM_ERROR           = 1                " Program errors
+        OTHERS                  = 2.
+    IF SY-SUBRC <> 0.
+      MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+        WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+  ENDIF.
+ENDFORM.
+
+FORM USER_COMMAND_SCR2 USING  R_UCOMM LIKE SY-UCOMM RS_SELFIELD TYPE SLIS_SELFIELD.
+  FIELD-SYMBOLS : <LS_FINAL2> LIKE LINE OF GT_FINAL2.
+*** Read Data on Double Click
+  CASE R_UCOMM.
+    WHEN '&IC1'.
+      READ TABLE GT_FINAL2 ASSIGNING <LS_FINAL2> INDEX RS_SELFIELD-TABINDEX.
+      IF SY-SUBRC = 0.
+        PERFORM CALL_SCREEN3 USING <LS_FINAL2>-QR_CODE.
+      ENDIF.
+    WHEN OTHERS.
+  ENDCASE.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form CALL_SCREEN3
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      --> <LS_FINAL1>_QR_CODE
+*&---------------------------------------------------------------------*
+FORM CALL_SCREEN3 USING P_QR_CODE.
+  CLEAR : GS_FINAL3.
+  REFRESH : GT_FINAL3.
+  GT_FINAL3 = GT_ITEM.
+  DELETE GT_FINAL3 WHERE QR_CODE <> P_QR_CODE.
+  GS_FINAL3 = GT_FINAL3[ 1 ].
+  CALL SCREEN 9003.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form CLEAR_DATA
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM CLEAR_DATA.
+  REFRESH : GT_FINAL3.
+  CLEAR : GS_FINAL3.
+ENDFORM.
+
+FORM DISPLAY_DATA_SCR3 .
+
+  CALL METHOD GRID->SET_TABLE_FOR_FIRST_DISPLAY
+    EXPORTING
+      IS_LAYOUT                     = GS_LAYO
+      IT_TOOLBAR_EXCLUDING          = GT_EXCLUDE  " Excluded Toolbar Standard Functions
+    CHANGING
+      IT_OUTTAB                     = GT_FINAL3
+      IT_FIELDCATALOG               = GT_FIELDCAT
+    EXCEPTIONS
+      INVALID_PARAMETER_COMBINATION = 1
+      PROGRAM_ERROR                 = 2
+      TOO_MANY_LINES                = 3
+      OTHERS                        = 4.
+
+  IF SY-SUBRC <> 0.
+    MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+               WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+ENDFORM.
+
+FORM PREPARE_FCAT.
+***  Displaying date in ALV Grid
+  IF GT_FIELDCAT IS INITIAL.
+*** Group Code
+    GS_FIELDCAT-FIELDNAME   = 'MATKL'.
+    GS_FIELDCAT-REPTEXT     = 'Category Code'.
+    GS_FIELDCAT-COL_OPT     = 'X'.
+    GS_FIELDCAT-TXT_FIELD   = 'X'.
+    APPEND GS_FIELDCAT TO GT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+*** Group Des
+    GS_FIELDCAT-FIELDNAME   = 'WGBEZ'.
+    GS_FIELDCAT-REPTEXT     = 'Category Des'.
+    GS_FIELDCAT-COL_OPT     = 'X'.
+    GS_FIELDCAT-TXT_FIELD   = 'X'.
+    APPEND GS_FIELDCAT TO GT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+*** Product Description
+    GS_FIELDCAT-FIELDNAME   = 'MAKTX'.
+    GS_FIELDCAT-REPTEXT     = 'Product Description'.
+    GS_FIELDCAT-COL_OPT     = 'X'.
+    GS_FIELDCAT-TXT_FIELD   = 'X'.
+    APPEND GS_FIELDCAT TO GT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+*** Quantity
+    GS_FIELDCAT-FIELDNAME   = 'MENGE_P'.
+    GS_FIELDCAT-REPTEXT     = 'Quantity'.
+    GS_FIELDCAT-COL_OPT     = 'X'.
+    GS_FIELDCAT-TXT_FIELD   = 'X'.
+    GS_FIELDCAT-NO_ZERO     = 'X'.
+    GS_FIELDCAT-DO_SUM      = 'X'.
+    APPEND GS_FIELDCAT TO GT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+*** Rate
+    GS_FIELDCAT-FIELDNAME   = 'NETPR_P'.
+    GS_FIELDCAT-REPTEXT     = 'Rate per Piece'.
+    GS_FIELDCAT-COL_OPT     = 'X'.
+    GS_FIELDCAT-TXT_FIELD   = 'X'.
+    GS_FIELDCAT-NO_ZERO     = 'X'.
+    APPEND GS_FIELDCAT TO GT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+
+*** Quantity
+    GS_FIELDCAT-FIELDNAME   = 'NETWR_P'.
+    GS_FIELDCAT-REPTEXT     = 'Purchase Value W/O Tax'.
+    GS_FIELDCAT-COL_OPT     = 'X'.
+    GS_FIELDCAT-TXT_FIELD   = 'X'.
+    GS_FIELDCAT-NO_ZERO     = 'X'.
+    GS_FIELDCAT-DO_SUM      = 'X'.
+    APPEND GS_FIELDCAT TO GT_FIELDCAT.
+    CLEAR GS_FIELDCAT.
+  ENDIF.
+ENDFORM.
+
+
+FORM EXCLUDE_TB_FUNCTIONS CHANGING GT_EXCLUDE TYPE UI_FUNCTIONS.
+  DATA LS_EXCLUDE TYPE UI_FUNC.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_COPY_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_DELETE_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_APPEND_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_INSERT_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_MOVE_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_FIND_MORE.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_SUM.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_AVERAGE.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_DETAIL.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_DELETE_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_APPEND_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_INSERT_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_MOVE_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_COPY.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_CUT.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_PASTE.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_PASTE_NEW_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_UNDO.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+ENDFORM.

@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCIINTEGRATION_SERVICE_SAVE_P</OBJ_NAME>
+     <OBJECT_M>INTF</OBJECT_M>
+     <OBJ_NAME_M>ZNCII_SAVE_PRODUCT_LIST_INBOUN</OBJ_NAME_M>
+     <HASH_ID>D03EA3FC3DBD7E68323EF6A75B51330E838C07E3</HASH_ID>
+     <ID>&lt;message&gt; IIntegrationService_SaveProductList_InputMessage http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>message</IFR_TYPE>
+     <IFR_NAME>IIntegrationService_SaveProductList_InputMessage</IFR_NAME>
+     <IFR_NSPCE>http://www.iVend.com/IIntegrationService/2010/12</IFR_NSPCE>
+     <IFR_GNSPCE>SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</IFR_GNSPCE>
+     <GEN_VERS>0006</GEN_VERS>
+     <PREFIX>ZNC</PREFIX>
+     <CATEGORY>ifmmessage</CATEGORY>
+     <X-ML_NSPCE>http://www.iVend.com/IIntegrationService/2010/12</X-ML_NSPCE>
+     <X-ML_NAME>SaveProductList</X-ML_NAME>
+     <VERSION_ID>dfcad0318b7d11e9b2dd0000002b9152</VERSION_ID>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCIINTEGRATION_SERVICE_SAVE_P</OBJ_NAME>
+     <OBJECT1>FIEL</OBJECT1>
+     <OBJ_NAME1>PRODUCT_LIST</OBJ_NAME1>
+     <OBJECT2>FIEL</OBJECT2>
+     <OBJ_NAME2>PRODUCT_LIST</OBJ_NAME2>
+     <OBJECT_R>TABL</OBJECT_R>
+     <OBJ_NAME_R>ZNCARRAY_OF_PRODUCT</OBJ_NAME_R>
+     <ID>&lt;element&gt; {http://www.iVend.com/IIntegrationService/2010/12}productList &lt;message&gt; IIntegrationService_SaveProductList_InputMessage http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>element</IFR_TYPE>
+     <IFR_NAME>productList</IFR_NAME>
+     <IFR_TAGTYP>E</IFR_TAGTYP>
+     <IFR_MAXOCC>1</IFR_MAXOCC>
+     <IFR_OPTNL>X</IFR_OPTNL>
+     <IFR_QUALIF>X</IFR_QUALIF>
+     <IFR_NILLABLE>X</IFR_NILLABLE>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>FIEL</R3_TYPE>
+     <R3_NAME>PRODUCT_LIST</R3_NAME>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+    </item>
+    <item>
+     <OBJECT>TABL</OBJECT>
+     <OBJ_NAME>ZNCIINTEGRATION_SERVICE_SAVE_P</OBJ_NAME>
+     <OBJECT1>TABL</OBJECT1>
+     <OBJ_NAME1>ZNCIINTEGRATION_SERVICE_SAVE_P</OBJ_NAME1>
+     <OBJECT2>TABL</OBJECT2>
+     <OBJ_NAME2>ZNCIINTEGRATION_SERVICE_SAVE_P</OBJ_NAME2>
+     <ID>&lt;message&gt; IIntegrationService_SaveProductList_InputMessage http://www.iVend.com/IIntegrationService/2010/12 SaveProductList_Inbound(http://saravanastore.com/SaveProductList/S4H/iVend)</ID>
+     <IFR_TYPE>message</IFR_TYPE>
+     <IFR_NAME>IIntegrationService_SaveProductList_InputMessage</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>TABL</R3_TYPE>
+     <R3_NAME>ZNCIINTEGRATION_SERVICE_SAVE_P</R3_NAME>
+     <R3_TEXT>Proxy Structure (generated)</R3_TEXT>
+     <CATEGORY>ifmmessage</CATEGORY>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

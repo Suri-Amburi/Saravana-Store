@@ -1,0 +1,37 @@
+*&---------------------------------------------------------------------*
+*& Include          ZVM_DELETE_DATA
+*&---------------------------------------------------------------------*
+AT SELECTION-SCREEN ON VALUE-REQUEST FOR P_FILE.
+
+  CALL FUNCTION 'F4_FILENAME'
+    EXPORTING
+      FIELD_NAME = 'P_FILE'
+    IMPORTING
+      FILE_NAME  = P_FILE.
+
+START-OF-SELECTION.
+
+  CALL FUNCTION 'TEXT_CONVERT_XLS_TO_SAP'
+    EXPORTING
+      I_LINE_HEADER        = 'X'
+      I_TAB_RAW_DATA       = IT_RAW
+      I_FILENAME           = P_FILE
+    TABLES
+      I_TAB_CONVERTED_DATA = IT_DATATAB[]
+    EXCEPTIONS
+      CONVERSION_FAILED    = 1
+      OTHERS               = 2.
+
+  IF SY-SUBRC <> 0.
+
+    MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+    WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+
+  ELSEIF IT_DATATAB[] IS NOT INITIAL.
+*    DELETE IT_DATATAB[] INDEX 1.
+*    IF IT_DATATAB[] IS NOT INITIAL.
+    BREAK BREDDY.
+    PERFORM BDC_CALL.
+    PERFORM FIELD_CATLOG.
+    PERFORM DISPLAY.
+    ENDIF .

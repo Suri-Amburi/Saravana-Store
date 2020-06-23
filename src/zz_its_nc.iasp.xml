@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_IASP" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <ATTR>
+    <SERVICE>ZZ_ITS_NC</SERVICE>
+    <ORIGLANG>E</ORIGLANG>
+    <MODIFLANG>E</MODIFLANG>
+   </ATTR>
+   <PARAMETERS>
+    <W3SERVPARA>
+     <SERVICE>ZZ_ITS_NC</SERVICE>
+     <NAME>~TRANSACTION</NAME>
+     <VALUE>ZLOAD</VALUE>
+    </W3SERVPARA>
+   </PARAMETERS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

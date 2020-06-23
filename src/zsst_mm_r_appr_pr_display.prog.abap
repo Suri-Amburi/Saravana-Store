@@ -1,0 +1,593 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSST_MM_R_APPR_PR_DISPLAY
+*&---------------------------------------------------------------------*
+
+
+FORM BUILD_FIELDCATALOG.
+
+  IF P_RAD2 = 'X' AND P_INWD IS NOT INITIAL.
+    READ TABLE IT_FIN INTO WA_FIN WITH KEY PRC_DOC = P_INWD.
+  ENDIF.
+  IF FIELDCATALOG IS INITIAL.
+    REFRESH FIELDCATALOG.
+    CLEAR FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'MATNR'.
+    FIELDCATALOG-SELTEXT_M   = 'CHILD SST NO. '.
+    FIELDCATALOG-COL_POS     = 1.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'MATKL'.
+    FIELDCATALOG-SELTEXT_M   = 'CAT NO.'.
+    FIELDCATALOG-COL_POS     = 2.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'PO_TXT'.
+    FIELDCATALOG-SELTEXT_M   = 'PURCHASE ORDER TEXT'.
+    FIELDCATALOG-COL_POS     = 3.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'LIFNR'.
+    FIELDCATALOG-SELTEXT_M   = 'VENDOR CODE'.
+    FIELDCATALOG-COL_POS     = 4.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'NAME1'.
+    FIELDCATALOG-SELTEXT_M   = 'VENDOR NAME'.
+    FIELDCATALOG-COL_POS     = 5.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'OLD_MRP'.
+    FIELDCATALOG-SELTEXT_M   = 'OLD MRP'.
+*  FIELDCATALOG-REF_FIELD   = 'RV13A'.
+*  FIELDCATALOG-REF_FIELD   = 'REF_TABLE'.
+    FIELDCATALOG-COL_POS     = 6.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'NEW_MRP'.
+    FIELDCATALOG-SELTEXT_M   = 'NEW MRP'.
+    FIELDCATALOG-DATATYPE  = 'CURR'.
+    IF P_RAD2 = 'X' AND WA_FIN-STATUS = 'X'.
+      FIELDCATALOG-INPUT     = 'X'.
+      FIELDCATALOG-EDIT     = 'X'.
+    ENDIF.
+    FIELDCATALOG-COL_POS     = 7.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'OLD_SP'.
+    FIELDCATALOG-SELTEXT_M   = 'OLD SELLING PRICE'.
+    FIELDCATALOG-COL_POS     = 8.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'NEW_SP'.
+*    FIELDCATALOG-REF_FIELDNAME   = 'WAERS'.
+*  FIELDCATALOG-REF_TABNAME      = 'EKKO'.
+*  FIELDCATALOG-decimalsfieldname      = 'NEW_SP'.
+*    FIELDCATALOG-cfieldname   = 'NEW_SP'.
+    FIELDCATALOG-DATATYPE  = 'CURR'.
+*  FIELDCATALOG-CTABNAME   = 'ZAF_PC'.
+*  FIELDCATALOG-CURRENCY   = 'INR'.
+
+    FIELDCATALOG-SELTEXT_M   = 'NEW SELLING PRICE'.
+
+
+    IF P_RAD2 = 'X' AND WA_FIN-STATUS = 'X'.
+      FIELDCATALOG-INPUT     = 'X'.
+      FIELDCATALOG-EDIT     = 'X'.
+    ENDIF.
+    FIELDCATALOG-COL_POS     = 9.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'OLD_TAX'.
+    FIELDCATALOG-SELTEXT_M   = 'OLD BILLING PRICE BEFORE TAX'.
+    FIELDCATALOG-COL_POS     = 10.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'NEW_TAX'.
+    FIELDCATALOG-SELTEXT_M   = 'NEW BILLING PRICE BEFORE TAX'.
+    FIELDCATALOG-DATATYPE  = 'CURR'.
+    IF P_RAD2 = 'X' AND WA_FIN-STATUS = 'X'.
+      FIELDCATALOG-INPUT     = 'X'.
+      FIELDCATALOG-EDIT     = 'X'.
+    ENDIF.
+    FIELDCATALOG-COL_POS     = 11.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+  ENDIF.
+  IF P_RAD2 = 'X'.
+    FIELDCATALOG-FIELDNAME   = 'DIFF_VAL'.
+    FIELDCATALOG-SELTEXT_M   = 'DIFFERENCE IN VALUE'.
+    FIELDCATALOG-COL_POS     = 12.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'SSCP_STK'.
+    FIELDCATALOG-SELTEXT_M   = 'STOCK IN CHROMPET'.
+    FIELDCATALOG-COL_POS     = 13.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'SSPO_STK'.
+    FIELDCATALOG-SELTEXT_M   = 'STOCK IN PORUR'.
+    FIELDCATALOG-COL_POS     = 14.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'SSPU_STK'.
+    FIELDCATALOG-SELTEXT_M   = 'STOCK IN PURASAWALKAM'.
+    FIELDCATALOG-COL_POS     = 15.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'SSTN_STK'.
+    FIELDCATALOG-SELTEXT_M   = 'STOCK IN T-NAGAR'.
+    FIELDCATALOG-COL_POS     = 16.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'TOT_STK'.
+    FIELDCATALOG-SELTEXT_M   = 'GRAND TOTAL QTY'.
+    FIELDCATALOG-COL_POS     = 17.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+    FIELDCATALOG-FIELDNAME   = 'TOT_VALUE'.
+    FIELDCATALOG-SELTEXT_M   = 'GRAND TOTAL VALUE'.
+    FIELDCATALOG-COL_POS     = 18.
+    APPEND FIELDCATALOG.
+    CLEAR  FIELDCATALOG.
+
+  ENDIF.
+*  DESCRIBE TABLE IT_FIN LINES WA_CNT.
+
+
+
+ENDFORM.                    " BUILD_FIELDCATALOG
+
+FORM DISPLAY_ALV_REPORT.
+  IF P_RAD2 = 'X'.
+
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM       = SY-REPID
+*       i_callback_top_of_page   = 'TOP-OF-PAGE'
+        I_CALLBACK_PF_STATUS_SET = 'SET_PF_STATUS'
+        I_CALLBACK_USER_COMMAND  = 'FORM_USER_COMMAND'
+*       i_grid_title             = 'My Title'
+*       IS_LAYOUT                = GD_LAYOUT
+        IT_EVENTS                = I_EVENTS
+        IT_FIELDCAT              = FIELDCATALOG[]
+      TABLES
+        T_OUTTAB                 = IT_FIN
+      EXCEPTIONS
+        PROGRAM_ERROR            = 1
+        OTHERS                   = 2.
+
+    IF SY-SUBRC <> 0.
+      WRITE:/ SY-SUBRC.
+    ENDIF.
+  ELSE.
+    CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+      EXPORTING
+        I_CALLBACK_PROGRAM       = SY-REPID
+*       i_callback_top_of_page   = 'TOP-OF-PAGE'
+        I_CALLBACK_PF_STATUS_SET = 'SET_PF_STATUS'
+        I_CALLBACK_USER_COMMAND  = 'FORM_USER_COMMAND'
+*       i_grid_title             = 'My Title'
+*       IS_LAYOUT                = GD_LAYOUT
+        IT_EVENTS                = I_EVENTS
+        IT_FIELDCAT              = FIELDCATALOG[]
+      TABLES
+        T_OUTTAB                 = IT_FINAL
+      EXCEPTIONS
+        PROGRAM_ERROR            = 1
+        OTHERS                   = 2.
+
+    IF SY-SUBRC <> 0.
+      WRITE:/ SY-SUBRC.
+    ENDIF.
+  ENDIF.
+
+ENDFORM.                    " DISPLAY_ALV_REPORT
+
+FORM SET_PF_STATUS USING RT_EXTAB   TYPE  SLIS_T_EXTAB.
+
+  SET PF-STATUS 'ZSTAT' EXCLUDING RT_EXTAB.
+
+ENDFORM.
+FORM GET_EVENTS .
+  CALL FUNCTION 'REUSE_ALV_EVENTS_GET'
+* EXPORTING
+*   I_LIST_TYPE           = 0
+    IMPORTING
+      ET_EVENTS = I_EVENTS.
+
+  READ TABLE I_EVENTS INTO WA_EVENTS WITH KEY NAME = 'TOP_OF_PAGE' .
+  WA_EVENTS-FORM = 'FORM_TOP_OF_PAGE' .
+  MODIFY  I_EVENTS FROM WA_EVENTS INDEX SY-TABIX .
+
+
+***********END OF LIST
+  READ TABLE I_EVENTS INTO WA_EVENTS WITH KEY NAME = 'END_OF_LIST' .
+  WA_EVENTS-FORM = 'FORM_END_OF_LIST' .
+  MODIFY  I_EVENTS FROM WA_EVENTS INDEX SY-TABIX .
+
+  READ TABLE I_EVENTS INTO WA_EVENTS WITH KEY NAME = 'USER_COMMAND' .
+  WA_EVENTS-FORM = 'FORM_USER_COMMAND' .
+  MODIFY  I_EVENTS FROM WA_EVENTS INDEX SY-TABIX .
+
+
+
+ENDFORM.                    " GET_EVENTS
+
+FORM FORM_TOP_OF_PAGE .
+
+
+  REFRESH I_HEADING .
+  CLEAR WA_HEADING .
+
+  IF P_RAD2 = 'X'.
+    LV_IMDOC = P_INWD.
+    READ TABLE IT_FIN INTO WA_FIN WITH KEY PRC_DOC = LV_IMDOC.
+    IF SY-SUBRC EQ 0.
+      LV_CRD_MM = WA_FIN-CRD_DOC.
+    ENDIF.
+  ELSE.
+    LV_IMDOC = WA_HDR-INWD_DOC.
+    READ TABLE IT_FIN INTO WA_FIN WITH KEY PRC_DOC = LV_IMDOC.
+    IF SY-SUBRC EQ 0.
+      LV_CRD_MM = WA_FIN-CRD_DOC.
+    ENDIF.
+  ENDIF.
+
+  WA_HEADING-TYP  = 'H'.
+  WA_HEADING-INFO = 'APPROVAL FOR PRICE CHANGE '.
+  APPEND WA_HEADING TO I_HEADING.
+  CLEAR WA_HEADING.
+
+  WA_HEADING-TYP  = 'S'.
+  CONCATENATE  'APPROVAL NO : ' LV_IMDOC 'DATE : ' SY-DATUM+6(2) '.'
+                 SY-DATUM+4(2) '.'
+                 SY-DATUM(4) INTO WA_HEADING-INFO SEPARATED BY ' '.
+  APPEND WA_HEADING TO I_HEADING.
+  CLEAR: WA_HEADING.
+
+  IF LV_CRD_MM IS NOT INITIAL.
+  WA_HEADING-TYP  = 'S'.
+  CONCATENATE 'CREDIT MEMO : ' LV_CRD_MM INTO WA_HEADING-INFO SEPARATED BY ' '.
+  APPEND WA_HEADING TO I_HEADING.
+  CLEAR: WA_HEADING.
+  ENDIF.
+
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+    EXPORTING
+      IT_LIST_COMMENTARY = I_HEADING
+*     I_LOGO             =
+*     I_END_OF_LIST_GRID =
+*     I_ALV_FORM         =
+    .
+
+ENDFORM .                    "FORM_TOP_OF_PAGE
+
+FORM FORM_END_OF_LIST .
+
+  REFRESH I_HEADING .
+  CLEAR WA_HEADING .
+
+  WA_HEADING-TYP = 'S' .
+  WA_HEADING-KEY = SY-UNAME.
+  APPEND WA_HEADING TO I_HEADING .
+  CLEAR : WA_HEADING.
+
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+    EXPORTING
+      IT_LIST_COMMENTARY = I_HEADING
+      I_END_OF_LIST_GRID = 'X'.
+ENDFORM .                    "FORM_END_OF_LIST
+
+FORM FORM_USER_COMMAND USING R_UCOMM LIKE SY-UCOMM
+                         RS_SELFIELD TYPE SLIS_SELFIELD.
+
+
+  CASE R_UCOMM.
+    WHEN 'PRNT'.
+
+      IF P_RAD1 = 'X'.
+
+        CALL FUNCTION 'NUMBER_GET_NEXT'
+          EXPORTING
+            NR_RANGE_NR             = '01'
+            OBJECT                  = 'ZPA'
+*           QUANTITY                = '1'
+*           SUBOBJECT               = ' '
+*           TOYEAR                  = '0000'
+*           IGNORE_BUFFER           = ' '
+          IMPORTING
+            NUMBER                  = WA_HDR-INWD_DOC
+*           QUANTITY                =
+*           RETURNCODE              =
+          EXCEPTIONS
+            INTERVAL_NOT_FOUND      = 1
+            NUMBER_RANGE_NOT_INTERN = 2
+            OBJECT_NOT_FOUND        = 3
+            QUANTITY_IS_0           = 4
+            QUANTITY_IS_NOT_1       = 5
+            INTERVAL_OVERFLOW       = 6
+            BUFFER_OVERFLOW         = 7
+            OTHERS                  = 8.
+        IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+        ENDIF.
+        WA_HDR-ERNAME    = SY-UNAME.
+        WA_HDR-ERDATE = SY-DATUM.
+
+        REFRESH IT_TAB.
+        LOOP AT IT_FINAL INTO WA_FINAL.
+          CLEAR WA_TAB.
+          MOVE-CORRESPONDING WA_FINAL TO WA_TAB.
+          WA_TAB-STATUS = 'X'.
+          WA_TAB-PRC_DOC = WA_HDR-INWD_DOC.
+          WA_TAB-ERNAME = SY-UNAME.
+          WA_TAB-ERDATE = SY-DATUM.
+          LOOP AT IT_MBEW INTO WA_MBEW WHERE MATNR = WA_FINAL-MATNR.
+            CASE WA_MBEW-BWKEY.
+              WHEN 'SSCP'.
+                WA_TAB-SSCP_STK = WA_TAB-SSCP_STK + WA_MBEW-LBKUM.
+              WHEN 'SSPO'.
+                WA_TAB-SSPO_STK = WA_TAB-SSPO_STK + WA_MBEW-LBKUM.
+              WHEN 'SSPU'.
+                WA_TAB-SSPU_STK = WA_TAB-SSPU_STK + WA_MBEW-LBKUM.
+              WHEN 'SSTN'.
+                WA_TAB-SSTN_STK = WA_TAB-SSTN_STK + WA_MBEW-LBKUM.
+            ENDCASE.
+            WA_TAB-TOT_STK = WA_TAB-TOT_STK + WA_MBEW-LBKUM.
+            WA_TAB-TOT_VALUE = WA_TAB-TOT_VALUE + WA_MBEW-SALK3.
+          ENDLOOP.
+          APPEND WA_TAB TO IT_TAB.
+        ENDLOOP.
+        MODIFY ZAF_PC FROM TABLE IT_TAB.
+
+        CALL FUNCTION 'SSF_FUNCTION_MODULE_NAME'
+          EXPORTING
+            FORMNAME           = 'ZAFPC_SF'
+*           VARIANT            = ' '
+*           DIRECT_CALL        = ' '
+          IMPORTING
+            FM_NAME            = FM_NAME
+          EXCEPTIONS
+            NO_FORM            = 1
+            NO_FUNCTION_MODULE = 2
+            OTHERS             = 3.
+        IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+        ENDIF.
+
+        CALL FUNCTION FM_NAME
+          EXPORTING
+
+            WA_APPR          = WA_HDR
+          TABLES
+            IT_AFPC          = IT_FINAL
+          EXCEPTIONS
+            FORMATTING_ERROR = 1
+            INTERNAL_ERROR   = 2
+            SEND_ERROR       = 3
+            USER_CANCELED    = 4
+            OTHERS           = 5.
+        IF SY-SUBRC <> 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+
+        ENDIF.
+
+        CALL FUNCTION 'CONVERT_OTF'
+          EXPORTING
+            FORMAT                = 'PDF'
+            MAX_LINEWIDTH         = 132
+          IMPORTING
+            BIN_FILESIZE          = V_LEN_IN
+            BIN_FILE              = I_XSTRING   " This is NOT Binary. This is Hexa
+          TABLES
+            OTF                   = I_OTF
+            LINES                 = I_TLINE
+          EXCEPTIONS
+            ERR_MAX_LINEWIDTH     = 1
+            ERR_FORMAT            = 2
+            ERR_CONV_NOT_POSSIBLE = 3
+            OTHERS                = 4.
+      ENDIF.
+    WHEN 'SAV'.
+
+      DATA : REF_GRID TYPE REF TO CL_GUI_ALV_GRID, "new
+             LT_CELLS TYPE LVC_T_MOCE.
+
+      IF REF_GRID IS INITIAL.
+        CALL FUNCTION 'GET_GLOBALS_FROM_SLVC_FULLSCR'
+          IMPORTING
+            E_GRID = REF_GRID.
+      ENDIF.
+
+
+      IF NOT REF_GRID IS INITIAL.
+        CALL METHOD REF_GRID->CHECK_CHANGED_DATA.
+      ENDIF.
+
+      LOOP AT IT_FIN INTO WA_FIN.
+        IF WA_FIN-NEW_MRP EQ 0 OR WA_FIN-NEW_SP EQ 0 OR WA_FIN-NEW_TAX EQ 0 .
+          MESSAGE 'PLEASE FILL ALL THE ENTRIES' TYPE 'E'.
+          EXIT.
+        ENDIF.
+      ENDLOOP.
+
+      IF IT_FIN1[] NE IT_FIN[].                                             " TO AVOID MULTIPLE SAVES IN TABLE.
+        LOOP AT IT_FIN INTO WA_FIN.
+             WA_FIN-STATUS = 'D'.
+             WA_FIN-UNAME = SY-UNAME.
+             WA_FIN-UDATE = SY-DATUM.
+             IF WA_FIN-OLD_TAX GT WA_FIN-NEW_TAX .
+               WA_FIN-DIFF_VAL = WA_FIN-OLD_TAX - WA_FIN-NEW_TAX.
+             ELSE.
+               WA_FIN-DIFF_VAL = WA_FIN-NEW_TAX - WA_FIN-OLD_TAX.
+             ENDIF.
+             CAL_AMT = CAL_AMT + ( WA_FIN-DIFF_VAL * WA_FIN-TOT_STK ).
+
+          MODIFY IT_FIN FROM WA_FIN INDEX SY-TABIX.
+        ENDLOOP.
+
+          RS_SELFIELD-REFRESH = 'X'.
+
+          MODIFY ZAF_PC FROM TABLE IT_FIN. "modify ztable the changes in alv
+*        ENDIF.
+          READ TABLE IT_FIN INTO WA_FIN WITH KEY  PRC_DOC = P_INWD.         " CONDITION TO AVOID MULTIPLE SAVES
+          IF SY-SUBRC EQ 0.
+            IF WA_FIN-CRD_DOC IS INITIAL.
+              PERFORM VK12_PA2 USING 'ZKP0'.                             " SELLING PRICE WITH MATERIAL/VENDOR
+              PERFORM VK12_PA3 USING 'ZMRP'.                             " MRP WITH MATERIAL
+              PERFORM VK12_MEK2 USING 'PB00'.                            " PURCHASE PRICE WITH MATERIAL / VENDOR
+              PERFORM VK12_PA1 USING 'ZKP0'.                             " SELLING PRICE WITH MATERIAL / EAN NO
+
+          IF CAL_AMT IS NOT INITIAL.                                  " TO AVOID BAPI FAILURE IF CURRENCY AMOUNT IS ZERO BAPI FAILS
+
+          VENDOR_HDR-BUS_ACT = 'RFBU'.                                "DOCUMENT HEADERT
+          VENDOR_HDR-USERNAME = SY-UNAME.
+          VENDOR_HDR-HEADER_TXT = 'VENDOR CREDIT MEMO'.
+          VENDOR_HDR-COMP_CODE = '1000'.
+          VENDOR_HDR-DOC_DATE = SY-DATUM.
+          VENDOR_HDR-PSTNG_DATE = SY-DATUM.
+          VENDOR_HDR-DOC_TYPE = 'KG'.
+
+          ACC_GL-ITEMNO_ACC = '0000000001'.                             "ACCOUNT GL
+          ACC_GL-GL_ACCOUNT = '600060'.
+          CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+            EXPORTING
+              INPUT         = ACC_GL-GL_ACCOUNT
+           IMPORTING
+             OUTPUT        = ACC_GL-GL_ACCOUNT
+                    .
+
+          ACC_GL-ITEM_TEXT = 'VENDOR CREDIT MEMO'.
+          ACC_GL-COMP_CODE = '1000'.
+          ACC_GL-BUS_AREA = '1000'.
+          ACC_GL-PSTNG_DATE = SY-DATUM.
+          ACC_GL-ALLOC_NMBR = 'VEND DP 31.01.2018'.
+          ACC_GL-COSTCENTER = '90000'.
+          ACC_GL-PROFIT_CTR = '10000'.
+
+          CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+            EXPORTING
+              INPUT         = ACC_GL-COSTCENTER
+           IMPORTING
+             OUTPUT        = ACC_GL-COSTCENTER
+                    .
+
+          CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+            EXPORTING
+              INPUT         = ACC_GL-PROFIT_CTR
+           IMPORTING
+             OUTPUT        = ACC_GL-PROFIT_CTR
+                    .
+
+          APPEND ACC_GL.
+
+          READ TABLE IT_FIN INTO WA_FIN WITH KEY PRC_DOC = P_INWD.
+          IF SY-SUBRC EQ 0.
+            ACC_PAY-VENDOR_NO = WA_FIN-LIFNR.                           " ACCOUNT PAYABLE
+          ENDIF.
+
+          CALL FUNCTION 'CONVERSION_EXIT_ALPHA_INPUT'
+            EXPORTING
+              INPUT         = ACC_PAY-VENDOR_NO
+           IMPORTING
+             OUTPUT        = ACC_PAY-VENDOR_NO
+                    .
+
+          ACC_PAY-ITEMNO_ACC = '0000000002'.
+          ACC_PAY-COMP_CODE = '1000'.
+          ACC_PAY-BUS_AREA = '1000'.
+          ACC_PAY-BLINE_DATE = SY-DATUM.
+          ACC_PAY-ALLOC_NMBR = P_INWD.
+          ACC_PAY-ITEM_TEXT = 'VENDOR CREDIT MEMO'.
+          ACC_PAY-BUSINESSPLACE = '1000'.
+          ACC_PAY-SECTIONCODE = '1000'.
+          APPEND ACC_PAY.
+
+          VENDOR_CURR-ITEMNO_ACC = '0000000001'.                         " CURRENCY AMOUNT
+          VENDOR_CURR-CURRENCY = 'INR'.
+          VENDOR_CURR-AMT_DOCCUR = CAL_AMT * -1.
+          APPEND VENDOR_CURR.
+
+          VENDOR_CURR-ITEMNO_ACC = '0000000002'.                         " CURRENCY AMOUNT
+          VENDOR_CURR-CURRENCY = 'INR'.
+          VENDOR_CURR-AMT_DOCCUR = CAL_AMT  .
+          APPEND VENDOR_CURR.
+
+
+          CALL FUNCTION 'BAPI_ACC_DOCUMENT_POST'
+            EXPORTING
+              DOCUMENTHEADER          = VENDOR_HDR
+*             CUSTOMERCPD             =
+*             CONTRACTHEADER          =
+*           IMPORTING
+*             OBJ_TYPE                =
+*             OBJ_KEY                 =
+*             OBJ_SYS                 =
+            TABLES
+              ACCOUNTGL               = ACC_GL
+*             ACCOUNTRECEIVABLE       =
+              ACCOUNTPAYABLE          = ACC_PAY
+*             ACCOUNTTAX              =
+              CURRENCYAMOUNT          = VENDOR_CURR
+*             CRITERIA                =
+*             VALUEFIELD              =
+*             EXTENSION1              =
+              RETURN                  = IT_RETURN
+*             PAYMENTCARD             =
+*             CONTRACTITEM            =
+*             EXTENSION2              =
+*             REALESTATE              =
+*             ACCOUNTWT               =
+                    .
+
+
+        CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+         EXPORTING
+           WAIT          = 'X'
+*         IMPORTING
+*           RETURN        =
+                  .
+
+        LOOP AT IT_RETURN INTO WA_RETURN.
+          IF WA_RETURN-TYPE EQ 'S'.
+             DATA : LV_STR1 TYPE STRING,
+                    LV_STR2 TYPE STRING.
+
+              LV_STR1 = WA_RETURN-MESSAGE_V2+0(10).            " DOCUMENT NO FROM BAPI
+              LV_STR2 = WA_RETURN-MESSAGE_V2+14(4).             " FINANCIAL YEAR
+
+          ENDIF.
+        ENDLOOP.
+
+        LOOP AT IT_FIN INTO WA_FIN WHERE PRC_DOC = P_INWD.
+          WA_FIN-CRD_DOC = LV_STR1.
+          WA_FIN-FIN_YR  = LV_STR2.
+          MODIFY IT_FIN FROM WA_FIN INDEX SY-TABIX.
+        ENDLOOP.
+        MODIFY ZAF_PC FROM TABLE IT_FIN.
+      ENDIF.
+     ENDIF.
+      ENDIF.
+      ENDIF.
+
+  ENDCASE.
+
+ENDFORM.

@@ -1,0 +1,138 @@
+FUNCTION ZMM_CONF_ACCOUNT.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     VALUE(COMPANYCODE) TYPE  BUKRS OPTIONAL
+*"     VALUE(VENDOR) TYPE  LIFNR OPTIONAL
+*"     VALUE(POSTINGDATE) TYPE  BUDAT
+*"     VALUE(FISCALYEAR) TYPE  GJAHR OPTIONAL
+*"  TABLES
+*"      IT_ITEM STRUCTURE  ZIMP_ACCOUNTITEM
+*"      IT_HEADER STRUCTURE  ZIMP_ACHEADER
+*"----------------------------------------------------------------------
+
+  TYPES : BEGIN OF TY_BSEG,
+          LIFNR     TYPE LIFNR,
+          BELNR     TYPE BELNR_D,
+          H_BUDAT   TYPE BUDAT ,
+          SGTXT     TYPE SGTXT,
+          DMBTR     TYPE DMBTR,
+          GJAHR     TYPE  GJAHR,
+          BUKRS     TYPE BUKRS,
+          KOART     TYPE KOART,
+          SHKZG     TYPE SHKZG,
+
+         END OF TY_BSEG.
+
+  TYPES : BEGIN OF TY_LFA1,
+        LIFNR TYPE LIFNR ,
+        NAME1 TYPE NAME1_GP,
+         END OF TY_LFA1.
+
+  TYPES : BEGIN OF TY_BKPF,
+        BUKRS TYPE BUKRS,
+        BLART TYPE BLART,
+         BELNR TYPE BELNR_D ,
+         GJAHR TYPE GJAHR ,
+
+         END OF TY_BKPF.
+
+     DATA : IT_BSEG TYPE TABLE OF TY_BSEG,
+           WA_BSEG TYPE TY_BSEG,
+           IT_LFA1 TYPE TABLE OF TY_LFA1,
+           WA_LFA1 TYPE TY_LFA1,
+           IT_BKPF TYPE TABLE OF TY_BKPF,
+           WA_BKPF TYPE TY_BKPF,
+           LV_DEBIT_TOT TYPE I,
+           LV_CREDIT_TOT TYPE I,
+           WA_HEADER TYPE ZIMP_ACHEADER ,
+           WA_ITEM TYPE ZIMP_ACCOUNTITEM .
+
+
+ SELECT
+    LIFNR
+    BELNR
+    H_BUDAT
+    SGTXT
+    DMBTR
+    GJAHR
+    BUKRS
+    KOART
+    SHKZG
+   FROM BSEG INTO TABLE IT_BSEG
+   WHERE BUKRS = COMPANYCODE AND
+         LIFNR = VENDOR AND
+         GJAHR = FISCALYEAR AND
+         H_BUDAT = POSTINGDATE .
+
+   IF IT_BSEG IS NOT INITIAL.
+     SELECT SINGLE
+       LIFNR
+       NAME1
+       FROM LFA1   INTO   WA_LFA1    WHERE LIFNR = WA_BSEG-LIFNR .
+
+
+     ENDIF.
+   IF IT_BSEG IS NOT INITIAL.
+     SELECT SINGLE
+       BUKRS
+       BLART
+       BELNR
+       GJAHR
+       FROM BKPF   INTO WA_BKPF
+
+       WHERE BUKRS = WA_BSEG-BUKRS AND
+       BLART IN ('RE' , 'ZH' , 'KR').
+     ENDIF.
+*   break spatro.
+
+   LOOP AT IT_BSEG INTO WA_BSEG .
+
+
+    WA_HEADER-BUKRS = WA_BSEG-BUKRS .
+    WA_HEADER-LIFNR = WA_BSEG-LIFNR .
+    WA_HEADER-H_BUDAT = WA_BSEG-H_BUDAT.      ""For Header data
+
+                                       "" For Item DAta
+    WA_ITEM-BELNR = WA_BSEG-BELNR .
+    WA_ITEM-SGTXT = WA_BSEG-SGTXT .
+    WA_ITEM-H_BUDAT = WA_BSEG-H_BUDAT .
+
+    IF WA_BSEG-KOART EQ 'K' .
+      ELSEIF WA_BSEG-SHKZG EQ  'H'.
+    WA_ITEM-DEBIT = WA_BSEG-DMBTR .
+    ELSEIF WA_BSEG-SHKZG EQ 'S'.
+      WA_ITEM-CREDIT =  ( -1 ) * WA_BSEG-DMBTR  .
+    ENDIF.
+
+
+
+
+
+
+
+    READ TABLE IT_LFA1 INTO WA_LFA1 WITH KEY LIFNR = WA_BSEG-LIFNR .
+     IF SY-TABIX = 0 .
+       WA_HEADER-NAME1 = WA_LFA1-NAME1 .
+
+       ENDIF.
+
+
+
+      APPEND WA_HEADER TO IT_HEADER .
+        WA_HEADER-TOTDEBIT = WA_HEADER-TOTDEBIT  + WA_ITEM-DEBIT .
+    WA_HEADER-TOTCREDIT = WA_HEADER-TOTCREDIT + WA_ITEM-CREDIT .
+
+         APPEND WA_ITEM TO IT_ITEM .
+     CLEAR WA_ITEM .
+
+
+
+
+
+     ENDLOOP.
+
+
+
+
+ENDFUNCTION.

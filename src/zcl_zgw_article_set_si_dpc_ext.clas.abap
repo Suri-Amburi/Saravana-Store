@@ -1,0 +1,124 @@
+class ZCL_ZGW_ARTICLE_SET_SI_DPC_EXT definition
+  public
+  inheriting from ZCL_ZGW_ARTICLE_SET_SI_DPC
+  create public .
+
+public section.
+protected section.
+
+  methods ARTICLE_SSSET_GET_ENTITYSET
+    redefinition .
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_ZGW_ARTICLE_SET_SI_DPC_EXT IMPLEMENTATION.
+
+
+  METHOD ARTICLE_SSSET_GET_ENTITYSET.
+
+    DATA :
+      LV_MATKL    TYPE MATKL,
+      LV_LIFNR    TYPE LIFNR,
+      LV_SET_FLAG TYPE CHAR1,
+      LS_ENTITY   TYPE ZCL_ZGW_ARTICLE_SET_SI_MPC=>TS_ARTICLE_SS.
+
+    CONSTANTS :
+      C_MATKL(6) VALUE 'Matkl',
+      C_SET(10)  VALUE 'SetMatFlag',
+      C_LIFNR(5) VALUE 'Lifnr',
+      C_M(1)     VALUE 'M',
+      C_X(1)     VALUE 'X'.
+
+*** Filters
+*** Select Options
+    IF IT_FILTER_SELECT_OPTIONS	IS NOT INITIAL.
+      LOOP AT IT_FILTER_SELECT_OPTIONS ASSIGNING FIELD-SYMBOL(<LS_FILTER>).
+        IF SY-SUBRC = 0.
+          CASE <LS_FILTER>-PROPERTY.
+            WHEN C_MATKL.
+              READ TABLE <LS_FILTER>-SELECT_OPTIONS ASSIGNING FIELD-SYMBOL(<LS_SEL_OPT>) INDEX 1.
+              IF SY-SUBRC = 0.
+                LV_MATKL = <LS_SEL_OPT>-LOW.
+              ENDIF.
+            WHEN C_SET.
+              READ TABLE <LS_FILTER>-SELECT_OPTIONS ASSIGNING <LS_SEL_OPT> INDEX 1.
+              IF SY-SUBRC = 0.
+                LV_SET_FLAG = <LS_SEL_OPT>-LOW.
+              ENDIF.
+            WHEN C_LIFNR.
+              READ TABLE <LS_FILTER>-SELECT_OPTIONS ASSIGNING <LS_SEL_OPT> INDEX 1.
+              IF SY-SUBRC = 0.
+                LV_LIFNR = <LS_SEL_OPT>-LOW.
+              ENDIF.
+          ENDCASE.
+        ENDIF.
+      ENDLOOP.
+    ENDIF.
+
+    CHECK LV_MATKL IS NOT INITIAL.
+    TRY.
+        ZCL_OD_ARTICLE_SS=>GET_ARITICLE_DETAILS_SET_SIZE(
+          EXPORTING
+            I_MATKL    = LV_MATKL
+            I_LIFNR    = LV_LIFNR
+          IMPORTING
+            T_ARITICLE = DATA(LT_ARTICLES) ).
+      CATCH CX_AMDP_ERROR. " Exceptions when calling AMDP methods
+    ENDTRY.
+
+    CHECK LT_ARTICLES IS NOT INITIAL.
+*** For Set Material Size
+*** GET BOM COMPONETS FOR SET MATERIAL
+    SELECT  MAST~MATNR,
+            MAST~WERKS,
+            MAST~STLNR,
+            MAST~STLAL,
+            STPO~STLKN,
+            STPO~IDNRK,
+            STPO~POSNR,
+            STPO~MENGE,
+            STPO~MEINS,
+            MARA~SIZE1
+            INTO TABLE @DATA(LT_SIZE)
+            FROM MAST AS MAST
+            INNER JOIN STPO AS STPO ON STPO~STLTY = @C_M AND MAST~STLNR = STPO~STLNR
+            INNER JOIN MARA AS MARA ON MARA~MATNR = STPO~IDNRK
+            FOR ALL ENTRIES IN @LT_ARTICLES
+            WHERE MAST~MATNR = @LT_ARTICLES-MATNR.
+
+    FIELD-SYMBOLS :
+      <LS_ARTICLES> LIKE LINE OF LT_ARTICLES,
+      <LS_SIZE>     LIKE LINE OF LT_SIZE.
+
+    LOOP AT LT_ARTICLES ASSIGNING <LS_ARTICLES>.
+      MOVE-CORRESPONDING <LS_ARTICLES> TO LS_ENTITY.
+      IF LS_ENTITY-PRICE_FROM LE 0.
+        LS_ENTITY-PRICE_FROM = <LS_ARTICLES>-KBETR.
+        LS_ENTITY-PRICE_TO = <LS_ARTICLES>-KBETR.
+      ENDIF.
+***   Set Material Size
+      READ TABLE LT_SIZE ASSIGNING <LS_SIZE> WITH KEY MATNR = <LS_ARTICLES>-MATNR.
+      IF SY-SUBRC = 0.
+        LOOP AT LT_SIZE ASSIGNING <LS_SIZE> WHERE STLNR = <LS_SIZE>-STLNR.
+          IF  LS_ENTITY-SIZE1 IS INITIAL.
+            LS_ENTITY-SIZE1 = <LS_SIZE>-SIZE1.
+          ELSE.
+            LS_ENTITY-SIZE1 = LS_ENTITY-SIZE1 && '-' && <LS_SIZE>-SIZE1.
+          ENDIF.
+          LS_ENTITY-SET_MAT_FLAG = C_X.
+        ENDLOOP.
+      ENDIF.
+      APPEND LS_ENTITY TO ET_ENTITYSET.
+      CLEAR : LS_ENTITY.
+    ENDLOOP.
+
+    IF LV_SET_FLAG = C_X.
+      DELETE ET_ENTITYSET WHERE SET_MAT_FLAG IS INITIAL.
+    ELSE.
+      DELETE ET_ENTITYSET WHERE SET_MAT_FLAG = C_X.
+    ENDIF.
+    SORT ET_ENTITYSET BY PRICE_FROM.
+  ENDMETHOD.
+ENDCLASS.

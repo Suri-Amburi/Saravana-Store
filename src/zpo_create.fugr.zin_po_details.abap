@@ -1,0 +1,41 @@
+FUNCTION ZIN_PO_DETAILS.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     VALUE(I_INDENT_NO) TYPE  ZINDENT
+*"  EXPORTING
+*"     VALUE(E_EBELN) TYPE  EBELN
+*"     VALUE(ET_RETURN) TYPE  BAPIRET2_TT
+*"----------------------------------------------------------------------
+  CONSTANTS:
+    C_E(1)      VALUE 'E',      " Error
+    C_HEADER(6) VALUE 'HEADER',
+    C_ITEM(4)   VALUE 'ITEM'.
+
+  CHECK I_INDENT_NO IS NOT INITIAL.
+*** Get Indent Number from PO Header
+  SELECT SINGLE EKKO~EBELN FROM EKKO INTO E_EBELN WHERE ZINDENT = I_INDENT_NO.
+  IF SY-SUBRC <> 0.
+*** Get Error Messges
+    SELECT
+      ZPH_T_ITEM~INDENT_NO,
+      ZPH_T_ITEM~ITEM,
+      ZPH_T_HDR~E_MSG AS H_E_MSG,
+      ZPH_T_ITEM~E_MSG
+      INTO TABLE @DATA(LT_MESSAGES)
+      FROM ZPH_T_HDR AS ZPH_T_HDR
+      INNER JOIN ZPH_T_ITEM AS ZPH_T_ITEM ON ZPH_T_ITEM~INDENT_NO = ZPH_T_HDR~INDENT_NO
+      WHERE ZPH_T_HDR~INDENT_NO = @I_INDENT_NO.
+    IF SY-SUBRC = 0.
+      LOOP AT LT_MESSAGES ASSIGNING FIELD-SYMBOL(<LS_MESSAGES>).
+        IF <LS_MESSAGES>-H_E_MSG IS NOT INITIAL.
+          APPEND VALUE #( TYPE = C_E ID = C_HEADER MESSAGE = <LS_MESSAGES>-H_E_MSG ) TO ET_RETURN.
+        ELSEIF <LS_MESSAGES>-E_MSG IS NOT INITIAL.
+          APPEND VALUE #( TYPE = C_E ID = C_ITEM MESSAGE = <LS_MESSAGES>-E_MSG ) TO ET_RETURN.
+        ENDIF.
+      ENDLOOP.
+    ELSE.
+      APPEND VALUE #( TYPE = C_E MESSAGE = 'Indent Does Not Exist' ) TO ET_RETURN.
+    ENDIF.
+  ENDIF.
+ENDFUNCTION.

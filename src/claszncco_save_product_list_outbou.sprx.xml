@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SPRX" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROXY_HEADER>
+    <item>
+     <OBJECT>CLAS</OBJECT>
+     <OBJ_NAME>ZNCCO_SAVE_PRODUCT_LIST_OUTBOU</OBJ_NAME>
+     <OBJECT_M>CLAS</OBJECT_M>
+     <OBJ_NAME_M>ZNCCO_SAVE_PRODUCT_LIST_OUTBOU</OBJ_NAME_M>
+     <HASH_ID>F3463C57D251758CD0A12FE80BDC6447F15E13F2</HASH_ID>
+     <ID>&lt;portType&gt; SaveProductList_Outbound http://saravanastore.com/SaveProductList/S4H/iVend http://saravanastore.com/SaveProductList/S4H/iVend</ID>
+     <IFR_GLOBAL>X</IFR_GLOBAL>
+     <IFR_TYPE>portType</IFR_TYPE>
+     <IFR_NAME>SaveProductList_Outbound</IFR_NAME>
+     <IFR_NSPCE>http://saravanastore.com/SaveProductList/S4H/iVend</IFR_NSPCE>
+     <IFR_GNSPCE>http://saravanastore.com/SaveProductList/S4H/iVend</IFR_GNSPCE>
+     <GEN_VERS>0006</GEN_VERS>
+     <PREFIX>ZNC</PREFIX>
+     <CATEGORY>ifmmessif</CATEGORY>
+     <DIRECTION>O</DIRECTION>
+     <SYNCHRON>D</SYNCHRON>
+     <X-ML_NSPCE>http://saravanastore.com/SaveProductList/S4H/iVend</X-ML_NSPCE>
+     <X-ML_NAME>SaveProductList_Outbound</X-ML_NAME>
+     <FURTHER_DATA>&lt;asx:abap xmlns:asx=&quot;http://www.sap.com/abapxml&quot; version=&quot;1.0&quot;&gt;&lt;asx:values&gt;&lt;DATA&gt;&lt;SOAP_APPL&gt;urn:sap-com:soap:application:esr:client:710&lt;/SOAP_APPL&gt;&lt;/DATA&gt;&lt;/asx:values&gt;&lt;/asx:abap&gt;</FURTHER_DATA>
+     <VERSION_ID>77f3e782885111e9a3820000002b9152</VERSION_ID>
+    </item>
+   </PROXY_HEADER>
+   <PROXY_DATA>
+    <item>
+     <OBJECT>CLAS</OBJECT>
+     <OBJ_NAME>ZNCCO_SAVE_PRODUCT_LIST_OUTBOU</OBJ_NAME>
+     <OBJECT1>CLAS</OBJECT1>
+     <OBJ_NAME1>ZNCCO_SAVE_PRODUCT_LIST_OUTBOU</OBJ_NAME1>
+     <OBJECT2>CLAS</OBJECT2>
+     <OBJ_NAME2>ZNCCO_SAVE_PRODUCT_LIST_OUTBOU</OBJ_NAME2>
+     <ID>&lt;portType&gt; SaveProductList_Outbound http://saravanastore.com/SaveProductList/S4H/iVend http://saravanastore.com/SaveProductList/S4H/iVend</ID>
+     <IFR_TYPE>portType</IFR_TYPE>
+     <IFR_NAME>SaveProductList_Outbound</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>CLAS</R3_TYPE>
+     <R3_NAME>ZNCCO_SAVE_PRODUCT_LIST_OUTBOU</R3_NAME>
+     <R3_TEXT>Proxy Class (generated)</R3_TEXT>
+     <CATEGORY>ifmmessif</CATEGORY>
+     <DIRECTION>O</DIRECTION>
+     <SYNCHRON>D</SYNCHRON>
+    </item>
+    <item>
+     <OBJECT>CLAS</OBJECT>
+     <OBJ_NAME>ZNCCO_SAVE_PRODUCT_LIST_OUTBOU</OBJ_NAME>
+     <OBJECT1>METH</OBJECT1>
+     <OBJ_NAME1>SAVE_PRODUCT_LIST_OUTBOUND</OBJ_NAME1>
+     <OBJECT2>METH</OBJECT2>
+     <OBJ_NAME2>SAVE_PRODUCT_LIST_OUTBOUND</OBJ_NAME2>
+     <ID>&lt;operation&gt; SaveProductList_Outbound &lt;portType&gt; SaveProductList_Outbound http://saravanastore.com/SaveProductList/S4H/iVend http://saravanastore.com/SaveProductList/S4H/iVend</ID>
+     <IFR_TYPE>operation</IFR_TYPE>
+     <IFR_NAME>SaveProductList_Outbound</IFR_NAME>
+     <IFR_LANGU>EN</IFR_LANGU>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>METH</R3_TYPE>
+     <R3_NAME>SAVE_PRODUCT_LIST_OUTBOUND</R3_NAME>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+     <DIRECTION>O</DIRECTION>
+    </item>
+    <item>
+     <OBJECT>CLAS</OBJECT>
+     <OBJ_NAME>ZNCCO_SAVE_PRODUCT_LIST_OUTBOU</OBJ_NAME>
+     <OBJECT1>METH</OBJECT1>
+     <OBJ_NAME1>SAVE_PRODUCT_LIST_OUTBOUND</OBJ_NAME1>
+     <OBJECT2>PAIM</OBJECT2>
+     <OBJ_NAME2>OUTPUT</OBJ_NAME2>
+     <OBJECT_R>TABL</OBJECT_R>
+     <OBJ_NAME_R>ZNCSAVE_PRODUCT_LIST</OBJ_NAME_R>
+     <ID>&lt;output&gt; output &lt;operation&gt; SaveProductList_Outbound &lt;portType&gt; SaveProductList_Outbound http://saravanastore.com/SaveProductList/S4H/iVend http://saravanastore.com/SaveProductList/S4H/iVend</ID>
+     <IFR_TYPE>PartOutput</IFR_TYPE>
+     <IFR_NAME>output</IFR_NAME>
+     <IFR_SCALE>-2</IFR_SCALE>
+     <R3_TYPE>PAIM</R3_TYPE>
+     <R3_NAME>OUTPUT</R3_NAME>
+     <R3_SEQNUM>000001</R3_SEQNUM>
+    </item>
+   </PROXY_DATA>
+  </asx:values>
+ </asx:abap>
+</abapGit>

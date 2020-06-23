@@ -1,0 +1,27 @@
+    <!-- start include cuaarea.html -->
+    <table class="MobileCuaArea">
+     <tr>
+      <!-- First line title and default buttons -->
+      <td valign="middle" align="left">`
+         if ( ~windowtitle != "" )`
+            <span class="MobileWindowTitle">`~windowtitle`</span>`
+         else`
+            <span class="MobileWindowTitle">&nbsp;</span>`
+         end`
+      </td>
+      <td valign="middle" align="right" width="90px">
+        <!-- enter button -->
+        <input type="image" class="MobileHeaderLogo" `
+            `alt="`#TR_SUBMIT`" src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="images/all/enter.gif")`" `sh()`>
+        <!-- logoff button -->
+        <a href="`wgateUrl(~okcode="/nex"); if (~SEC_SESSTOKEN != "")`&amp;~SEC_SESSTOKEN=`~SEC_SESSTOKEN; end`"><img src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="images/all/logoff.gif")`" `
+            `alt="`#TR_LOGOFF`" class="MobileHeaderLogo" `sh()`></a>
+        <!-- SAP logo -->
+        <img src="`mimeURL(~service="itsmobile", ~theme=99, ~language="", ~name="images/all/saplogo.gif")`" `
+            `alt="ITSmobile 1.1" class="MobileHeaderLogo" `sh()`>
+      </td>
+     </tr>
+    </table>
+`include(~service="itsmobile", ~language="", ~theme="99", ~name="include/mesgs.html")`
+    <!-- end include cuaarea.html -->
+                                                                                                                                                                               

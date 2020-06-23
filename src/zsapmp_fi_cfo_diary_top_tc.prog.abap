@@ -1,0 +1,142 @@
+*&---------------------------------------------------------------------*
+*& Include ZSAPMP_FI_CFO_DIARY_TOP                  - Module Pool      ZSAPMP_FI_CFO_DIARY
+*&---------------------------------------------------------------------*
+PROGRAM ZSAPMP_FI_CFO_DIARY.
+DATA: OK_CODE LIKE SY-UCOMM.
+TYPES: BEGIN OF TY_BSIK,
+         BUKRS TYPE BUKRS,
+         LIFNR TYPE LIFNR,
+         GJAHR TYPE GJAHR,
+         BELNR TYPE BELNR_D,
+         BUDAT TYPE BSIK-BUDAT,
+         WAERS TYPE BSIK-WAERS,
+         XBLNR TYPE XBLNR,
+         WRBTR TYPE WRBTR,
+         BSCHL type	BSCHL,
+         BLART type	BLART,
+         ZTERM TYPE DZTERM,
+         BLDAT TYPE BLDAT,
+         dmbtr TYPE dmbtr,
+       END OF TY_BSIK.
+TYPES: BEGIN OF TY_BSEG,
+         BUKRS TYPE BUKRS,
+         BELNR TYPE BELNR_D,
+         GJAHR TYPE GJAHR,
+         BUZEI TYPE BUZEI,
+         BSCHL TYPE BSCHL,
+         KOART TYPE KOART,
+         LIFNR TYPE LIFNR,
+         H_BLDAT TYPE BLDAT,
+         H_BLART TYPE BLART,
+         ZFBDT TYPE DZFBDT,
+         NETDT TYPE NETDT,
+       END OF TY_BSEG.
+
+TYPES: BEGIN OF TY_LFA1,
+         LIFNR TYPE LIFNR,
+         NAME1 TYPE NAME1_GP,
+       END OF TY_LFA1.
+
+TYPES: BEGIN OF ty_bkpf,
+       BUKRS TYPE BUKRS,
+       BELNR TYPE BELNR_D,
+       GJAHR TYPE GJAHR,
+       REINDAT TYPE REINDAT,
+  END OF TY_BKPF.
+
+TYPES: BEGIN OF ty_t012k,
+       BUKRS TYPE BUKRS,
+       HBKID TYPE HBKID,
+       HKTID TYPE HKTID,
+       BANKN TYPE BANKN,
+       HKONT TYPE HKONT,
+  END OF TY_T012K.
+
+TYPES: BEGIN OF TY_BSIS,
+       BUKRS TYPE BUKRS,
+       HKONT TYPE HKONT,
+       ZUONR TYPE	DZUONR,
+       GJAHR TYPE GJAHR,
+       BELNR TYPE BELNR_D,
+       SHKZG TYPE	SHKZG,
+       DMBTR TYPE	DMBTR,
+  END OF TY_BSIS.
+
+
+
+
+TYPES:BEGIN OF TY_INW_T_HDR,
+      EBELN	 TYPE EBELN,
+      LIFNR  TYPE ELIFN,
+      QR_CODE TYPE ZQR_CODE,
+      END OF TY_INW_T_HDR.
+
+
+DATA: IT_BSIK TYPE TABLE OF TY_BSIK,
+      WA_BSIK TYPE TY_BSIK,
+      IT_t012K TYPE TABLE OF TY_t012K,
+      WA_t012K TYPE TY_t012K,
+      IT_BSIS TYPE TABLE OF TY_BSIS,
+      WA_BSIS TYPE TY_BSIS,
+      IT_BKPF TYPE TABLE OF TY_BKPF,
+      WA_BKPF TYPE TY_BKPF,
+      IT_INW_T_HDR TYPE TABLE OF TY_INW_T_HDR,
+      WA_INW_T_HDR TYPE TY_INW_T_HDR,
+      IT_BSEG TYPE TABLE OF TY_BSEG,
+      WA_BSEG TYPE TY_BSEG,
+      it_final type TABLE OF zcfo_final1,
+      it_final1 type TABLE OF zcfo_final1,
+      wa_final type  zcfo_final1,
+      wa_final1 type  zcfo_final1,
+      WA_HEADER TYPE ZCFO_HEADER,
+      IT_LFA1 TYPE TABLE OF TY_LFA1,
+      WA_LFA1 TYPE TY_LFA1,
+      WA_I_FAEDE TYPE FAEDE,
+      WA_I_GL_FAEDE TYPE XFELD,
+      WA_E_FAEDE TYPE FAEDE.
+
+
+
+*DATA : LV_DATE1 TYPE SY-DATUM,
+*       LV_DATE2 TYPE SY-DATUM,
+*       LV_DATE3 TYPE SY-DATUM,
+*       LV_DATE4 TYPE SY-DATUM,
+*       LV_DATE5 TYPE SY-DATUM,
+*       LV_DATE6 TYPE SY-DATUM,
+*       LV_DATE7 TYPE SY-DATUM,
+DATA:  LV_DATE7 TYPE SY-DATUM,
+       LV_D TYPE SY-DATUM,
+       DAY TYPE DLYDY ,
+       YEAR TYPE GJAHR,
+       YEAR1 TYPE GJAHR,
+       DATE TYPE BLDAT,
+       LV_TEXT1 TYPE SY-DATUM.
+
+ DATA : LV_ZBD1T TYPE BSEG-ZBD1T,
+         LV_ZBD1P TYPE BSEG-ZBD1P,
+         LV_ZBD2T TYPE  BSEG-ZBD2T,
+         LV_ZBD2P TYPE  BSEG-ZBD2P,
+         LV_ZBD3T TYPE  BSEG-ZBD3T,
+         LV_ZFBDT TYPE  BSEG-ZFBDT,
+         LV_XSPLT TYPE  T052-XSPLT,
+         LV_ZSCHF TYPE  T052-ZSCHF,
+         LV_ZLSCH TYPE  T052-ZLSCH.
+data : wa_t052 TYPE t052.
+data : duedate type BSEG-ZFBDT.
+data: lv_net TYPE DMBTR.
+
+*DATA : LVD_2 TYPE NETPR,
+*       LVD_3 TYPE NETPR,
+*       LVD_4 TYPE NETPR,
+*       LVD_5 TYPE NETPR,
+*       LVD_6 TYPE NETPR,
+*       LVD_7 TYPE NETPR.
+*
+*DATA : LV_WAERS2 TYPE WAERS,
+*       LV_WAERS3 TYPE WAERS,
+*       LV_WAERS4 TYPE WAERS,
+*       LV_WAERS5 TYPE WAERS,
+*       LV_WAERS6 TYPE WAERS,
+*       LV_WAERS7 TYPE WAERS.
+
+CONTROLS tc1 TYPE TABLEVIEW USING SCREEN 9000.

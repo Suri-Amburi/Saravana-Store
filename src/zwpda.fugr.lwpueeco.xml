@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <PROGDIR>
+    <NAME>LWPUEECO</NAME>
+    <CLAS>WWS2</CLAS>
+    <SUBC>I</SUBC>
+    <APPL>W</APPL>
+    <RLOAD>D</RLOAD>
+    <FIXPT>X</FIXPT>
+   </PROGDIR>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>704</KEY>
+     <ENTRY>Sichern ohne Aktivieren</ENTRY>
+     <LENGTH>23</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>800</KEY>
+     <ENTRY>Materialtext nicht vorhanden.</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>801</KEY>
+     <ENTRY>Aktion-Aufteiler:</ENTRY>
+     <LENGTH>17</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>921</KEY>
+     <ENTRY>FM WAVI PROCESS MESSAGES: parameter FBI MSG OBJECT set wrong</ENTRY>
+     <LENGTH>60</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>922</KEY>
+     <ENTRY>Structure AUFI must be filled</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>923</KEY>
+     <ENTRY>Structure AUFG must be filled</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>924</KEY>
+     <ENTRY>Structure AUVZ must be filled</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>925</KEY>
+     <ENTRY>...checking alloc tbl no.</ENTRY>
+     <LENGTH>25</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>926</KEY>
+     <ENTRY>Alloc tbl no. must be entered on saving</ENTRY>
+     <LENGTH>39</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>927</KEY>
+     <ENTRY>Alloc tbl no. cannot be changed</ENTRY>
+     <LENGTH>31</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>928</KEY>
+     <ENTRY>...Read UPT AUSB</ENTRY>
+     <LENGTH>16</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>929</KEY>
+     <ENTRY>Plant status could not be determined; alloc tbl inconsistent</ENTRY>
+     <LENGTH>60</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>999</KEY>
+     <ENTRY>unexpected exception occurred</ENTRY>
+     <LENGTH>29</LENGTH>
+    </item>
+    <item>
+     <ID>R</ID>
+     <ENTRY>Exportable constants for POS upload processing</ENTRY>
+     <LENGTH>46</LENGTH>
+    </item>
+   </TPOOL>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,45 @@
+*&---------------------------------------------------------------------*
+*& Include          ZFI_IBANKMASTER_C02_TOP
+*&---------------------------------------------------------------------*
+TABLES:LFA1,LFB1.
+TYPE-POOLS SLIS.
+
+TYPES:BEGIN OF TY_FILE,
+        COUNTRY(20),
+        BANKKEY(20),
+
+        BANKNAME(100),
+        BANKNAME1(100),
+        STREET         TYPE STRING,
+        PINCODE(50),
+        CITY(30),
+        COUNTRY1(25),
+        REGION(20),
+      END OF TY_FILE,
+      TY_T_FILE TYPE TABLE OF TY_FILE.
+
+DATA:WA_FILE TYPE TY_FILE,
+     IT_FILE TYPE TY_T_FILE.
+
+DATA:FNAME         TYPE LOCALFILE,
+     ENAME         TYPE CHAR4,
+
+     WA_BDCDATA    TYPE BDCDATA,
+     IT_BDCDATA    TYPE TABLE OF BDCDATA,
+
+     WA_BDCMSGCOLL TYPE BDCMSGCOLL,
+     IT_BDCMSGCOLL TYPE TABLE OF BDCMSGCOLL,
+
+     WA_FCAT       TYPE SLIS_FIELDCAT_ALV,
+     IT_FCAT       TYPE SLIS_T_FIELDCAT_ALV,
+
+     BEGIN OF IT_ERROR OCCURS 0,
+       RECORD       TYPE I,
+       MESSAGE(100) TYPE C,
+     END OF IT_ERROR,
+
+     COUNT  TYPE I,
+     V_TEXT TYPE STRING.
+
+DATA: CTUMODE LIKE CTU_PARAMS-DISMODE VALUE 'N',
+      CUPDATE LIKE CTU_PARAMS-UPDMODE VALUE 'A'.

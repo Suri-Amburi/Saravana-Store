@@ -1,0 +1,355 @@
+*&---------------------------------------------------------------------*
+*& Include          ZHR_EMP_MASTER_SUB
+*&---------------------------------------------------------------------*
+
+FORM GET_TABLEDATA.
+
+  SELECT PERNR
+         WERKS
+         PLANS
+         PERSG
+         PERSK
+         BTRTL
+         SUBTY
+         FROM PA0001 INTO TABLE IT_PA0001 WHERE PERNR = PERNR-PERNR.
+
+  IF IT_PA0001 IS NOT INITIAL.
+    SELECT PERNR
+           BEGDA
+           FROM PA0000 INTO TABLE IT_PA0000
+           FOR ALL ENTRIES IN IT_PA0001 WHERE PERNR = IT_PA0001-PERNR.
+
+    SELECT PERNR
+           GESCH
+           GBDAT
+           VNAMC
+           NCHMC
+           FROM PA0002 INTO TABLE IT_PA0002
+           FOR ALL ENTRIES IN IT_PA0001 WHERE PERNR = IT_PA0001-PERNR.
+
+    SELECT PERNR
+           ANSSA
+           SUBTY
+           NAME2
+           STRAS
+           LOCAT
+           PSTLZ
+           ORT01
+           ORT02
+           LAND1
+           FROM PA0006 INTO TABLE IT_PA0006  "3 5
+           FOR ALL ENTRIES IN IT_PA0001 WHERE PERNR = IT_PA0001-PERNR.
+
+    SELECT PERNR
+           SCHKZ
+           FROM PA0007 INTO TABLE IT_PA0007
+           FOR ALL ENTRIES IN IT_PA0001 WHERE PERNR = IT_PA0001-PERNR.
+
+    SELECT PERNR
+           BNKSA
+           BANKL
+           BANKN
+           FROM PA0009 INTO TABLE IT_PA0009
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERNR = IT_PA0001-PERNR.
+
+    SELECT PERNR
+           SUBTY
+           FAVOR
+           FANAM
+           FAMSA
+           FROM PA0021 INTO TABLE IT_PA0021
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERNR = IT_PA0001-PERNR
+           AND SUBTY = '11'.
+
+    SELECT PERNR
+           SUBTY
+           USRTY
+           USRID
+           USRID_LONG
+           FROM PA0105 INTO TABLE IT_PA0105
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERNR = IT_PA0001-PERNR.
+
+    SELECT PERNR
+           SUBTY
+           ICNUM
+           FROM PA0185 INTO TABLE IT_PA0185
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERNR = IT_PA0001-PERNR.
+
+    SELECT PERSG
+           PTEXT
+           FROM T501T INTO TABLE IT_T501T
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERSG = IT_PA0001-PERSG.
+
+    SELECT PERSK
+           PTEXT
+           FROM T503T INTO TABLE IT_T503T
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERSK  = IT_PA0001-PERSK.
+
+    SELECT BTRTL
+           BTEXT
+           FROM T001P INTO TABLE IT_T001P
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE BTRTL = IT_PA0001-BTRTL.
+
+    SELECT PERSA
+           NAME1
+           FROM T500P INTO TABLE IT_T500P
+           FOR ALL ENTRIES IN IT_PA0001
+           WHERE PERSA = IT_PA0001-WERKS.
+
+*    SELECT SUBTY
+*           INFTY
+*           STEXT
+*           SPRSL
+*           FROM T591S INTO TABLE IT_T591S
+*           FOR ALL ENTRIES IN IT_PA0006
+*           WHERE SUBTY = IT_PA0006-SUBTY
+*           AND SPRSL = 'EN'
+*           AND INFTY = '0006'.
+    SELECT LAND1
+           SPRAS
+           LANDX
+           FROM T005T INTO TABLE IT_T005T
+           FOR ALL ENTRIES IN IT_PA0006
+           WHERE LAND1 = IT_PA0006-LAND1 AND SPRAS = 'EN'.
+
+
+
+  ENDIF.
+
+  CALL FUNCTION 'DD_DOMA_GET'
+    EXPORTING
+      DOMAIN_NAME   = 'GESCH'
+*     GET_STATE     = 'M  '
+      LANGU         = SY-LANGU
+*     PRID          = 0
+      WITHTEXT      = 'X'
+*   IMPORTING
+*     DD01V_WA_A    =
+*     DD01V_WA_N    =
+*     GOT_STATE     =
+    TABLES
+      DD07V_TAB_A   = IT_TABA
+      DD07V_TAB_N   = IT_TABB
+    EXCEPTIONS
+      ILLEGAL_VALUE = 1
+      OP_FAILURE    = 2
+      OTHERS        = 3.
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+
+ENDFORM.
+
+
+FORM GET_FINAL.
+
+  LOOP AT IT_PA0001 INTO WA_PA0001.
+
+    WA_FINAL-PLANS =  WA_PA0001-PLANS.
+
+    READ TABLE IT_T001P INTO WA_T001P WITH KEY BTRTL = WA_PA0001-BTRTL.
+    IF SY-SUBRC EQ 0.
+      WA_FINAL-BTEXT = WA_T001P-BTEXT.
+    ENDIF.
+
+    READ TABLE IT_T500P INTO WA_T500P WITH KEY PERSA = WA_PA0001-WERKS.
+    IF SY-SUBRC EQ 0.
+      WA_FINAL-NAME1 = WA_T500P-NAME1.
+    ENDIF.
+
+    READ TABLE IT_T501T INTO WA_T501T WITH KEY PERSG  = WA_PA0001-PERSG.
+    IF SY-SUBRC = 0.
+      WA_FINAL-PTEXT = WA_T501T-PTEXT.
+    ENDIF.
+
+    READ TABLE IT_T503T INTO WA_T503T WITH KEY PERSK  = WA_PA0001-PERSK.
+    IF SY-SUBRC = 0.
+      WA_FINAL-PTEXT1 = WA_T503T-PTEXT.
+    ENDIF.
+
+    READ TABLE IT_PA0000 INTO WA_PA0000 WITH KEY PERNR = WA_PA0001-PERNR.
+    IF SY-SUBRC EQ 0.
+      WA_FINAL-BEGDA = WA_PA0000-BEGDA.
+    ENDIF.
+
+    READ TABLE IT_PA0002 INTO WA_PA0002 WITH KEY PERNR = WA_PA0001-PERNR.
+    IF SY-SUBRC EQ 0.
+
+      LOOP AT IT_TABA INTO WA_TABA.
+        IF WA_TABA-DOMVALUE_L = WA_PA0002-GESCH.
+          WA_FINAL-GENDER = WA_TABA-DDTEXT.
+        ENDIF.
+      ENDLOOP.
+
+      WA_FINAL-GBDAT = WA_PA0002-GBDAT.
+      WA_FINAL-VNAMC = WA_PA0002-VNAMC.
+      WA_FINAL-NCHMC = WA_PA0002-NCHMC.
+
+    ENDIF.
+
+    LOOP AT IT_PA0006 INTO WA_PA0006 WHERE PERNR = WA_PA0001-PERNR.
+*      READ TABLE IT_T591S INTO WA_T591S WITH KEY SUBTY = WA_PA0006-SUBTY.
+      IF SY-SUBRC EQ 0.
+        READ TABLE IT_T005T INTO WA_T005T WITH KEY LAND1 = WA_PA0006-LAND1.
+      ENDIF.
+
+      CASE WA_PA0006-SUBTY.
+        WHEN '1'.
+          CONCATENATE WA_PA0006-NAME2 WA_PA0006-STRAS WA_PA0006-LOCAT WA_PA0006-PSTLZ WA_PA0006-ORT01 WA_PA0006-ORT02 WA_T005T-LANDX INTO WA_FINAL-STEXT SEPARATED BY ','.
+        WHEN '6'.
+          CONCATENATE WA_PA0006-NAME2 WA_PA0006-STRAS WA_PA0006-LOCAT WA_PA0006-PSTLZ WA_PA0006-ORT01 WA_PA0006-ORT02 WA_T005T-LANDX INTO WA_FINAL-STEXT SEPARATED BY ','.
+      ENDCASE.
+    ENDLOOP.
+
+    READ TABLE IT_PA0007 INTO WA_PA0007 WITH KEY PERNR = WA_PA0001-PERNR.
+    IF SY-SUBRC EQ 0.
+      WA_FINAL-SCHKZ = WA_PA0007-SCHKZ.
+    ENDIF.
+
+    READ TABLE IT_PA0009 INTO WA_PA0009 WITH KEY PERNR = WA_PA0001-PERNR.
+    IF SY-SUBRC EQ 0.
+      WA_FINAL-BNKSA = WA_PA0009-BNKSA.
+      WA_FINAL-BANKL = WA_PA0009-BANKL.
+      WA_FINAL-BANKN = WA_PA0009-BANKN.
+    ENDIF.
+
+    READ TABLE IT_PA0021 INTO WA_PA0021 WITH KEY PERNR = WA_PA0001-PERNR.
+    IF SY-SUBRC EQ 0.
+      CONCATENATE WA_PA0021-FAVOR WA_PA0021-FANAM INTO WA_FINAL-FATHER SEPARATED BY ' '.
+    ENDIF.
+
+    LOOP AT IT_PA0105 INTO WA_PA0105  WHERE PERNR = WA_PA0001-PERNR.
+      CASE WA_PA0105-SUBTY.
+        WHEN 'CELL'.
+          WA_FINAL-USRID = WA_PA0105-USRID.
+        WHEN '0010'.
+          WA_FINAL-USRID_LONG = WA_PA0105-USRID_LONG.
+      ENDCASE.
+      WA_FINAL-USRTY = WA_PA0105-USRTY.
+    ENDLOOP.
+
+    LOOP AT IT_PA0185 INTO WA_PA0185  WHERE PERNR = WA_PA0001-PERNR.
+      CASE WA_PA0185-SUBTY.
+        WHEN '02'.
+          WA_FINAL-ICNUM1 = WA_PA0185-ICNUM.
+        WHEN '03'.
+          WA_FINAL-ICNUM2 = WA_PA0185-ICNUM.
+        WHEN '06'.
+          WA_FINAL-ICNUM3 = WA_PA0185-ICNUM.
+        WHEN '08'.
+          WA_FINAL-ICNUM4 = WA_PA0185-ICNUM.
+      ENDCASE.
+    ENDLOOP.
+
+    CALL FUNCTION 'CU_READ_RGDIR'
+      EXPORTING
+        PERSNR          = WA_PA0000-PERNR
+*       BUFFER          =
+*       NO_AUTHORITY_CHECK       = ' '
+*   IMPORTING
+*       MOLGA           =
+      TABLES
+        IN_RGDIR        = IT_RGDIR
+      EXCEPTIONS
+        NO_RECORD_FOUND = 1
+        OTHERS          = 2.
+    IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+    ENDIF.
+    IF IT_RGDIR[] IS NOT INITIAL.
+      READ TABLE IT_RGDIR INTO WA_RGDIR INDEX 1.
+    ENDIF.
+
+    CALL FUNCTION 'PYXX_READ_PAYROLL_RESULT'
+      EXPORTING
+*       CLUSTERID                    =
+        EMPLOYEENUMBER               = WA_PA0000-PERNR
+        SEQUENCENUMBER               = WA_RGDIR-SEQNR
+*       READ_ONLY_BUFFER             = ' '
+        READ_ONLY_INTERNATIONAL      = 'X'
+*       ARC_GROUP                    = ' '
+*       CHECK_READ_AUTHORITY         = 'X'
+*       FILTER_CUMULATIONS           = 'X'
+*       CLIENT                       =
+*   IMPORTING
+*       VERSION_NUMBER_PAYVN         =
+*       VERSION_NUMBER_PCL2          =
+      CHANGING
+        PAYROLL_RESULT               = PAYROLL
+      EXCEPTIONS
+        ILLEGAL_ISOCODE_OR_CLUSTERID = 1
+        ERROR_GENERATING_IMPORT      = 2
+        IMPORT_MISMATCH_ERROR        = 3
+        SUBPOOL_DIR_FULL             = 4
+        NO_READ_AUTHORITY            = 5
+        NO_RECORD_FOUND              = 6
+        VERSIONS_DO_NOT_MATCH        = 7
+        ERROR_READING_ARCHIVE        = 8
+        ERROR_READING_RELID          = 9
+        OTHERS                       = 10.
+    IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+    ENDIF.
+    IT_RT[] = PAYROLL-INTER-RT[].
+    LOOP AT IT_RT INTO WA_RT.
+      CASE WA_RT-LGART.
+        WHEN '/1000'.
+          WA_FINAL-BASICSALARY = WA_FINAL-BASICSALARY + WA_RT-BETRG.
+        WHEN '/1001'.
+          WA_FINAL-DA = WA_FINAL-DA + WA_RT-BETRG.
+        WHEN '/1003'.
+          WA_FINAL-HRA = WA_FINAL-HRA + WA_RT-BETRG.
+        WHEN '/1004'.
+          WA_FINAL-SPECIALALLOWANCE  = WA_FINAL-SPECIALALLOWANCE + WA_RT-BETRG.
+        WHEN '/101'.
+          WA_FINAL-GROSS = WA_FINAL-BASICSALARY + WA_FINAL-DA + WA_FINAL-HRA + WA_FINAL-SPECIALALLOWANCE.
+      ENDCASE.
+    ENDLOOP.
+    SL = SL + 1.
+    WA_FINAL-SL    =  SL.
+    APPEND WA_FINAL TO IT_FINAL.
+    CLEAR WA_FINAL.
+
+  ENDLOOP.
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form FIELD_CATALOG
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM FIELD_CATALOG.
+
+  CALL FUNCTION 'REUSE_ALV_FIELDCATALOG_MERGE'
+    EXPORTING
+      I_PROGRAM_NAME         = SY-REPID
+*     I_INTERNAL_TABNAME     = it_final
+      I_STRUCTURE_NAME       = 'ZEMP_STR'
+*     I_CLIENT_NEVER_DISPLAY = 'X'
+*     I_INCLNAME             =
+*     I_BYPASSING_BUFFER     =
+*     I_BUFFER_ACTIVE        =
+    CHANGING
+      CT_FIELDCAT            = IT_FCAT
+    EXCEPTIONS
+      INCONSISTENT_INTERFACE = 1
+      PROGRAM_ERROR          = 2
+      OTHERS                 = 3.
+  IF SY-SUBRC <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+*  ENDIF.
+
+ENDFORM.

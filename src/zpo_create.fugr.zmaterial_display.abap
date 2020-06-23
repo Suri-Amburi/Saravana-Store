@@ -1,0 +1,648 @@
+FUNCTION ZMATERIAL_DISPLAY.
+*"----------------------------------------------------------------------
+*"*"Local Interface:
+*"  IMPORTING
+*"     VALUE(IM_DATE_FROM) TYPE  SY-DATUM OPTIONAL
+*"     VALUE(IM_DATE_TO) TYPE  SY-DATUM OPTIONAL
+*"     VALUE(GROUP_ID) TYPE  WWGHA OPTIONAL
+*"  EXPORTING
+*"     VALUE(ET_DISPLAY) TYPE  ZEX_MAT_TT
+*"     VALUE(ET_RETURN) TYPE  BAPIRET2_TT
+*"----------------------------------------------------------------------
+
+*  BREAK BREDDY.
+  TYPES : BEGIN OF TY_KLAH ,
+            CLINT TYPE CLINT,
+            KLART TYPE KLASSENART,
+            CLASS TYPE KLASSE_D,
+            VONDT TYPE VONDAT,
+            BISDT TYPE BISDAT,
+            WWSKZ TYPE KLAH-WWSKZ,
+          END OF TY_KLAH .
+
+  TYPES : BEGIN OF TY_KLAH1 ,
+            CLINT TYPE CLINT,
+            KLART TYPE KLASSENART,
+            CLASS TYPE MATKL,
+            VONDT TYPE VONDAT,
+            BISDT TYPE BISDAT,
+            WWSKZ TYPE KLAH-WWSKZ,
+          END OF TY_KLAH1 .
+
+  TYPES : BEGIN OF TY_KSSK ,
+            OBJEK TYPE CUOBN,
+            MAFID TYPE KLMAF,
+            KLART TYPE KLASSENART,
+            CLINT TYPE CLINT,
+            ADZHL TYPE ADZHL,
+            DATUB TYPE DATUB,
+          END OF TY_KSSK .
+
+  TYPES : BEGIN OF TY_KSSK1 ,
+            OBJEK TYPE CLINT,
+*          MAFID type KLMAF,
+*          KLART type KLASSENART,
+*          CLINT type CLINT,
+*          ADZHL type ADZHL,
+*          DATUB type DATUB,
+          END OF TY_KSSK1 .
+  DATA : IT_KLAH  TYPE TABLE OF TY_KLAH,
+         WA_KLAH  TYPE TY_KLAH,
+         IT_KLAH1 TYPE TABLE OF TY_KLAH1,
+         WA_KLAH1 TYPE TY_KLAH1,
+         IT_KSSK1 TYPE TABLE OF TY_KSSK1,
+         WA_KSSK1 TYPE TY_KSSK1,
+         IT_KSSK  TYPE TABLE OF TY_KSSK,
+         WA_KSSK  TYPE TY_KSSK.
+  TYPES : BEGIN OF TY_MARA,
+            MATNR        TYPE MATNR,
+            SATNR        TYPE SATNR,
+            PRDHA        TYPE PRODH_D,
+            MEINS        TYPE MEINS,
+            EAN11        TYPE EAN11,
+            BRGEW        TYPE BRGEW,
+            NTGEW        TYPE NTGEW,
+            BRAND_ID     TYPE WRF_BRAND_ID,
+            ATTYP        TYPE ATTYP,
+            LAEDA        TYPE LAEDA,
+            MAKTL        TYPE MATKL,
+            ZZPRICE_FROM TYPE ZPRICE_FROM,
+            ZZPRICE_TO   TYPE ZPRICE_TO,
+          END OF TY_MARA,
+
+          BEGIN OF TY_MAKT,
+            MATNR TYPE MATNR,
+            SPRAS TYPE SPRAS,
+            MAKTX TYPE MAKTX,
+          END OF TY_MAKT.
+
+  TYPES : BEGIN OF TY_A503_AMDP,
+            CATEGORY_ID    TYPE KLAH-CLASS,
+            KSCHL          TYPE A503-KSCHL,
+            LIFNR          TYPE A503-LIFNR,
+            MATKL          TYPE A503-MATKL,
+            KFRST          TYPE A503-KFRST,
+            DATBI          TYPE A503-DATBI,
+            DATAB          TYPE A503-DATAB,
+            KNUMH          TYPE A503-KNUMH,
+            MATNR          TYPE MARA-MATNR,
+            SATNR          TYPE MARA-SATNR,
+            PRDHA          TYPE MARA-PRDHA,
+            MEINS          TYPE MARA-MEINS,
+            EAN11          TYPE MARA-EAN11,
+            BRGEW          TYPE MARA-BRGEW,
+            NTGEW          TYPE MARA-NTGEW,
+            BRAND_ID       TYPE MARA-BRAND_ID,
+            ATTYP          TYPE MARA-ATTYP,
+            LAEDA          TYPE MARA-LAEDA,
+            COLOR          TYPE MARA-COLOR,
+            SIZE1          TYPE MARA-SIZE1,
+            ZZPRICE_FRM    TYPE  MARA-ZZPRICE_FRM,
+            ZZPRICE_TO     TYPE MARA-ZZPRICE_TO,
+            ZZARTICLE      TYPE MARA-ZZARTICLE,
+            ZZPO_ORDER_TXT TYPE MARA-ZZPO_ORDER_TXT,
+            MAKTX          TYPE MAKT-MAKTX,
+            KBETR          TYPE KONP-KBETR,
+            STLNR          TYPE MAST-STLNR,
+            WGBEZ60        TYPE T023T-WGBEZ60,
+
+          END OF TY_A503_AMDP.
+
+
+  DATA : WA_MAT         TYPE ZMAT_DISP,
+         WA_BAPIRET2_TT TYPE BAPIRET2_TT,
+*         IT_MARA        TYPE TABLE OF TY_MARA,
+         LW_MARA        TYPE TY_MARA,
+         IT_MAKT        TYPE TABLE OF TY_MAKT,
+         WA_MAKT        TYPE TY_MAKT,
+*         IT_MARC        TYPE TABLE OF TY_MARC,
+*         WA_MARC        TYPE  TY_MARC,
+         LS_DATE        TYPE RANGE_DATE,
+         IT_O_WGH01     TYPE TABLE OF WGH01,
+         WA_O_WGH01     TYPE WGH01,
+         ET_A503        TYPE TABLE OF TY_A503_AMDP.
+
+  BREAK BREDDY .
+  CONSTANTS : C_M(1) VALUE 'M'.
+*  BREAK BREDDY.
+*  CALL FUNCTION 'MERCHANDISE_GROUP_HIER_ART_SEL'
+*    EXPORTING
+*      MATKL       = ' '
+*      SPRAS       = SY-LANGU
+*    TABLES
+*      O_WGH01     = IT_O_WGH01
+*    EXCEPTIONS
+*      NO_BASIS_MG = 1
+*      NO_MG_HIER  = 2
+*      OTHERS      = 3.
+*  IF SY-SUBRC <> 0.
+*  ENDIF.
+*  IF GROUP_ID IS NOT INITIAL.
+*    DELETE IT_O_WGH01 WHERE WWGHA <> GROUP_ID.
+*  ENDIF.
+
+**    IF SY-SUBRC = 0.
+**      WA_MAT-GROUP_ID = WA_O_WGH01-WWGHA.
+**      CLEAR WA_O_WGH01.
+*  ENDIF.
+*        READ TABLE IT_O_WGH01 INTO WA_O_WGH01 INDEX 1.
+*  CHECK IT_O_WGH01 IS NOT INITIAL.
+
+*BREAK BREDDY.
+
+*  SELECT A502~KAPPL ,
+*        A502~KSCHL ,
+*        A502~LIFNR ,
+*        A502~MATNR ,
+*        A502~KFRST ,
+*        A502~DATBI ,
+*        A502~DATAB ,
+*        A502~KNUMH ,
+*        MARA~SATNR ,
+*        MARA~PRDHA ,
+*        MARA~MEINS ,
+*        MARA~EAN11 ,
+*        MARA~BRGEW ,
+*        MARA~NTGEW ,
+*        MARA~BRAND_ID ,
+*        MARA~ATTYP ,
+*        MARA~LAEDA ,
+*        MARA~MATKL ,
+*        MARA~COLOR ,
+*        MARA~SIZE1 ,
+*        MARA~ZZPRICE_FRM ,
+*        MARA~ZZPRICE_TO ,
+*        MARA~ZZARTICLE,
+*        MAKT~MAKTX ,
+*        KONP~KBETR ,
+*        MAST~STLNR ,
+**         WRF_BRANDS~BRAND_ID,
+*        T023T~WGBEZ60
+**         WGH01~WWGHA,
+**         WGH01~MATKL
+*       INTO TABLE @DATA(IT_MARA)
+*       FROM A502 AS A502
+*       LEFT OUTER JOIN MARA AS MARA ON MARA~MATNR = A502~MATNR
+*       LEFT OUTER JOIN MAKT AS MAKT ON MAKT~MATNR = A502~MATNR
+*       LEFT OUTER JOIN KONP AS KONP ON KONP~KNUMH = A502~KNUMH AND LOEVM_KO = ' '
+*       LEFT OUTER JOIN MAST AS MAST ON MAST~MATNR = MARA~MATNR
+*       LEFT OUTER JOIN T023T AS T023T ON T023T~MATKL = MARA~MATKL
+**        FOR ALL ENTRIES IN @IT_KLAH1
+**        LEFT OUTER JOIN IT_O_WGH01 AS IT_O_WGH01 ON IT_O_WGH01~MATKL = MARA~MATKL
+**        LEFT OUTER JOIN WRF_BRANDS AS WRF_BRANDS ON WRF_BRANDS~BRAND_ID = MARA~BRAND_ID
+**        LEFT OUTER JOIN A515 AS A515 ON A515~MATNR = MARA~MATNR
+**        FOR ALL ENTRIES IN @IT_O_WGH01
+*       WHERE  A502~DATAB BETWEEN @IM_DATE_FROM  AND  @IM_DATE_TO .
+
+  SELECT SINGLE CLINT
+             KLART
+             CLASS
+             VONDT
+             BISDT
+             WWSKZ FROM KLAH INTO WA_KLAH
+             WHERE WWSKZ = '0'
+             AND KLART = '026'
+             AND CLASS = GROUP_ID .
+
+  IF WA_KLAH IS NOT INITIAL.
+    SELECT OBJEK
+           MAFID
+           KLART
+           CLINT
+           ADZHL
+           DATUB FROM KSSK INTO TABLE IT_KSSK
+            WHERE CLINT = WA_KLAH-CLINT.
+*  ELSE.
+*
+*    MESSAGE 'Invalid Hierarchy' TYPE 'E' DISPLAY LIKE 'I'.
+
+
+  ENDIF.
+
+  LOOP AT IT_KSSK INTO WA_KSSK .
+    SHIFT WA_KSSK-OBJEK LEFT DELETING LEADING '0'.
+    WA_KSSK1-OBJEK = WA_KSSK-OBJEK .
+    APPEND WA_KSSK1 TO IT_KSSK1 .
+    CLEAR WA_KSSK1 .
+  ENDLOOP.
+*  BREAK BREDDY.
+  IF IT_KSSK1 IS NOT INITIAL .
+    SELECT CLINT
+           KLART
+           CLASS
+           VONDT
+           BISDT
+           WWSKZ FROM KLAH INTO TABLE IT_KLAH
+           FOR ALL ENTRIES IN IT_KSSK1
+           WHERE CLINT = IT_KSSK1-OBJEK
+            AND WWSKZ = '1'.
+  ENDIF.
+
+  CHECK IT_KLAH[] IS NOT INITIAL.
+  IT_KLAH1[] = IT_KLAH[] .
+  SELECT MARA~MATKL , MARA~MATNR  FROM MARA AS MARA
+     INTO TABLE @DATA(IT_MATKL)
+      FOR ALL ENTRIES IN @IT_KLAH1
+      WHERE MATKL = @IT_KLAH1-CLASS
+*     AND MATNR  IN ( '132869-41' , '132869-40' , '131375-9' )
+      AND ( ( ERSDA BETWEEN @IM_DATE_FROM AND @IM_DATE_TO ) OR ( LAEDA BETWEEN @IM_DATE_FROM AND @IM_DATE_TO ) )  ." Suri : 31.08.2019 19:09:00
+
+  BREAK SAMBURI.
+  SELECT A502~KAPPL ,
+         A502~KSCHL ,
+         A502~LIFNR ,
+         A502~MATNR ,
+         A502~KFRST ,
+         A502~DATBI ,
+         A502~DATAB ,
+         A502~KNUMH ,
+         MARA~SATNR ,
+         MARA~PRDHA ,
+         MARA~MEINS ,
+         MARA~EAN11 ,
+         MARA~BRGEW ,
+         MARA~NTGEW ,
+         MARA~BRAND_ID ,
+         MARA~ATTYP ,
+         MARA~LAEDA ,
+         MARA~MATKL ,
+         MARA~COLOR ,
+         MARA~SIZE1 ,
+         MARA~ZZPRICE_FRM ,
+         MARA~ZZPRICE_TO ,
+         MARA~ZZARTICLE,
+         MARA~ZZPO_ORDER_TXT,
+         MAKT~MAKTX ,
+         KONP~KBETR ,
+         MAST~STLNR ,
+         T023T~WGBEZ60
+        INTO TABLE @DATA(IT_MARA)
+        FROM A502 AS A502
+        LEFT OUTER JOIN MARA AS MARA ON MARA~MATNR = A502~MATNR
+*       LEFT OUTER JOIN IT_MATKL AS A ON A~MATKL = MARA~MATKL
+        LEFT OUTER JOIN MAKT AS MAKT ON MAKT~MATNR = A502~MATNR
+        LEFT OUTER JOIN KONP AS KONP ON KONP~KNUMH = A502~KNUMH
+        LEFT OUTER JOIN MAST AS MAST ON MAST~MATNR = MARA~MATNR
+        LEFT OUTER JOIN T023T AS T023T ON T023T~MATKL = MARA~MATKL
+*       LEFT OUTER JOIN A503  AS A503 ON A503~MATKL   = MARA~MATKL
+*       WHERE A502~DATAB BETWEEN @IM_DATE_FROM  AND  @IM_DATE_TO  AND KONP~LOEVM_KO = ' '.      " Suri : 22.08.2019 20:36:00
+        FOR ALL ENTRIES IN @IT_MATKL                                               " Suri : 31.08.2019 19:09:00
+        WHERE MARA~MATKL = @IT_MATKL-MATKL  AND MARA~MATNR = @IT_MATKL-MATNR  AND  " Suri : 31.08.2019 19:09:00
+*      ( A502~DATAB LE @IM_DATE_FROM AND A502~DATBI GE @IM_DATE_FROM ) OR ( A502~DATAB LE @IM_DATE_TO AND A502~DATBI GE @IM_DATE_TO )
+         KONP~LOEVM_KO = ' '
+         ." Suri : 22.08.2019 20:36:00
+*       AND A502~KSCHL IN   ( 'PB00'  ) .""Bhavani 11.12.2019
+
+  SORT IT_MARA DESCENDING BY LIFNR MATNR DATAB.
+  DELETE ADJACENT DUPLICATES FROM IT_MARA COMPARING LIFNR MATNR .
+  IF  IT_MARA IS NOT INITIAL.
+    SELECT  A515~KSCHL , A515~MATNR , A515~KNUMH FROM A515 INTO TABLE @DATA(IT_A515) FOR ALL ENTRIES IN @IT_MARA WHERE MATNR = @IT_MARA-MATNR.
+    SELECT KONP~KNUMH , KONP~KSCHL , KONP~KBETR , KONP~LOEVM_KO FROM KONP INTO TABLE @DATA(IT_KONP) FOR ALL ENTRIES IN @IT_A515 WHERE KSCHL = @IT_A515-KSCHL AND KNUMH = @IT_A515-KNUMH ."AND LOEVM_KO = ' '.
+
+*********commented by bhavani********************************
+**-> Begin Of Changes By NCHOUDHURY 22.05.2019 11:55:56
+*    SELECT  A445~KSCHL , A445~MATNR , A445~KNUMH
+*      FROM A445
+*      INTO TABLE @DATA(IT_A445)
+*      FOR ALL ENTRIES IN @IT_MARA
+*      WHERE MATNR = @IT_MARA-MATNR .
+**      AND KSCHL IN ( 'ZMKP' , 'PB00' ). ""BHAVANI 07.09.2019
+**        and brand_id <> ' '.
+
+*    SELECT KONP~KNUMH , KONP~KSCHL , KONP~KBETR , KONP~LOEVM_KO
+*      FROM KONP
+*      INTO TABLE @DATA(IT_KONP_A445)
+*      FOR ALL ENTRIES IN @IT_A445
+*      WHERE KSCHL = @IT_A445-KSCHL
+*      AND KNUMH = @IT_A445-KNUMH .
+**-> End Of Changes By NCHOUDHURY 22.05.2019 11:55:56
+
+********added by Bhavani********************
+
+    SELECT KONP~KNUMH , KONP~KSCHL , KONP~KBETR , KONP~LOEVM_KO
+      FROM KONP
+      INTO TABLE @DATA(IT_KONP1)
+      FOR ALL ENTRIES IN @IT_MARA
+      WHERE KSCHL = @IT_MARA-KSCHL
+      AND KNUMH = @IT_MARA-KNUMH .
+
+
+***********************ended by bhavani************
+
+
+
+
+
+*** Start of changes by Suri : 13.05.2019
+*  SELECT STPO~STLNR,
+*         STPO~IDNRK,
+*         STPO~MEINS,
+*         MARA~SIZE1
+*         FROM STPO AS STPO
+*         LEFT OUTER JOIN MARA AS MARA ON MARA~MATNR = STPO~IDNRK
+*         INTO TABLE @DATA(IT_SIZE)
+*         FOR ALL ENTRIES IN @IT_MARA
+*         WHERE STPO~STLNR = @IT_MARA-STLNR .
+*** Getting all the BOM componets from Single Componets
+*    SELECT STPO~STLNR,
+*           STPO~IDNRK,
+*           STPO~POSNR,
+*           STPO~MENGE,
+*           MAST~MATNR,
+*           MAST~WERKS,
+*           MAST~STLAL,
+*           MARA~SIZE1
+*           INTO TABLE @DATA(IT_SIZE)
+*           FROM STPO AS STPO
+*           INNER JOIN MAST AS MAST ON STPO~STLNR = MAST~STLNR
+*           INNER JOIN MARA AS MARA ON MARA~MATNR = STPO~IDNRK
+*           FOR ALL ENTRIES IN @IT_MARA
+*           WHERE STPO~IDNRK = @IT_MARA-MATNR.
+
+***  Getting BOM Componets for SET Material
+    SELECT  MAST~MATNR,
+            MAST~WERKS,
+            MAST~STLNR,
+            MAST~STLAL,
+            STPO~STLKN,
+            STPO~IDNRK,
+            STPO~POSNR,
+            STPO~MENGE,
+            STPO~MEINS,
+            MARA~SIZE1
+            INTO TABLE @DATA(IT_SIZE)
+            FROM MAST AS MAST
+            INNER JOIN STPO AS STPO ON STPO~STLTY = @C_M AND MAST~STLNR = STPO~STLNR
+            INNER JOIN MARA AS MARA ON MARA~MATNR = STPO~IDNRK
+            FOR ALL ENTRIES IN @IT_MARA
+            WHERE MAST~MATNR = @IT_MARA-MATNR.
+  ENDIF.
+
+
+  BREAK BREDDY .
+*******added by bhavani 14.11.2019********************
+  ZMATERIAL_DISPLAY=>GET_OUTPUT_PRD(
+EXPORTING
+GROUP_ID =    GROUP_ID
+IM_DATE_FROM = IM_DATE_FROM
+IM_DATE_TO   = IM_DATE_TO
+    IMPORTING
+    ET_A503 = ET_A503                        "EBEW
+   ).
+
+  IF ET_A503 IS NOT INITIAL.
+    SELECT
+    A515~KSCHL ,
+    A515~MATNR ,
+    A515~KNUMH FROM A515 INTO TABLE @DATA(IT_A515_B)
+               FOR ALL ENTRIES IN @ET_A503
+               WHERE MATNR     = @ET_A503-MATNR.
+
+
+
+
+
+    SELECT KONP~KNUMH ,
+     KONP~KSCHL ,
+     KONP~KBETR ,
+     KONP~LOEVM_KO FROM KONP INTO TABLE @DATA(IT_KONP1_B)
+                   FOR ALL ENTRIES IN @ET_A503
+                   WHERE KSCHL = @ET_A503-KSCHL
+                   AND KNUMH = @ET_A503-KNUMH .
+
+
+
+  ENDIF.
+
+
+  IF IT_A515_B IS NOT INITIAL .
+    SELECT KONP~KNUMH ,
+           KONP~KSCHL ,
+           KONP~KBETR ,
+           KONP~LOEVM_KO FROM KONP INTO TABLE @DATA(IT_KONP_B)
+                         FOR ALL ENTRIES IN @IT_A515_B
+                         WHERE KSCHL      = @IT_A515_B-KSCHL
+                         AND KNUMH       = @IT_A515_B-KNUMH ."AND LOEVM_KO = ' '.
+  ENDIF .
+
+*****  Getting BOM Componets for SET Material
+  IF ET_A503 IS NOT INITIAL .
+    SELECT  MAST~MATNR,
+            MAST~WERKS,
+            MAST~STLNR,
+            MAST~STLAL,
+            STPO~STLKN,
+            STPO~IDNRK,
+            STPO~POSNR,
+            STPO~MENGE,
+            STPO~MEINS,
+            MARA~SIZE1
+            INTO TABLE @DATA(IT_SIZE_B)
+            FROM MAST AS MAST
+            INNER JOIN STPO AS STPO ON STPO~STLTY = @C_M AND MAST~STLNR = STPO~STLNR
+            INNER JOIN MARA AS MARA ON MARA~MATNR = STPO~IDNRK
+            FOR ALL ENTRIES IN @ET_A503
+            WHERE MAST~MATNR = @ET_A503-MATNR.
+  ENDIF.
+************Ended by bhavani 14.11.2019**************************
+
+*** End of changes by Suri : 13.05.2019
+  DATA(IT_MARA1) = IT_MARA[] .
+*  SORT IT_MARA DESCENDING BY LIFNR MATNR DATAB.
+*  DELETE ADJACENT DUPLICATES FROM IT_MARA COMPARING LIFNR MATNR .
+  LOOP AT IT_MARA ASSIGNING FIELD-SYMBOL(<WA_MARA>).
+
+    WA_MAT-SUPPLIER_ID       =   <WA_MARA>-LIFNR  .
+    WA_MAT-SSTCODE           =   <WA_MARA>-SATNR  .
+    WA_MAT-EAN11            = <WA_MARA>-EAN11.
+    WA_MAT-CHILD_CODE        =   <WA_MARA>-MATNR  .
+    WA_MAT-CATEGORY_ID       =   <WA_MARA>-MATKL  .
+    WA_MAT-ITEM_NAME         =   <WA_MARA>-ZZPO_ORDER_TXT .
+    WA_MAT-COLOR             =   <WA_MARA>-COLOR  .
+    WA_MAT-BRAND_ID          =   <WA_MARA>-BRAND_ID  .
+    WA_MAT-PARENT            =   <WA_MARA>-ZZARTICLE  .
+    WA_MAT-CHILD             =   <WA_MARA>-WGBEZ60  .
+    WA_MAT-UOM               =   <WA_MARA>-MEINS  .
+    WA_MAT-GROUP_ID          =   WA_KLAH-CLASS.
+    WA_MAT-FROM_PRICE        =   <WA_MARA>-ZZPRICE_FRM  .
+    WA_MAT-TO_PRICE          =   <WA_MARA>-ZZPRICE_TO  .
+***********commented by bhavani**************
+***-> Begin Of Changes By NCHOUDHURY 22.05.2019 12:09:45
+*    IF <WA_MARA>-BRAND_ID IS NOT INITIAL.
+*      READ TABLE IT_A445 ASSIGNING FIELD-SYMBOL(<WA_A445>) WITH KEY MATNR = <WA_MARA>-MATNR.
+*      IF <WA_A445> IS ASSIGNED.
+*        READ TABLE IT_KONP_A445 ASSIGNING FIELD-SYMBOL(<WA_PB00>) WITH KEY KSCHL = <WA_A445>-KSCHL  KNUMH = <WA_A445>-KNUMH.
+*        IF SY-SUBRC = 0.
+*          WA_MAT-FROM_PRICE = <WA_PB00>-KBETR.
+*          WA_MAT-TO_PRICE  =  <WA_PB00>-KBETR.
+*        ENDIF.
+*      ENDIF.
+*    ENDIF.
+***-> End Of Changes By NCHOUDHURY 22.05.2019 12:09:45
+
+************added by bhavani*****************
+    IF <WA_MARA>-BRAND_ID IS NOT INITIAL.
+      READ TABLE IT_KONP1 ASSIGNING FIELD-SYMBOL(<WA_PB00>) WITH KEY  KSCHL = <WA_MARA>-KSCHL  KNUMH = <WA_MARA>-KNUMH.
+      IF SY-SUBRC = 0.
+        WA_MAT-FROM_PRICE = <WA_PB00>-KBETR.
+        WA_MAT-TO_PRICE  =  <WA_PB00>-KBETR.
+      ENDIF.
+
+    ENDIF.
+***********ended by bhavani************************
+    READ TABLE IT_MARA1 ASSIGNING FIELD-SYMBOL(<WA_MARGIN>) WITH KEY MATNR = <WA_MARA>-MATNR
+                                                                 LIFNR = <WA_MARA>-LIFNR.
+*                                                        KSCHL IN ( 'ZMKP' , 'PB00' ).
+    IF <WA_MARGIN>-KSCHL = 'ZMKP'.
+      WA_MAT-MARGIN            =   <WA_MARGIN>-KBETR / 10  .
+      READ TABLE IT_A515 ASSIGNING FIELD-SYMBOL(<WA_A515>) WITH KEY MATNR = <WA_MARA>-MATNR.
+*                                                           KSCHL = 'ZMRP'.
+      IF <WA_A515> IS ASSIGNED.
+        READ TABLE IT_KONP ASSIGNING FIELD-SYMBOL(<WA_MRP>) WITH KEY KSCHL = <WA_A515>-KSCHL  KNUMH = <WA_A515>-KNUMH.
+        IF SY-SUBRC = 0.
+          WA_MAT-MRP = <WA_MRP>-KBETR.
+        ENDIF.
+      ENDIF.
+
+    ELSEIF <WA_MARGIN>-KSCHL = 'PB00'.
+*      ELSEIF <WA_MARA>-KSCHL = 'PB00'.
+      CLEAR : WA_MAT-MARGIN , WA_MAT-MRP , WA_MAT-TO_PRICE , WA_MAT-FROM_PRICE .
+*      IF SY-SUBRC = 0 .
+      WA_MAT-MRP            =  <WA_MARA>-KBETR.                                 "" <WA_MARGIN>-KBETR / 10  .
+      WA_MAT-FROM_PRICE = <WA_MARA>-KBETR.
+      WA_MAT-TO_PRICE  =  <WA_MARA>-KBETR.
+    ENDIF.
+
+*        READ TABLE IT_A515 ASSIGNING FIELD-SYMBOL(<WA_A515>) WITH KEY MATNR = <WA_MARA>-MATNR.
+*                                                                  KSCHL = 'ZMRP'.
+*        IF <WA_A515> IS ASSIGNED.
+
+*      READ TABLE IT_KONP ASSIGNING FIELD-SYMBOL(<WA_MRP1>) WITH KEY  KNUMH = <WA_MARGIN>-KNUMH.   ""KSCHL = <WA_A515>-KSCHL
+*      IF SY-SUBRC = 0.
+*
+*        WA_MAT-MRP = <WA_MRP1>-KBETR.
+*
+*      ENDIF.
+
+*** Start of Chnages : Suri : 13.05.2019
+*    DATA(IT_SIZE_BOM) = IT_SIZE.
+*    READ TABLE IT_SIZE ASSIGNING FIELD-SYMBOL(<LS_SIZE>) WITH KEY IDNRK = <WA_MARA>-MATNR.
+*    IF SY-SUBRC = 0.
+*      LOOP AT IT_SIZE_BOM ASSIGNING FIELD-SYMBOL(<LS_SIZE_BOM>) WHERE STLNR = <LS_SIZE>-STLNR.
+*        IF  WA_MAT-SET_SIZE IS INITIAL.
+*          WA_MAT-SET_SIZE = <LS_SIZE_BOM>-SIZE1.
+*        ELSE.
+*          WA_MAT-SET_SIZE = WA_MAT-SET_SIZE && '-' && <LS_SIZE_BOM>-SIZE1.
+*        ENDIF.
+*      ENDLOOP.
+*    ENDIF.
+    READ TABLE IT_SIZE ASSIGNING FIELD-SYMBOL(<LS_SIZE>) WITH KEY MATNR = <WA_MARA>-MATNR.
+    IF SY-SUBRC = 0.
+      LOOP AT IT_SIZE ASSIGNING <LS_SIZE> WHERE STLNR = <LS_SIZE>-STLNR.
+        IF  WA_MAT-SIZE IS INITIAL.
+          WA_MAT-SIZE = <LS_SIZE>-SIZE1.
+        ELSE.
+          WA_MAT-SIZE = WA_MAT-SIZE && '-' && <LS_SIZE>-SIZE1.
+        ENDIF.
+      ENDLOOP.
+    ELSE.
+      WA_MAT-SIZE =  <WA_MARA>-SIZE1.
+    ENDIF.
+*** End of Chnages : Suri : 13.05.2019
+*    REFRESH IT_SIZE1 .
+*    IT_SIZE1[] = IT_SIZE .
+*    BREAK BREDDY.
+    READ TABLE IT_MATKL ASSIGNING FIELD-SYMBOL(<WA_MATKL>) WITH KEY  MATNR  = <WA_MARA>-MATNR .
+    IF SY-SUBRC = 0 .
+      IF WA_MAT-SSTCODE IS INITIAL.
+        WA_MAT-SSTCODE = WA_MAT-CHILD_CODE.
+      ENDIF.
+      APPEND WA_MAT TO ET_DISPLAY .
+      CLEAR WA_MAT .
+    ELSEIF GROUP_ID IS INITIAL .
+      IF WA_MAT-SSTCODE IS INITIAL.
+        WA_MAT-SSTCODE = WA_MAT-CHILD_CODE.
+      ENDIF.
+      APPEND WA_MAT TO ET_DISPLAY .
+      CLEAR WA_MAT .
+    ENDIF .
+  ENDLOOP.
+
+  BREAK BREDDY .
+***********added by bhavani 14.11.2019*************************
+  DATA(ET_A503_B) = ET_A503[] .
+  LOOP AT ET_A503 ASSIGNING FIELD-SYMBOL(<ES_A503>).
+
+    WA_MAT-SUPPLIER_ID  =  <ES_A503>-LIFNR .
+    WA_MAT-SSTCODE      =  <ES_A503>-SATNR .
+    WA_MAT-EAN11        =  <ES_A503>-EAN11 .
+    WA_MAT-CHILD_CODE   =  <ES_A503>-MATNR .
+    WA_MAT-CATEGORY_ID  =  <ES_A503>-MATKL .
+    WA_MAT-ITEM_NAME    =  <ES_A503>-ZZPO_ORDER_TXT .
+    WA_MAT-COLOR        =  <ES_A503>-COLOR .
+    WA_MAT-BRAND_ID     =  <ES_A503>-BRAND_ID .
+    WA_MAT-PARENT       =  <ES_A503>-ZZARTICLE .
+    WA_MAT-CHILD        =  <ES_A503>-WGBEZ60 .
+    WA_MAT-UOM          =  <ES_A503>-MEINS .
+    WA_MAT-GROUP_ID     =  <ES_A503>-CATEGORY_ID .
+    WA_MAT-FROM_PRICE   =  <ES_A503>-ZZPRICE_FRM .
+    WA_MAT-TO_PRICE     =  <ES_A503>-ZZPRICE_TO .
+
+    READ TABLE ET_A503_B ASSIGNING FIELD-SYMBOL(<EA_A503_B>) WITH KEY MATNR = <ES_A503>-MATNR
+                                                                      LIFNR = <ES_A503>-LIFNR.
+
+    IF SY-SUBRC = 0.
+      IF <EA_A503_B>-KSCHL = 'ZMKP'.
+        WA_MAT-MARGIN            =   <WA_MARGIN>-KBETR / 10  .
+        READ TABLE IT_A515_B ASSIGNING FIELD-SYMBOL(<WA_A515_B>) WITH KEY MATNR = <ES_A503>-MATNR.
+*                                                           KSCHL = 'ZMRP'.
+        IF <WA_A515_B> IS ASSIGNED.
+          READ TABLE IT_KONP_B ASSIGNING FIELD-SYMBOL(<WA_KONP_B>) WITH KEY KSCHL = <WA_A515_B>-KSCHL  KNUMH = <WA_A515_B>-KNUMH.
+          IF SY-SUBRC = 0.
+            WA_MAT-MRP = <WA_KONP_B>-KBETR.
+          ENDIF.
+        ENDIF.
+
+
+      ENDIF.
+    ENDIF.
+
+
+    READ TABLE IT_SIZE_B ASSIGNING FIELD-SYMBOL(<LS_SIZE_B>) WITH KEY MATNR = <ES_A503>-MATNR.
+    IF SY-SUBRC = 0.
+      LOOP AT IT_SIZE_B ASSIGNING <LS_SIZE_B> WHERE STLNR = <LS_SIZE_B>-STLNR.
+        IF  WA_MAT-SIZE IS INITIAL.
+          WA_MAT-SIZE = <LS_SIZE_B>-SIZE1.
+        ELSE.
+          WA_MAT-SIZE = WA_MAT-SIZE && '-' && <LS_SIZE_B>-SIZE1.
+        ENDIF.
+      ENDLOOP.
+    ELSE.
+      WA_MAT-SIZE =  <ES_A503>-SIZE1.
+    ENDIF.
+
+
+
+    READ TABLE ET_A503 ASSIGNING FIELD-SYMBOL(<WS_A503>) WITH KEY  MATNR  = <ES_A503>-MATNR .
+    IF SY-SUBRC = 0 .
+      IF WA_MAT-SSTCODE IS INITIAL.
+        WA_MAT-SSTCODE = WA_MAT-CHILD_CODE.
+      ENDIF.
+      APPEND WA_MAT TO ET_DISPLAY .
+      CLEAR WA_MAT .
+    ELSEIF GROUP_ID IS INITIAL .
+      IF WA_MAT-SSTCODE IS INITIAL.
+        WA_MAT-SSTCODE = WA_MAT-CHILD_CODE.
+      ENDIF.
+      APPEND WA_MAT TO ET_DISPLAY .
+      CLEAR WA_MAT .
+    ENDIF .
+
+
+
+  ENDLOOP.
+********ended by bhavani 14.11.2019********************
+
+  BREAK BREDDY .
+
+ENDFUNCTION.

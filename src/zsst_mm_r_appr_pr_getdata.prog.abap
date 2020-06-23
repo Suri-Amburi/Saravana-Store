@@ -1,0 +1,215 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSST_MM_R_APPR_PR_GETDATA
+*&---------------------------------------------------------------------*
+
+
+START-OF-SELECTION.
+
+  IF P_RAD2 = 'X'.
+
+    SELECT *
+    FROM ZAF_PC
+    INTO TABLE IT_FIN
+    WHERE PRC_DOC EQ P_INWD.
+
+    SELECT MATNR
+           LIFNR
+    FROM A502
+    INTO TABLE IT_VENDOR
+    FOR ALL ENTRIES IN IT_FIN
+    WHERE MATNR = IT_FIN-MATNR.
+
+    SELECT MATNR
+           EAN11
+    FROM MARA
+    INTO TABLE IT_PA1
+    FOR ALL ENTRIES IN IT_FIN
+    WHERE MATNR = IT_FIN-MATNR.
+
+
+
+
+    IT_FIN1[] = IT_FIN[].
+
+  ELSE.
+
+    SELECT A~MATKL
+           A~MATNR
+           A~EAN11
+           A~ZZPO_ORDER_TXT
+           B~LIFNR
+    INTO TABLE IT_MARA
+    FROM MARA AS A INNER JOIN A502 AS B ON ( B~MATNR EQ A~MATNR AND B~KAPPL EQ 'M')
+    WHERE MATKL IN S_GRP.
+
+    IF IT_MARA IS NOT INITIAL.
+
+      SELECT KAPPL
+             KSCHL
+             MATNR
+             KFRST
+             DATBI
+             KNUMH
+      FROM A515
+      INTO TABLE IT_A515
+      FOR ALL ENTRIES IN IT_MARA
+      WHERE MATNR EQ IT_MARA-MATNR AND
+            KSCHL EQ 'ZMRP' AND
+            DATBI EQ '99991231'.
+
+      SELECT KAPPL
+             KSCHL
+             LIFNR
+             MATNR
+             KFRST
+             DATBI
+             KNUMH
+      FROM A502
+      INTO TABLE IT_A502
+      FOR ALL ENTRIES IN IT_MARA
+      WHERE MATNR EQ IT_MARA-MATNR AND
+            LIFNR EQ IT_MARA-LIFNR AND
+            KSCHL IN ('ZKP0','PB00') AND
+            DATBI EQ '99991231'.
+
+      SELECT KAPPL
+             KSCHL
+             MATNR
+             EAN11
+             KFRST
+             DATBI
+             KNUMH
+      FROM A516
+      INTO TABLE IT_A516
+      FOR ALL ENTRIES IN IT_MARA
+      WHERE MATNR EQ IT_MARA-MATNR AND
+            KSCHL EQ 'ZKP0' AND
+            DATBI EQ '99991231' AND
+            EAN11 EQ IT_MARA-EAN11.
+
+    SELECT MATNR
+           BWKEY
+           BWTAR
+           LBKUM
+           SALK3
+    FROM   MBEW
+    INTO TABLE IT_MBEW
+    FOR ALL ENTRIES IN IT_MARA
+    WHERE MATNR = IT_MARA-MATNR AND
+          BWKEY IN ( 'SSCP','SSPO','SSPU','SSTN' ).
+
+    ENDIF.
+
+    IF IT_A515 IS NOT INITIAL.
+      SELECT KNUMH
+             KOPOS
+             KBETR
+      FROM KONP
+      INTO TABLE IT_MRP
+      FOR ALL ENTRIES IN IT_A515
+      WHERE KNUMH EQ IT_A515-KNUMH AND
+            LOEVM_KO NE 'X'.
+
+    ENDIF.
+
+    IF IT_A502 IS NOT INITIAL.
+
+      SELECT KNUMH
+             KOPOS
+             KBETR
+      FROM KONP
+      INTO TABLE IT_502
+      FOR ALL ENTRIES IN IT_A502
+      WHERE KNUMH EQ IT_A502-KNUMH AND
+            LOEVM_KO NE 'X'.
+
+      SELECT LIFNR
+             NAME1
+             ORT01
+      FROM   LFA1
+      INTO TABLE IT_LFA1
+      FOR ALL ENTRIES IN IT_A502
+      WHERE LIFNR EQ IT_A502-LIFNR.
+
+    ENDIF.
+
+    IF IT_A516 IS NOT INITIAL.
+      SELECT KNUMH
+             KOPOS
+             KBETR
+      FROM KONP
+      INTO TABLE IT_516
+      FOR ALL ENTRIES IN IT_A516
+      WHERE KNUMH EQ IT_A516-KNUMH AND
+            LOEVM_KO NE 'X'.
+
+    ENDIF.
+
+
+
+    LOOP AT IT_MARA INTO WA_MARA.
+      MOVE WA_MARA-MATNR TO WA_FINAL-MATNR.
+      MOVE WA_MARA-MATKL TO WA_FINAL-MATKL.
+      MOVE WA_MARA-ZZPO_ORDER_TXT TO WA_FINAL-PO_TXT.
+      READ TABLE IT_A502 INTO WA_A502 WITH KEY MATNR = WA_MARA-MATNR.
+      IF SY-SUBRC EQ 0.
+        MOVE WA_A502-LIFNR TO WA_FINAL-LIFNR.
+        READ TABLE IT_LFA1 INTO WA_LFA1 WITH KEY LIFNR = WA_A502-LIFNR.
+        IF SY-SUBRC EQ 0.
+          MOVE WA_LFA1-NAME1 TO WA_FINAL-NAME1.
+        ENDIF.
+        LOOP AT IT_A502 INTO WA_A502 WHERE MATNR = WA_MARA-MATNR.
+          IF WA_A502-KSCHL = 'PB00'.
+            READ TABLE IT_502 INTO WA_502 WITH KEY KNUMH = WA_A502-KNUMH.
+            IF SY-SUBRC EQ 0.
+              MOVE WA_502-KBETR  TO WA_FINAL-OLD_TAX.
+            ENDIF.
+          ELSE.
+            READ TABLE IT_502 INTO WA_502 WITH KEY KNUMH = WA_A502-KNUMH.
+            IF SY-SUBRC EQ 0.
+              MOVE WA_502-KBETR TO WA_FINAL-OLD_SP.
+            ENDIF.
+          ENDIF.
+        ENDLOOP.
+      ENDIF.
+
+      READ TABLE IT_A515 INTO WA_A515 WITH KEY MATNR = WA_MARA-MATNR.
+      IF SY-SUBRC EQ 0.
+        READ TABLE IT_MRP INTO WA_MRP WITH KEY KNUMH = WA_A515-KNUMH.
+        IF SY-SUBRC EQ 0.
+          MOVE WA_MRP-KBETR TO WA_FINAL-OLD_MRP.
+        ENDIF.
+      ENDIF.
+
+      IF WA_FINAL-OLD_SP IS INITIAL.
+        READ TABLE IT_A516 INTO WA_A516 WITH KEY MATNR = WA_MARA-MATNR.
+        IF SY-SUBRC EQ 0.
+          READ TABLE IT_516 INTO WA_516 WITH KEY KNUMH = WA_A516-KNUMH.
+          IF SY-SUBRC EQ 0.
+            MOVE WA_516-KBETR TO WA_FINAL-OLD_SP.
+          ENDIF.
+        ENDIF.
+      ENDIF.
+
+
+*  WA_FINAL-PRC_DOC = WA_HDR-INWD_DOC.
+*  WA_FINAL-ERNAME = SY-UNAME.
+*  WA_FINAL-ERDATE = SY-DATUM.
+      APPEND WA_FINAL TO IT_FINAL.
+      CLEAR : WA_FINAL,
+              WA_MARA,
+              WA_A515,
+              WA_A502,
+              WA_A516,
+              WA_MRP,
+              WA_502,
+              WA_516,
+              WA_LFA1.
+
+    ENDLOOP.
+*
+  ENDIF.
+
+  PERFORM BUILD_FIELDCATALOG.
+  PERFORM GET_EVENTS .
+  PERFORM DISPLAY_ALV_REPORT.

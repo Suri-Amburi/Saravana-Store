@@ -1,0 +1,320 @@
+*&---------------------------------------------------------------------*
+*& Include          SAPMZ_GATEIN_LP_F01
+*&---------------------------------------------------------------------*
+
+
+*& Form GET_DATA
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM GET_DATA.
+*** Get Inword Header Deatails
+  CLEAR : GS_INWD_HDR.
+  SELECT SINGLE * FROM ZINW_T_HDR INTO GS_INWD_HDR WHERE QR_CODE = P_QR_CODE." AND STATUS = C_01.
+  IF SY-SUBRC <> 0.
+    MESSAGE S011(ZMSG_CLS) DISPLAY LIKE 'E'.
+    LEAVE LIST-PROCESSING.
+    EXIT.
+  ENDIF.
+*** Validation for Local Purchase
+  SELECT SINGLE BSART FROM EKKO INTO GV_BSART WHERE EBELN = GS_INWD_HDR-EBELN.
+  IF GV_BSART <> C_ZLOP .
+    MESSAGE S058(ZMSG_CLS) DISPLAY LIKE 'E' WITH GS_INWD_HDR-EBELN.
+    LEAVE LIST-PROCESSING.
+    EXIT.
+  ELSE.
+    IF GS_INWD_HDR-STATUS > C_04.
+      MESSAGE S060(ZMSG_CLS) DISPLAY LIKE 'E'.
+      LEAVE LIST-PROCESSING.
+      EXIT.
+    ENDIF.
+***    Checking fro Gate In
+    SELECT SINGLE * FROM ZINW_T_STATUS INTO GS_STATUS WHERE QR_CODE = P_QR_CODE AND STATUS_FIELD = C_QR_CODE AND STATUS_VALUE = C_QR02.
+    IF SY-SUBRC = 0.
+      MESSAGE S059(ZMSG_CLS) DISPLAY LIKE 'E'.
+      LEAVE LIST-PROCESSING.
+      EXIT.
+    ENDIF.
+  ENDIF.
+  IF GS_INWD_HDR IS NOT INITIAL.
+    CALL SCREEN 9001.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form FIELD_CAT
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM FIELD_CAT .
+  DATA: LS_FC   TYPE  LVC_S_FCAT,
+        IT_SORT TYPE LVC_T_SORT,
+        LS_SORT TYPE LVC_S_SORT,
+        LV_POS  TYPE I VALUE 1.
+
+  IF GT_FIELDCAT IS INITIAL.
+    GS_LAYO-FRONTEND   = C_X.
+    GS_LAYO-ZEBRA      = C_X.
+    GS_LAYO-CWIDTH_OPT = C_X.
+
+    LS_FC-COL_POS   = LV_POS.
+    LS_FC-FIELDNAME = 'INWD_DOC'.
+    LS_FC-TABNAME   = 'GT_HDR'.
+    LS_FC-NO_ZERO   = C_X.
+    LS_FC-SCRTEXT_L = 'Inward Doc'.
+    APPEND LS_FC TO GT_FIELDCAT.
+    CLEAR LS_FC.
+
+    LS_FC-COL_POS   = LV_POS + 1.
+    LS_FC-FIELDNAME = 'EBELN'.
+    LS_FC-TABNAME   = 'GT_HDR'.
+    LS_FC-SCRTEXT_L = 'Pur Order'.
+    APPEND LS_FC TO GT_FIELDCAT.
+    CLEAR LS_FC.
+
+    LS_FC-COL_POS   = LV_POS + 1.
+    LS_FC-FIELDNAME = 'LIFNR'.
+    LS_FC-TABNAME   = 'GT_HDR'.
+    LS_FC-NO_ZERO   = C_X.
+    LS_FC-SCRTEXT_L = 'Vendor'.
+    APPEND LS_FC TO GT_FIELDCAT.
+    CLEAR LS_FC.
+
+    LS_FC-COL_POS   = LV_POS + 1.
+    LS_FC-FIELDNAME = 'NAME1'.
+    LS_FC-TABNAME   = 'GT_HDR'.
+    LS_FC-NO_ZERO   = C_X.
+    LS_FC-SCRTEXT_L = 'Vendor Name'.
+    APPEND LS_FC TO GT_FIELDCAT.
+    CLEAR LS_FC.
+
+    LS_FC-COL_POS   = LV_POS + 1.
+    LS_FC-FIELDNAME = 'PUR_TOTAL'.
+    LS_FC-TABNAME   = 'GT_HDR'.
+    LS_FC-SCRTEXT_L = 'Total Pur Price'.
+    APPEND LS_FC TO GT_FIELDCAT.
+    CLEAR LS_FC.
+
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form DISPLAY_DATA
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM DISPLAY_DATA.
+  REFRESH : GT_HDR.
+  MOVE-CORRESPONDING GS_INWD_HDR TO GS_HDR.
+  APPEND GS_HDR TO GT_HDR.
+
+  IF GT_EXCLUDE IS INITIAL.
+    PERFORM EXCLUDE_TB_FUNCTIONS CHANGING GT_EXCLUDE.
+  ENDIF.
+  IF GRID IS NOT BOUND.
+    CREATE OBJECT CONTAINER
+      EXPORTING
+        CONTAINER_NAME = MYCONTAINER.
+    CREATE OBJECT GRID
+      EXPORTING
+        I_PARENT = CONTAINER.
+  ENDIF.
+*** Create Object for event_receiver.
+  IF GR_EVENT IS NOT BOUND.
+    CREATE OBJECT GR_EVENT.
+  ENDIF.
+
+  IF GRID IS BOUND.
+    CALL METHOD GRID->SET_TABLE_FOR_FIRST_DISPLAY
+      EXPORTING
+        IS_LAYOUT                     = GS_LAYO
+        IT_TOOLBAR_EXCLUDING          = GT_EXCLUDE
+      CHANGING
+        IT_OUTTAB                     = GT_HDR
+        IT_FIELDCATALOG               = GT_FIELDCAT
+      EXCEPTIONS
+        INVALID_PARAMETER_COMBINATION = 1
+        PROGRAM_ERROR                 = 2
+        TOO_MANY_LINES                = 3
+        OTHERS                        = 4.
+
+    IF SY-SUBRC <> 0.
+    ENDIF.
+***  Refresh
+    IF GRID IS BOUND.
+      DATA: IS_STABLE TYPE LVC_S_STBL.
+      IS_STABLE = 'XX'.
+      CALL METHOD GRID->REFRESH_TABLE_DISPLAY
+        EXPORTING
+          IS_STABLE = IS_STABLE
+        EXCEPTIONS
+          FINISHED  = 1
+          OTHERS    = 2.
+    ENDIF.
+***  Registering the EDIT Event
+    CALL METHOD GRID->REGISTER_EDIT_EVENT
+      EXPORTING
+        I_EVENT_ID = CL_GUI_ALV_GRID=>MC_EVT_MODIFIED.
+    SET HANDLER GR_EVENT->HANDLE_DATA_CHANGED FOR GRID.
+  ENDIF.
+ENDFORM.
+
+
+FORM EXCLUDE_TB_FUNCTIONS  CHANGING GT_EXCLUDE TYPE UI_FUNCTIONS.
+  DATA LS_EXCLUDE TYPE UI_FUNC.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_COPY_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_DELETE_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_APPEND_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_INSERT_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_MOVE_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_FIND_MORE.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_SUM.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_AVERAGE.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_DETAIL.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_DELETE_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_APPEND_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_INSERT_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_MOVE_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_COPY.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_CUT.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_PASTE.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_PASTE_NEW_ROW.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+  LS_EXCLUDE = CL_GUI_ALV_GRID=>MC_FC_LOC_UNDO.
+  APPEND LS_EXCLUDE TO GT_EXCLUDE.
+ENDFORM.
+
+FORM SAVE_DATA.
+
+  IF GS_INWD_HDR IS NOT INITIAL.
+    GS_INWD_HDR-STATUS = C_02.
+    GS_INWD_HDR-SERVICE_PO = GV_EBELN.
+*** Status Update
+    GS_STATUS-INWD_DOC     = GS_INWD_HDR-INWD_DOC.
+    GS_STATUS-QR_CODE      = GS_INWD_HDR-QR_CODE.
+    GS_STATUS-STATUS_FIELD = C_QR_CODE.
+    GS_STATUS-STATUS_VALUE = C_QR02.
+    GS_STATUS-CREATED_BY   = SY-UNAME.
+    GS_STATUS-CREATED_DATE = SY-DATUM.
+    GS_STATUS-CREATED_TIME = SY-UZEIT.
+    GS_STATUS-DESCRIPTION  = 'Gate In'.
+*  GV_MOD = C_D.
+    MODIFY ZINW_T_STATUS FROM GS_STATUS.
+    MODIFY ZINW_T_HDR FROM GS_INWD_HDR.
+    MESSAGE S002(ZMSG_CLS).
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form DISPLAY_LOGO
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM DISPLAY_LOGO .
+  DATA: W_LINES TYPE I.
+  TYPES PICT_LINE(256) TYPE C.
+  DATA :
+    LOGO_CONTAINER TYPE REF TO CL_GUI_CUSTOM_CONTAINER,
+    EDITOR         TYPE REF TO CL_GUI_TEXTEDIT,
+    PICTURE        TYPE REF TO CL_GUI_PICTURE,
+    PICT_TAB       TYPE TABLE OF PICT_LINE,
+    URL(255)       TYPE C.
+
+  DATA: GRAPHIC_URL(255).
+  DATA: BEGIN OF GRAPHIC_TABLE OCCURS 0,
+          LINE(255) TYPE X,
+        END OF GRAPHIC_TABLE.
+  DATA: L_GRAPHIC_CONV TYPE I.
+  DATA: L_GRAPHIC_OFFS TYPE I.
+  DATA: GRAPHIC_SIZE TYPE I.
+  DATA: L_GRAPHIC_XSTR TYPE XSTRING.
+
+  CALL METHOD CL_GUI_CFW=>FLUSH.
+  CREATE OBJECT:
+  LOGO_CONTAINER EXPORTING CONTAINER_NAME = 'LOGO_CONTAINER',
+  PICTURE EXPORTING PARENT = LOGO_CONTAINER.
+
+  CALL METHOD CL_SSF_XSF_UTILITIES=>GET_BDS_GRAPHIC_AS_BMP
+    EXPORTING
+      P_OBJECT = 'GRAPHICS'
+      P_NAME   = 'ZSARVANA_LOGO'
+      P_ID     = 'BMAP'
+      P_BTYPE  = 'BCOL'
+    RECEIVING
+      P_BMP    = L_GRAPHIC_XSTR.
+
+  IF SY-SUBRC <> 0.
+  ENDIF.
+  GRAPHIC_SIZE = XSTRLEN( L_GRAPHIC_XSTR ).
+  L_GRAPHIC_CONV = GRAPHIC_SIZE.
+  L_GRAPHIC_OFFS = 0.
+  WHILE L_GRAPHIC_CONV > 255.
+    GRAPHIC_TABLE-LINE = L_GRAPHIC_XSTR+L_GRAPHIC_OFFS(255).
+    APPEND GRAPHIC_TABLE.
+    L_GRAPHIC_OFFS = L_GRAPHIC_OFFS + 255.
+    L_GRAPHIC_CONV = L_GRAPHIC_CONV - 255.
+  ENDWHILE.
+  GRAPHIC_TABLE-LINE = L_GRAPHIC_XSTR+L_GRAPHIC_OFFS(L_GRAPHIC_CONV).
+  APPEND GRAPHIC_TABLE.
+
+  CALL FUNCTION 'DP_CREATE_URL'
+    EXPORTING
+      TYPE     = 'IMAGE'
+      SUBTYPE  = 'X-UNKNOWN'
+      SIZE     = GRAPHIC_SIZE
+      LIFETIME = 'T'
+    TABLES
+      DATA     = GRAPHIC_TABLE
+    CHANGING
+      URL      = URL.
+
+  CALL METHOD PICTURE->LOAD_PICTURE_FROM_URL
+    EXPORTING
+      URL = URL.
+  CALL METHOD PICTURE->SET_DISPLAY_MODE
+    EXPORTING
+      DISPLAY_MODE = PICTURE->DISPLAY_MODE_FIT_CENTER.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form DISPLAY_MODE
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+FORM CLEAR .
+  CLEAR :GV_MOD, GS_LAYO, GS_INWD_HDR,GV_EBELN, GS_HDR.
+  REFRESH : GT_HDR , GT_FIELDCAT.
+  IF GRID IS BOUND.
+    GRID->FREE( ).
+    CLEAR GRID.
+    CONTAINER->FREE( ).
+    CLEAR CONTAINER.
+  ENDIF.
+  LEAVE TO SCREEN 0.
+ENDFORM.

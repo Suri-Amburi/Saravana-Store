@@ -1,0 +1,37 @@
+`include(~service="system", ~language="", ~theme="dm", ~name="TemplateLibraryDHTML.html")`
+`SAP_TopInclude()`
+<html>
+  <head>
+    `SAP_PageTitle()`
+    `SAP_Stylesheet()`
+    `SAP_JavaScript()`
+  </head>
+  <body `SAP_BodyAttributes()` onload="`SAP_OnloadJavaScript()`">
+    `SAP_TemplateHeader()`
+    `SAP_BodyContentBegin()`
+    `SAP_FormBegin()`
+      `SAP_DynproLayerBegin(004,001,018,001)`
+      `SAP_Label("QUES1")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(003,002,020,001)`
+      `SAP_InputField("AEXIDV")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(003,003,020,001)`
+      `SAP_Label("QUES2")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(003,004,007,001)`
+      `SAP_Button("AAOK")`
+      `SAP_DynproLayerEnd()`
+
+      `SAP_DynproLayerBegin(016,004,007,001)`
+      `SAP_Button("AANO")`
+      `SAP_DynproLayerEnd()`
+
+    `SAP_FormEnd()`
+    `SAP_BodyContentEnd()`
+  </body>
+</html>
+                                                  

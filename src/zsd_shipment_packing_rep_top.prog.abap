@@ -1,0 +1,153 @@
+*&---------------------------------------------------------------------*
+*& Include          ZSD_SHIPMENT_PACKING_REP_TOP
+*&---------------------------------------------------------------------*
+TYPES: BEGIN OF TY_LIKP,
+       VBELN TYPE VBELN_VL,    """Delivery
+       WERKS TYPE EMPFW,       """Receiving Plant for Deliveries
+  END OF TY_LIKP.
+
+TYPES: BEGIN OF TY_LIPS,
+       VBELN TYPE VBELN_VL,    """Delivery
+       POSNR TYPE POSNR_VL,    """Delivery Item
+       MATNR TYPE MATNR,       """Material Number
+       MATKL TYPE MATKL,       """Material Group
+       WERKS TYPE WERKS_D,     """Plant
+       LFIMG TYPE LFIMG,       """Actual quantity delivered
+       ARKTX TYPE ARKTX,       ""Short Text for Sales Order Item
+  END OF TY_LIPS.
+
+TYPES: BEGIN OF TY_MAKT,
+       MATNR TYPE MATNR,       """Material Number
+       SPRAS TYPE SPRAS,       """Language Key
+       MAKTX TYPE MAKTX,       """Material description
+  END OF TY_MAKT.
+
+TYPES: BEGIN OF TY_ADRC,
+       ADDRNUMBER TYPE AD_ADDRNUM,  """Address number
+       NAME1      TYPE AD_NAME1,    """Name
+       CITY1      TYPE AD_CITY1,    """City
+       POST_CODE1 TYPE AD_PSTCD1,   """City postal code
+       STREET     TYPE AD_STREET,   """Street
+       HOUSE_NUM1 TYPE AD_HSNM1,    ""House Number
+       STR_SUPPL1 TYPE AD_STRSPP1,  """Street 2
+       STR_SUPPL2 TYPE AD_STRSPP2,  """Street 3
+       STR_SUPPL3 TYPE AD_STRSPP3,  """Street 4
+  END OF TY_ADRC.
+
+TYPES: BEGIN OF TY_T001W,
+       WERKS TYPE WERKS_D,    """Plant
+       NAME1 TYPE NAME1,      """"Name
+       LAND1 TYPE LAND1,      """Country Key
+       REGIO TYPE REGIO,      """Region
+       ADRNR TYPE ADRNR,      ""Address
+       J_1BBRANCH TYPE J_1BBRANC_,   ""Business Place
+  END OF TY_T001W.
+
+*TYPES: BEGIN OF TY_T005U,
+*       SPRAS TYPE SPRAS,      """Language Key
+*       LAND1 TYPE LAND1,      """Country Key
+*       BLAND TYPE REGIO,      """Region
+*       BEZEI TYPE BEZEI20,    """Description
+*  END OF TY_T005U."
+
+TYPES: BEGIN OF TY_J_1BBRANCH,
+       BUKRS  TYPE BUKRS,
+       BRANCH TYPE J_1BBRANC_,
+       GSTIN  TYPE J_1IGSTCD3,
+  END OF TY_J_1BBRANCH.
+
+TYPES: BEGIN OF TY_T023,
+       MATKL TYPE MATKL,
+  END OF TY_T023.
+
+TYPES: BEGIN OF TY_T023T,
+       SPRAS TYPE SPRAS,
+       MATKL TYPE MATKL,
+       WGBEZ TYPE WGBEZ,
+  END OF TY_T023T.
+
+TYPES: BEGIN OF TY_VTTP,
+       TKNUM TYPE TKNUM,
+       TPNUM TYPE TPNUM,
+       VBELN TYPE VBELN_VL,
+ END OF TY_VTTP.
+
+TYPES: BEGIN OF TY_VTTK,
+       TKNUM TYPE TKNUM,
+       SIGNI TYPE SIGNI,
+       EXTI1 TYPE EXTI1,
+       EXTI2 TYPE EXTI2,
+       TPBEZ TYPE TPBEZ,
+       DTABF TYPE DTABF,
+       TEXT1 TYPE VTTK_TEXT1,
+       TEXT2 TYPE VTTK_TEXT2,
+       TEXT3 TYPE VTTK_TEXT3,
+ END OF TY_VTTK.
+
+TYPES: BEGIN OF TY_VEPO,
+       VENUM TYPE VENUM,
+       VEPOS TYPE VEPOS,
+       VBELN TYPE VBELN_VL,
+       posnr TYPE POSNR_VL,
+ END OF TY_VEPO.
+
+TYPES: BEGIN OF TY_VEKP,
+       VENUM TYPE VENUM,
+       VHART TYPE VHIART,
+ END OF TY_VEKP.
+
+TYPES: BEGIN OF TY_TVTYT,
+       SPRAS TYPE SPRAS,
+       TRATY TYPE VHIART,
+       VTEXT TYPE BEZEI20,
+  END OF TY_TVTYT.
+
+TYPES: BEGIN OF TY_MARA,
+       MATNR TYPE MATNR,
+       MATKL TYPE MATKL,
+  END OF TY_MARA.
+
+DATA : IT_LIKP TYPE TABLE OF TY_LIKP,
+       WA_LIKP TYPE TY_LIKP,
+       IT_LIPS TYPE TABLE OF TY_LIPS,
+       WA_LIPS TYPE TY_LIPS,
+       IT_MAKT TYPE TABLE OF TY_MAKT,
+       WA_MAKT TYPE TY_MAKT,
+       IT_ADRC TYPE TABLE OF TY_ADRC,
+       IT_ADRC_T TYPE TABLE OF TY_ADRC,
+       WA_ADRC TYPE TY_ADRC,
+       WA_ADRC_T TYPE TY_ADRC,
+       IT_T001W TYPE TABLE OF TY_T001W,
+       IT_T001W_T TYPE TABLE OF TY_T001W,
+       WA_T001W TYPE TY_T001W,
+       WA_T001W_T TYPE TY_T001W,
+       IT_J_1BBRANCH TYPE TABLE OF TY_J_1BBRANCH,
+       IT_J_1BBRANCH_T TYPE TABLE OF TY_J_1BBRANCH,
+       WA_J_1BBRANCH TYPE TY_J_1BBRANCH,
+       WA_J_1BBRANCH_T TYPE TY_J_1BBRANCH,
+       IT_T023 TYPE TABLE OF TY_T023,
+       WA_T023 TYPE TY_T023,
+       IT_T023T TYPE TABLE OF TY_T023T,
+       WA_T023T TYPE  TY_T023T,
+       IT_VEPO TYPE TABLE OF TY_VEPO,
+       WA_VEPO TYPE TY_VEPO,
+       IT_VTTP TYPE TABLE OF TY_VTTP,
+       WA_VTTP TYPE TY_VTTP,
+       IT_VTTK TYPE TABLE OF TY_VTTK,
+       WA_VTTK TYPE TY_VTTK,
+       IT_VEKP TYPE TABLE OF TY_VEKP,
+       WA_VEKP TYPE TY_VEKP,
+       IT_MARA TYPE TABLE OF TY_MARA,
+       WA_MARA TYPE TY_MARA,
+       IT_FINAL TYPE TABLE OF ZFINAL_DEL1,
+       WA_HEADER TYPE  ZHEADER_DEL,
+       WA_FINAL TYPE ZFINAL_DEL1,
+       FM_NAME TYPE  RS38L_FNAM,
+       LV_TRAYS TYPE I,
+       LV_BUNDLES TYPE I,
+       LV_TOTAL TYPE I,
+       LV_VBELN TYPE LIKP-VBELN,
+       IT_TVTYT TYPE TABLE OF TY_TVTYT,
+       IT_WGH01 TYPE TABLE OF WGH01,
+       WA_WGH01 TYPE WGH01,
+       WA_TVTYT TYPE TY_TVTYT.

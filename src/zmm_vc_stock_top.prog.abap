@@ -1,0 +1,93 @@
+*&---------------------------------------------------------------------*
+*& Include          ZMM_VC_STOCK_TOP
+*&---------------------------------------------------------------------*
+
+
+TYPES : BEGIN OF TY_KLAH ,
+          CLINT TYPE CLINT,
+          KLART TYPE KLASSENART,
+          CLASS TYPE KLASSE_D,
+          VONDT TYPE VONDAT,
+          BISDT TYPE BISDAT,
+          WWSKZ TYPE KLAH-WWSKZ,
+        END OF TY_KLAH .
+
+TYPES : BEGIN OF TY_KLAH1 ,
+          CLINT TYPE CLINT,
+          KLART TYPE KLASSENART,
+          CLASS TYPE MATKL,
+          VONDT TYPE VONDAT,
+          BISDT TYPE BISDAT,
+          WWSKZ TYPE KLAH-WWSKZ,
+        END OF TY_KLAH1 .
+
+TYPES : BEGIN OF TY_KSSK ,
+          OBJEK TYPE CUOBN,
+          MAFID TYPE KLMAF,
+          KLART TYPE KLASSENART,
+          CLINT TYPE CLINT,
+          ADZHL TYPE ADZHL,
+          DATUB TYPE DATUB,
+        END OF TY_KSSK .
+
+TYPES : BEGIN OF TY_KSSK1 ,
+          OBJEK TYPE CLINT,
+*          MAFID type KLMAF,
+*          KLART type KLASSENART,
+*          CLINT type CLINT,
+*          ADZHL type ADZHL,
+*          DATUB type DATUB,
+        END OF TY_KSSK1 .
+
+TYPES : BEGIN OF TY_MBEW ,
+          MATNR TYPE MATNR,
+          BWKEY TYPE BWKEY,
+          LBKUM TYPE LBKUM,
+          SALK3 TYPE SALK3,
+        END OF TY_MBEW .
+
+TYPES : BEGIN OF TY_MARA ,
+          MATNR TYPE MATNR,
+          MATKL TYPE MATKL,
+        END OF TY_MARA .
+
+TYPES : BEGIN OF TY_A502 ,
+          MATNR TYPE MATNR,
+          LIFNR TYPE LIFNR,
+        END OF TY_A502 .
+
+TYPES : BEGIN OF TY_FINAL ,
+          LIFNR TYPE LIFNR,
+          BWKEY TYPE BWKEY,
+          LBKUM TYPE LBKUM,
+          SALK3 TYPE SALK3,
+        END OF TY_FINAL .
+
+TYPES : BEGIN OF TY_GTDATA ,
+          MATNR TYPE MBEW-MATNR,
+          BWKEY TYPE MBEW-BWKEY,
+          LBKUM TYPE MBEW-LBKUM,
+          SALK3 TYPE MBEW-SALK3,
+          LIFNR TYPE A502-LIFNR,
+          KSCHL TYPE A502-KSCHL,
+          KNUMH TYPE KONP-KNUMH,
+        END OF TY_GTDATA.
+
+DATA : IT_MBEW  TYPE TABLE OF TY_MBEW,
+       WA_MBEW  TYPE TY_MBEW,
+       IT_KLAH  TYPE TABLE OF TY_KLAH,
+       IT_FINAL TYPE TABLE OF TY_FINAL,
+       WA_KLAH  TYPE TY_KLAH,
+       WA_FINAL TYPE TY_FINAL,
+       IT_KLAH1 TYPE TABLE OF TY_KLAH1,
+       WA_KLAH1 TYPE TY_KLAH1,
+       IT_KSSK1 TYPE TABLE OF TY_KSSK1,
+       WA_KSSK1 TYPE TY_KSSK1,
+       IT_KSSK  TYPE TABLE OF TY_KSSK,
+       WA_KSSK  TYPE TY_KSSK,
+       IT_A502  TYPE TABLE OF TY_A502,
+       IT_MARA  TYPE TABLE OF TY_MARA,
+       GT_DATA  TYPE TABLE OF TY_GTDATA,
+       WA_A502  TYPE TY_A502,
+       WA_MARA  TYPE TY_MARA,
+       LV_MATKL TYPE MATKL.

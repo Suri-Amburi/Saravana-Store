@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Photo PO App</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZFM_COPY_LTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZFM_COPY_L</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZFM_PURCHASE_COPY</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>PO Form</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>LV_EBELN</PARAMETER>
+       <TYP>EKKO-EBELN</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>REG_PO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>RETURN_PO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>TATKAL_PO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>PRINT_PRIEVIEW</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>SERVICE_PO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>VENDOR_RETURN_PO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>VENDOR_DEBIT_NOTE</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>CHAR1</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>LV_EBELN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchasing Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>REG_PO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchasing Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>RETURN_PO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchasing Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TATKAL_PO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Purchasing Document Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PRINT_PRIEVIEW</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>SERVICE_PO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>VENDOR_RETURN_PO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>VENDOR_DEBIT_NOTE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Single-Character Flag</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZIN_MATERIAL_COPY</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Material Details</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_DATE_FROM</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>SY-DATUM</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_DATE_TO</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>SY-DATUM</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>GROUP_ID</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>KLASSE_D</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>ET_DISPLAY</PARAMETER>
+       <TYP>ZEX_MAT_TT</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_DATE_FROM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP system field: Current date of application server</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_DATE_TO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP system field: Current date of application server</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>GROUP_ID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Class number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ET_DISPLAY</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Material Details</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZPHOTO_PO_COPY1</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Photo PO Create</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_HEADER_TT</PARAMETER>
+       <TYP>ZPH_HED_TT</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>HEADER_RETURN</PARAMETER>
+       <TYP>ZHED_ES</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>ITEM_RETURN</PARAMETER>
+       <TYP>ZITEM_ES</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>PH_ITEM</PARAMETER>
+       <DBSTRUCT>ZPH_ITEM</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_HEADER_TT</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Header table type</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>HEADER_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character field of length 40</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>ITEM_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character field of length 40</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>PH_ITEM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Item Data</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
